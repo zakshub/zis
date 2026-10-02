@@ -12,6 +12,8 @@
 
 ## M1 Evidence Contracts
 
+Status: complete for the five requested Milestone 1 contracts and evidence foundation (2026-10-02).
+
 1. Define EvidenceRecord schema.
 2. Define Observation schema.
 3. Define Claim schema.
@@ -24,7 +26,11 @@
 10. Create synthetic fixtures.
 11. Write validation tests.
 
+Implemented additions: ordinal confidence, lifecycle states, source/provenance requirements, deterministic identifiers, contradiction relations, temporal validity and strict identity-field rejection.
+
 ## M2 ZOS Inventory
+
+Status: inventory and migration map complete; sample redaction/import remains pending human approval.
 
 1. Enumerate ZOS files.
 2. Classify each file.
@@ -38,6 +44,8 @@
 10. Verify provenance round trip.
 
 ## M3 Classical Runtime
+
+Status: foundation slice complete (database migrations, evidence storage, audit events, CLI and export). The remaining broader runtime items stay deferred.
 
 1. Select baseline language and runtime.
 2. Create CLI skeleton.

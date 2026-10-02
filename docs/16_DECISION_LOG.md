@@ -39,3 +39,33 @@ Reason: preserve prior work while adopting the newer ZIS architecture.
 ## D010 Minimum sufficient solution is default
 Decision: no build and manual methods are valid outcomes.
 Reason: prevent system building from becoming the goal itself.
+
+## D011 Python standard library is the first executable runtime
+Decision: use Python 3.11+ without runtime third-party dependencies for Milestone 1.
+Reason: it is portable, inspectable and sufficient for schemas, CLI, hashing, timestamps, SQLite and exports.
+Alternatives: TypeScript/Node, Go, Rust or a service framework. These add no required M1 capability.
+Migration impact: JSON contracts, SQL migrations and export formats remain language-neutral.
+
+## D012 SQLite is the first local evidence store
+Decision: use one local SQLite database under the gitignored `.zis/` directory.
+Reason: transactions, relational integrity, mature tooling and minimal operations fit the existing local-first architecture.
+Alternatives: JSONL was considered but is weaker for contradiction relations and migrations; server databases are unnecessary.
+Migration impact: JSON/CSV/Markdown export prevents SQLite from becoming the only representation.
+
+## D013 Confidence is ordinal
+Decision: use `unknown`, `weak`, `probable`, `strong`, `established`.
+Reason: the requested M1 model rejects fake mathematical precision while remaining explicit and sortable by human meaning.
+Migration impact: ZOS numeric confidence must not be converted automatically; it requires review.
+
+## D014 Evidence history is preserved through projections and audit events
+Decision: keep evidence rows, represent contradictions separately, and record lifecycle/supersession actions in append-only audit events.
+Reason: a newer interpretation must not erase old evidence or resolution rationale.
+Alternative: immutable event sourcing for every read was rejected as unnecessary M1 complexity.
+
+## D015 User Milestone 1 includes bounded Phase 1–3 foundations
+Decision: implement the user's named Milestone 1 as one bounded delivery while preserving the repository's longer roadmap numbering.
+Reason: the requested definition of done explicitly includes contracts, ZOS inventory, local database, CLI, migrations and export. This is a scope aggregation, not a change to the product architecture.
+
+## D016 No internal documentation contradiction blocked implementation
+Decision: treat open runtime/confidence/export questions as intentionally deferred choices resolved by the approved Milestone 1 request.
+Reason: the foundation documents name options and boundaries but do not prescribe conflicting implementations.

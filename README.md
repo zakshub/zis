@@ -12,7 +12,28 @@ The durable object is the cognitive specification, evidence model, memory, rules
 
 ## Current status
 
-Documentation Foundation v0.1 is now established.
+Milestone 1 — Evidence Contracts and ZOS Migration Foundation — is implemented locally. ZIS now has machine-validated contracts, a SQLite evidence store, deterministic identifiers, explicit provenance/confidence/time semantics, contradiction and supersession history, a minimal CLI, durable exports and an audited ZOS migration plan. No AI provider or frontend is required.
+
+## Quick start
+
+Python 3.11+ is required. The runtime has no third-party dependencies.
+
+```powershell
+$env:PYTHONPATH = "src"
+python -m zis.cli init
+python -m zis.cli status
+python -m unittest discover -s tests -v
+```
+
+Example evidence capture:
+
+```powershell
+python -m zis.cli evidence add "Synthetic example" --type observation --source-type synthetic --source-reference example:1 --scope example --confidence weak
+python -m zis.cli evidence list
+python -m zis.cli export .\local-export
+```
+
+Runtime data defaults to `.zis/zis.sqlite3` and is excluded from Git. Exported evidence may be private and must be reviewed before publication.
 
 Read in this order:
 
@@ -32,5 +53,7 @@ Read in this order:
 14. docs/13_MILESTONES_AND_MICRO_TASKS.md
 15. docs/14_STATUS.md
 16. docs/15_GOVERNANCE_AND_ACCEPTANCE.md
+
+Implementation details are in `docs/architecture/M1_IMPLEMENTATION.md`; privacy boundaries and the ZOS migration inventory are under `docs/privacy/` and `docs/migration/`.
 
 No direct personal identity, face, employer or exact private identity data belongs in the public ZIS core.

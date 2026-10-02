@@ -16,6 +16,8 @@ Outputs: evidence schema, source registry, ZOS inventory, redaction rules, confi
 
 Exit condition: representative ZOS material can be imported, traced and audited.
 
+Status (2026-10-02): the machine contracts, identity/privacy rules, ZOS inventory and migration map are implemented. Actual ZOS record import remains intentionally pending human selection and approval; no personal source material was copied.
+
 ## Phase 2 Classical Core Runtime
 
 Goal: build the minimum non AI dependent ZIS core.
@@ -23,6 +25,8 @@ Goal: build the minimum non AI dependent ZIS core.
 Outputs: local database, CLI, evidence ingestion, memory, deterministic router, capability registry, approval records, audit log, export and restore.
 
 Exit condition: ZIS can operate basic workflows without any LLM.
+
+Status (2026-10-02): a bounded foundation slice is complete: local SQLite initialization/migrations, evidence storage, audit events, contradictions, temporal supersession, CLI and JSON/CSV/Markdown export. Memory, capability/specialist registries, approvals, deterministic routing, backup and restore remain future Phase 2 work.
 
 ## Phase 3 Modern Intelligence Layer
 

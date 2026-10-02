@@ -52,6 +52,17 @@ ZIS must distinguish observed facts, user statements, inferences, hypotheses and
 9. Status document is updated.
 10. Human acceptance criteria are satisfied.
 
+## Milestone 1 acceptance evidence
+
+1. Five machine contracts and a deterministic validator exist.
+2. SQLite initialization, versioned migration, evidence persistence and audit history are tested.
+3. Provenance, ordinal confidence, contradictions and temporal supersession are preserved.
+4. JSON, CSV and Markdown exports provide non-proprietary recovery representations.
+5. Identity scrubbing and Git/private-data boundaries are documented and partially enforced structurally.
+6. ZOS was inventoried as an ancestor source; no personal or specialist material was imported.
+7. The automated suite runs without AI, network or external services.
+8. Human acceptance is still required before beginning the next milestone or importing reviewed ZOS evidence.
+
 ## Change governance
 
 Every architecture change should record reason, evidence, alternatives, decision, consequences and migration impact.
