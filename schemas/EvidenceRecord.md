@@ -1,5 +1,7 @@
 # EvidenceRecord
 
+Machine contract: `EvidenceRecord.schema.json`. Implemented in Milestone 1; this document is retained as the conceptual source.
+
 Required fields:
 
 id

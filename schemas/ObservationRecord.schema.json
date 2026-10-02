@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zis.local/schemas/ObservationRecord.schema.json",
+  "title": "ZIS ObservationRecord v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "source", "source_references", "captured_at", "observed_at", "summary", "raw_reference", "scope", "status", "confidence", "provenance", "privacy_class", "identity_scrub_status", "retention_state", "linked_evidence_ids", "version"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^obs_[a-f0-9]{20}$"},
+    "source": {"type": "object", "additionalProperties": false, "required": ["type", "reference"], "properties": {"type": {"type": "string", "minLength": 1}, "reference": {"type": "string", "minLength": 1}}},
+    "source_references": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "captured_at": {"type": "string", "format": "date-time"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "summary": {"type": "string", "minLength": 1},
+    "raw_reference": {"type": ["string", "null"]},
+    "scope": {"type": "string", "minLength": 1},
+    "status": {"enum": ["captured", "reviewed", "promoted", "superseded", "rejected", "expired"]},
+    "confidence": {"enum": ["unknown", "weak", "probable", "strong", "established"]},
+    "provenance": {"type": "object", "additionalProperties": false, "required": ["method", "actor", "chain"], "properties": {"method": {"type": "string", "minLength": 1}, "actor": {"type": "string", "minLength": 1}, "chain": {"type": "array", "items": {"type": "string", "minLength": 1}}}},
+    "privacy_class": {"enum": ["public", "internal", "private", "restricted"]},
+    "identity_scrub_status": {"enum": ["not_required", "pending_review", "reviewed_safe", "excluded"]},
+    "retention_state": {"enum": ["referenced", "retained_private", "scheduled_for_deletion", "deleted"]},
+    "linked_evidence_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^ev_[a-f0-9]{20}$"}},
+    "version": {"type": "integer", "minimum": 1}
+  }
+}

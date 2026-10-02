@@ -1,5 +1,7 @@
 # SpecialistManifest
 
+Machine contract: `SpecialistManifest.schema.json`. Implemented as a contract only; no specialist is integrated in Milestone 1.
+
 Required fields:
 
 id

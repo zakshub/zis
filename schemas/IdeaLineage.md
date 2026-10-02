@@ -1,5 +1,7 @@
 # IdeaLineage
 
+Machine contract: `IdeaLineage.schema.json`. Implemented as a contract only; no cognitive idea engine is built in Milestone 1.
+
 Required fields:
 
 id

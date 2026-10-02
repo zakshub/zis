@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zis.local/schemas/CapabilityProposal.schema.json",
+  "title": "ZIS CapabilityProposal v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "created_at", "updated_at", "observed_need", "evidence_ids", "source_references", "current_capabilities_checked", "problem_frequency", "problem_severity", "proposed_solution_level", "alternatives", "expected_value", "implementation_cost", "maintenance_cost", "privacy_impact", "security_impact", "architecture_summary", "reversibility", "approval_status", "approval_record", "status", "provenance", "confidence", "version"],
+  "allOf": [
+    {
+      "if": {"properties": {"proposed_solution_level": {"enum": ["extend_existing", "small_tool", "product", "system", "new_specialist_intelligence"]}, "status": {"enum": ["approved", "implemented"]}}, "required": ["proposed_solution_level", "status"]},
+      "then": {"properties": {"approval_status": {"const": "approved"}, "approval_record": {"type": "string", "minLength": 1}}, "required": ["approval_status", "approval_record"]}
+    }
+  ],
+  "properties": {
+    "id": {"type": "string", "pattern": "^cap_[a-f0-9]{20}$"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "observed_need": {"type": "string", "minLength": 1},
+    "evidence_ids": {"type": "array", "items": {"type": "string", "pattern": "^ev_[a-f0-9]{20}$"}},
+    "source_references": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "current_capabilities_checked": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "problem_frequency": {"enum": ["unknown", "one_off", "occasional", "repeated", "continuous"]},
+    "problem_severity": {"enum": ["unknown", "low", "medium", "high", "critical"]},
+    "proposed_solution_level": {"enum": ["no_action", "reasoning_only", "research_only", "existing_capability", "extend_existing", "small_tool", "product", "system", "new_specialist_intelligence"]},
+    "alternatives": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "expected_value": {"type": "string", "minLength": 1},
+    "implementation_cost": {"type": "string", "minLength": 1},
+    "maintenance_cost": {"type": "string", "minLength": 1},
+    "privacy_impact": {"type": "string", "minLength": 1},
+    "security_impact": {"type": "string", "minLength": 1},
+    "architecture_summary": {"type": "string", "minLength": 1},
+    "reversibility": {"enum": ["easy", "moderate", "difficult", "irreversible"]},
+    "approval_status": {"enum": ["not_required", "pending", "approved", "rejected"]},
+    "approval_record": {"type": ["string", "null"]},
+    "status": {"enum": ["draft", "proposed", "approved", "rejected", "implemented", "retired"]},
+    "provenance": {"type": "object", "additionalProperties": false, "required": ["method", "actor", "chain"], "properties": {"method": {"type": "string", "minLength": 1}, "actor": {"type": "string", "minLength": 1}, "chain": {"type": "array", "items": {"type": "string", "minLength": 1}}}},
+    "confidence": {"enum": ["unknown", "weak", "probable", "strong", "established"]},
+    "version": {"type": "integer", "minimum": 1}
+  }
+}

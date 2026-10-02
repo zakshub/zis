@@ -1,5 +1,7 @@
 # CapabilityProposal
 
+Machine contract: `CapabilityProposal.schema.json`. The approval invariant is encoded in the machine contract.
+
 Required fields:
 
 id
