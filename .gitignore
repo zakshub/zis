@@ -1,0 +1,39 @@
+# Local/private runtime state. See docs/privacy/DATA_BOUNDARY.md.
+.zis/
+data/
+private/
+exports/
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.token
+credentials*.json
+
+# Python tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+
+# Private/raw source exports
+*.mbox
+*.eml
+*.vcf
+*whatsapp*export*
+*browser*history*
+
