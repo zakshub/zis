@@ -1,0 +1,172 @@
+# Milestones and Micro Tasks
+
+## M0 Foundation Review
+
+1. Review every foundation document.
+2. Resolve naming conflicts between ZIS and inherited ZOS terms.
+3. Confirm single owner architecture.
+4. Freeze direct identity exclusion rules.
+5. Freeze canonical English specification language.
+6. Freeze approval gate categories.
+7. Record first architecture decisions.
+
+## M1 Evidence Contracts
+
+1. Define EvidenceRecord schema.
+2. Define Observation schema.
+3. Define Claim schema.
+4. Define Inference schema.
+5. Define Confidence schema.
+6. Define Counterevidence schema.
+7. Define Correction schema.
+8. Define TemporalScope schema.
+9. Define Source registry schema.
+10. Create synthetic fixtures.
+11. Write validation tests.
+
+## M2 ZOS Inventory
+
+1. Enumerate ZOS files.
+2. Classify each file.
+3. Mark identity sensitive files.
+4. Mark specialist knowledge that should not migrate.
+5. Mark cognitive evidence candidates.
+6. Mark reusable architecture patterns.
+7. Produce migration manifest.
+8. Redact sample documents.
+9. Import sample evidence.
+10. Verify provenance round trip.
+
+## M3 Classical Runtime
+
+1. Select baseline language and runtime.
+2. Create CLI skeleton.
+3. Create local data directory contract.
+4. Create database migrations.
+5. Implement evidence storage.
+6. Implement memory storage.
+7. Implement audit events.
+8. Implement capability registry.
+9. Implement specialist registry.
+10. Implement approval records.
+11. Implement deterministic task router.
+12. Implement export.
+13. Implement backup.
+14. Implement restore drill.
+15. Add unit tests.
+16. Add integration tests.
+
+## M4 Cognitive Engine v0.1
+
+1. Implement attention scoring rules.
+2. Implement novelty and repetition signals.
+3. Implement contradiction detection.
+4. Implement association links.
+5. Implement pattern candidate creation.
+6. Implement hypothesis state.
+7. Implement idea lineage record.
+8. Implement evaluation record.
+9. Implement reflection record.
+10. Implement model update proposal.
+
+## M5 Modern AI Adapter
+
+1. Define provider neutral model interface.
+2. Define prompt input contract.
+3. Define structured output contract.
+4. Implement one provider adapter.
+5. Implement no provider fallback.
+6. Add timeout behavior.
+7. Add error transparency.
+8. Add cost and token accounting.
+9. Add provider switch test.
+10. Prove core runtime works with adapter disabled.
+
+## M6 Specialist Federation
+
+1. Define SpecialistManifest schema.
+2. Register Designer.
+3. Register Studio.
+4. Register SEO.
+5. Register TaxBot.
+6. Evaluate ZIST.
+7. Define request contract.
+8. Define response contract.
+9. Define health check.
+10. Define unavailable state.
+11. Define version compatibility.
+12. Define provenance receipt.
+13. Add specialist fallback rules.
+
+## M7 Observation Ledger
+
+1. Define connector permission model.
+2. Define observation categories.
+3. Build source connection registry.
+4. Build visible permission screen.
+5. Build pause all control.
+6. Build source revoke flow.
+7. Implement observation ingestion.
+8. Implement identity scrubber.
+9. Build inference explanation view.
+10. Build retention state control.
+11. Build learning promotion queue.
+
+## M8 Capability Sensing
+
+1. Implement solution ladder.
+2. Create evaluation rubric.
+3. Add existing capability lookup.
+4. Add build versus buy comparison.
+5. Add no build outcome.
+6. Add proposal generator.
+7. Add approval gate.
+8. Add approved build handoff.
+9. Add post build outcome review.
+10. Add duplicate capability detection.
+
+## M9 Operations UI
+
+1. Ask Designer for information architecture.
+2. Evaluate navigation patterns instead of assuming sidebar navigation.
+3. Build search and command surface.
+4. Build system status.
+5. Build Observation Ledger.
+6. Build Learning Feed.
+7. Build Memory explorer.
+8. Build Idea Lineage.
+9. Build Capability Router.
+10. Build Specialist registry.
+11. Build Approvals.
+12. Build dependency health.
+13. Build recovery controls.
+14. Accessibility review.
+15. Responsive review.
+
+## M10 Simulation World
+
+1. Define world state schema.
+2. Define zone mapping.
+3. Ask Designer for interaction architecture.
+4. Ask Studio for original pet like species language.
+5. Define creature state mapping.
+6. Define path and signal mapping.
+7. Prototype 2D world.
+8. Evaluate 2.5D or 3D renderer.
+9. Bind world animation to real backend events.
+10. Add reduced motion mode.
+11. Add non visual fallback.
+12. Run usability tests.
+
+## M11 Resilience
+
+1. Create dependency inventory.
+2. Assign replacement strategies.
+3. Implement offline mode.
+4. Implement no AI mode.
+5. Export all critical data to durable documented formats.
+6. Write reconstruction manual.
+7. Create minimal reference implementation.
+8. Run migration to alternate runtime proof.
+9. Run restore on clean machine.
+10. Record recovery time and gaps.
