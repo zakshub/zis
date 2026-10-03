@@ -1,12 +1,14 @@
 # SpecialistManifest
 
-Machine contract: `SpecialistManifest.schema.json`. Implemented as a contract only; no specialist is integrated in Milestone 1.
+Machine contract: `SpecialistManifest.schema.json`. M3 implements registry storage and lifecycle only; no specialist is invoked or integrated through federation.
 
 Required fields:
 
 id
 
 name
+
+domain
 
 purpose
 
@@ -15,6 +17,10 @@ capabilities
 input_contract
 
 output_contract
+
+interface_version
+
+compatible_runtime_versions
 
 when_to_use
 
@@ -30,12 +36,26 @@ health_check
 
 security_boundary
 
-version
-
 fallback
 
 provenance_requirement
 
 owner_approval_required_for_changes
 
-Invariant: registering a repository does not copy its knowledge into ZIS.
+status
+
+availability
+
+confidence
+
+provenance
+
+created_at
+
+updated_at
+
+source_references
+
+version
+
+Invariant: registering a repository does not copy its knowledge into ZIS and does not authorize invocation.

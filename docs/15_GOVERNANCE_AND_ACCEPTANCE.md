@@ -77,6 +77,22 @@ M1 acceptance is bounded: the validator is not standards-complete, and applicati
 8. The 33-test suite passes and contains no real private ZOS fixture.
 9. No actual ZOS candidate/import is approved by this implementation milestone; each future selection remains a human decision.
 
+## Milestone 3 acceptance evidence
+
+1. Source, memory-storage, capability, specialist and approval registries persist through migration 003.
+2. Memory remains proposed and non-current until an exact approved `memory.promote` action activates it.
+3. Rejected, revoked, missing or scope-mismatched approvals cannot authorize an operation.
+4. CapabilityProposal remains distinct from installed capability metadata; no capability is automatically created.
+5. Specialist registration stores metadata only and cannot invoke or copy a specialist brain.
+6. Routing is deterministic from structured input and registry state, records evaluated rules and returns unsupported rather than guessing.
+7. New projections validate lifecycle transitions and write audit history in the same transaction.
+8. Backup manifests bind SHA-256 checksum, schema/runtime versions, source metadata and durable record counts.
+9. Tampered/incompatible backups are rejected; restore verifies a temporary database and does not overwrite by default.
+10. Health reports SQLite, schema, required-table and foreign-key integrity without destructive repair.
+11. The 59-test suite and synthetic full-state restore drill pass without AI, network or private fixtures.
+
+M3 approvals are application-level governance records. They do not authenticate a human cryptographically, provide non-repudiation or make audit history tamper-evident against direct database access.
+
 ## Change governance
 
 Every architecture change should record reason, evidence, alternatives, decision, consequences and migration impact.

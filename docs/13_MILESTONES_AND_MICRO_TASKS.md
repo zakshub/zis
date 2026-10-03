@@ -47,28 +47,30 @@ Status: complete for the bounded migration pipeline (2026-10-03). No real ZOS ev
 
 ## M3 Classical Runtime
 
-Status: next recommended milestone. Foundation pieces already exist (database migrations, evidence storage, audit events, CLI, export and atomic migration import); the remaining broader runtime items stay deferred until owner approval.
+Status: complete and verified (2026-10-04). Existing M1/M2 foundations were reused rather than rebuilt.
 
 Pre-runtime audit fixes completed 2026-10-03: validator scope and audit-history limitations documented; atomic evidence transaction boundaries tightened. Future durability/adversarial cases are recorded in `docs/testing/TESTING_STRATEGY.md`.
 
-1. Select baseline language and runtime.
-2. Create CLI skeleton.
-3. Create local data directory contract.
-4. Create database migrations.
-5. Implement evidence storage.
-6. Implement memory storage.
-7. Implement audit events.
-8. Implement capability registry.
-9. Implement specialist registry.
-10. Implement approval records.
-11. Implement deterministic task router.
-12. Implement export.
-13. Implement backup.
-14. Implement restore drill.
-15. Add unit tests.
-16. Add integration tests.
+1. Select baseline language and runtime. Reused Python 3.11+ and SQLite.
+2. Create CLI skeleton. Reused and extended.
+3. Create local data directory contract. Reused `.zis/` boundary.
+4. Create database migrations. Reused framework; added migration 003.
+5. Implement evidence storage. Reused unchanged.
+6. Implement memory storage. Complete as governed storage only.
+7. Implement audit events. Reused for every new durable mutation.
+8. Implement capability registry. Complete without sensing or creation.
+9. Implement specialist registry. Complete without invocation/federation.
+10. Implement approval records. Complete with exact action/reference/scope enforcement.
+11. Implement deterministic task router. Complete for explicit structured routes only.
+12. Implement export. Existing formats extended with runtime records.
+13. Implement backup. Complete with SQLite backup API, checksum and manifest.
+14. Implement restore drill. Complete with synthetic state-equivalence coverage.
+15. Add unit tests. Complete.
+16. Add integration tests. Complete.
 
 ## M4 Cognitive Engine v0.1
+
+Status: exact next recommended milestone; do not begin without owner review of M3.
 
 1. Implement attention scoring rules.
 2. Implement novelty and repetition signals.

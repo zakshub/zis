@@ -26,9 +26,9 @@ Outputs: local database, CLI, evidence ingestion, memory, deterministic router, 
 
 Exit condition: ZIS can operate basic workflows without any LLM.
 
-Status (2026-10-03): a bounded foundation slice is complete: local SQLite initialization/migrations, evidence storage, audit events, contradictions, temporal supersession, CLI, JSON/CSV/Markdown export and atomic M2 evidence import. Memory, capability/specialist registries, general approvals, deterministic routing, backup and restore remain future Phase 2 work.
+Status (2026-10-04): complete for M3. The accepted M1/M2 foundation now includes governed memory storage, source/capability/specialist registries, scoped approval records, explainable deterministic routing, runtime operations, schema/foreign-key health checks, expanded readable export, and verified local backup/restore. This is classical infrastructure, not cognition, specialist execution or capability sensing.
 
-Audit note (2026-10-03): M1 validation and audit guarantees are now explicitly bounded, and current evidence mutations use one transaction/connection per logical operation. The durability/adversarial cases listed in the testing strategy remain a Classical Runtime backlog rather than completed M1 guarantees.
+Audit note (2026-10-04): M3 implements the relevant checksum, tamper detection, fresh restore, state-equivalence, orphan detection and rollback cases. Power-loss simulation, disk-full behavior, high-contention concurrency, cryptographic audit tamper evidence and cross-version restore remain later resilience work.
 
 ## Phase 3 Modern Intelligence Layer
 

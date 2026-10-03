@@ -12,7 +12,7 @@ The durable object is the cognitive specification, evidence model, memory, rules
 
 ## Current status
 
-Milestones 1 and 2 are implemented locally. In addition to the M1 evidence foundation, ZIS now has a governed ZOS migration pipeline: selected files can be fingerprinted and classified, manually structured candidates pass privacy, specialist and temporal gates, review decisions are audited, and only explicitly approved safe candidates can enter the existing evidence store. No real ZOS personal evidence has been imported. The dependency-free validator implements only the ZIS-required subset of JSON Schema Draft 2020-12; it is not standards-complete. Audit events are application-level append-only, not cryptographically tamper-evident. No AI provider or frontend is required.
+Milestones 1, 2 and 3 are implemented locally. ZIS now has the evidence and governed ZOS migration foundations plus a deterministic Classical Runtime: source, memory-storage, capability and specialist registries; scoped approval records; explainable routing; operation history; verified local SQLite backup/restore; health checks; and JSON/CSV/Markdown export. This remains infrastructure, not the Cognitive Engine. No real ZOS personal evidence or specialist knowledge has been imported. The dependency-free validator implements only the ZIS-required subset of JSON Schema Draft 2020-12; it is not standards-complete. Audit and approval records are application-level governance, not cryptographic identity or tamper evidence. No AI provider, frontend or network is required.
 
 ## Quick start
 
@@ -22,6 +22,8 @@ Python 3.11+ is required. The runtime has no third-party dependencies.
 $env:PYTHONPATH = "src"
 python -m zis.cli init
 python -m zis.cli status
+python -m zis.cli runtime status
+python -m zis.cli health
 python -m unittest discover -s tests -v
 ```
 
@@ -33,9 +35,9 @@ python -m zis.cli evidence list
 python -m zis.cli export .\local-export
 ```
 
-The bounded M2 commands are under `zis migrate zos`. Start with `--help`; scan only explicitly selected paths from a read-only ZOS checkout and use an immutable source commit. Candidate creation is structured/manual, and `approve` is required before `import`.
+The bounded M2 commands remain under `zis migrate zos`. M3 adds `source`, `memory`, `capability`, `specialist`, `approval`, `route`, `backup`, `restore`, `health` and `runtime` command families. Use `--help` for exact structured inputs.
 
-Runtime data defaults to `.zis/zis.sqlite3` and is excluded from Git. Exported evidence may be private and must be reviewed before publication.
+Runtime data defaults to `.zis/zis.sqlite3` and is excluded from Git. Backups must use an explicit private destination and are never uploaded. Exports and backups may contain private state and must not be committed.
 
 Read in this order:
 
@@ -56,6 +58,6 @@ Read in this order:
 15. docs/14_STATUS.md
 16. docs/15_GOVERNANCE_AND_ACCEPTANCE.md
 
-Implementation details are in `docs/architecture/M1_IMPLEMENTATION.md` and `docs/migration/M2_IMPLEMENTATION.md`; privacy boundaries and the ZOS migration inventory are under `docs/privacy/` and `docs/migration/`.
+Implementation details are in `docs/architecture/M1_IMPLEMENTATION.md`, `docs/migration/M2_IMPLEMENTATION.md` and `docs/architecture/M3_CLASSICAL_RUNTIME.md`; privacy boundaries and the ZOS migration inventory are under `docs/privacy/` and `docs/migration/`.
 
 No direct personal identity, face, employer or exact private identity data belongs in the public ZIS core.

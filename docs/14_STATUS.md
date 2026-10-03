@@ -1,10 +1,10 @@
 # Current Status
 
-Date: 2026 10 03
+Date: 2026 10 04
 
 ## Overall state
 
-Milestone 2 — ZOS Evidence Migration — is implemented and verified. M1 remains closed. The broader ZIS product remains pre-frontend and pre-integration.
+Milestone 3 — Classical Runtime — is implemented and verified. M0–M2 remain closed. The broader ZIS product remains pre-cognition, pre-specialist-execution, pre-observation and pre-frontend.
 
 ## Completed foundation documentation
 
@@ -78,6 +78,22 @@ TaxBot is an active local first Pakistan tax preparation system.
 
 ZIST is a local first Urdu content intelligence and archive system.
 
+## Milestone 3 implemented
+
+1. General source registry with optional compatibility for existing embedded evidence source references.
+2. Evidence-backed memory storage with proposed/active/terminal lifecycle, contradiction state and mandatory exact approval before activation.
+3. Capability registry distinct from CapabilityProposal, with dependency and availability checks.
+4. SpecialistManifest v2 registry with domain, interface/runtime compatibility and availability metadata; no invocation.
+5. General application-level ApprovalRecord with immutable audit history and exact action/reference/scope authorization.
+6. Explainable deterministic routing for no-action, runtime-status, existing-capability, specialist-candidate, approval-required and unsupported outcomes.
+7. Minimal durable route and runtime-operation records; only local runtime status executes in M3.
+8. SQLite migration 003 and seven new portable contracts.
+9. JSON/CSV/Markdown export expanded to include M3 runtime projections in JSON and summary counts in Markdown.
+10. Consistent SQLite backup using the supported backup API, SHA-256 manifest, schema/runtime versions, durable counts and verification.
+11. Restore to a fresh path by default, verified through a temporary database before atomic replacement; overwrite requires an explicit flag.
+12. Structured health check for SQLite integrity, required tables, migration sequence and foreign-key/orphan state.
+13. Synthetic restore drill covers evidence, contradiction, ZOS migration metadata, M3 registries, approval/memory state, runtime operations and audit continuity.
+
 ## Not yet implemented
 
 No general external-source ingestion pipeline or observation connector exists; M2 only reads explicitly selected local ZOS files.
@@ -94,12 +110,12 @@ No ZIS simulation world exists yet.
 
 No real ZOS evidence, personal content or specialist knowledge has been imported; human selection and review are still required for any future candidate.
 
-No general memory engine, approval engine, specialist registry/runtime, router, backup or restore workflow exists yet.
+No Memory Engine, Cognitive Engine, learning/consolidation, specialist federation/execution, capability sensing, semantic routing, background job system or cryptographic approval identity exists yet. M3 provides only their classical storage/governance substrate where stated.
 
 ## Verification
 
-`python -m unittest discover -s tests -v` passes 33 tests locally on Python 3.13.15: the accepted 16 M1 tests plus 17 M2 migration tests. The implementation targets Python 3.11+ and requires no network or AI service.
+`python -m unittest discover -s tests -v` passes 59 tests locally on Python 3.13.15: the accepted 33 M1/M2 tests plus 26 M3 tests. The implementation targets Python 3.11+ and requires no network or AI service.
 
 ## Next milestone
 
-Recommended next: M3 — Classical Runtime, bounded to the remaining governed lifecycle, source registry, approval records, backup/restore and recovery work. Do not begin until M2 is reviewed and accepted.
+Recommended next: M4 — Cognitive Engine v0.1. Do not begin until M3 is reviewed and accepted.

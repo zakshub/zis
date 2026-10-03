@@ -90,3 +90,24 @@ Migration impact: real ZOS material remains unimported until an owner reviews a 
 Decision: approved import, lineage updates, contradiction materialization and audit history use the existing SQLite database and one caller-owned transaction.
 Reason: this preserves established contracts and rollback behavior without a second evidence or conflict system.
 Architecture impact: none; migration 002 adds bounded manifest/review tables.
+
+## D021 M3 uses projection tables plus existing audit history
+Decision: store current validated records as JSON projections with indexed relational lifecycle/reference columns, while recording every mutation in the existing application-level audit table.
+Reason: this preserves portable contracts, relational integrity and atomic rollback without introducing event-sourcing infrastructure.
+Alternatives: microservices, queues, a new event store and distributed workflow infrastructure were rejected as unnecessary.
+Architecture impact: migration 003 extends the accepted SQLite runtime without changing its layer model.
+
+## D022 Durable memory requires exact approval
+Decision: evidence-backed memory begins `proposed` and non-current; activation requires an approved record matching `memory.promote`, the exact memory ID and scope.
+Reason: evidence existence, confidence or repetition alone must not silently become durable truth.
+Architecture impact: M3 implements storage and governance only; consolidation, decay, semantic memory and cognition remain later milestones.
+
+## D023 Classical routing is explicit and non-semantic
+Decision: M3 routes only declared structured action types against current registry/approval state and records every rule evaluated.
+Reason: insufficient information must be visible rather than filled by probabilistic or pretend semantic reasoning.
+Architecture impact: capability sensing remains M8, specialist invocation remains M6 and cognitive routing remains M4.
+
+## D024 Backup publication and restore are verify-before-replace
+Decision: use SQLite's backup API, publish a checksum/version/count manifest, restore through a verified temporary database, and refuse destination overwrite by default.
+Reason: copying a live database directly or replacing a destination before verification creates avoidable partial-state risk.
+Architecture impact: backup remains local and explicit; cloud synchronization and cross-version recovery are not introduced.

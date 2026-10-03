@@ -2,15 +2,15 @@
 
 These questions are intentionally deferred until the relevant milestone. They are not blockers for documentation foundation.
 
-## Runtime
+## Runtime decisions resolved for the current implementation
 
-1. What language should own the classical core runtime?
-2. Is Python the best first implementation or should the core be split between a small portable kernel and a modern service layer?
-3. Which durable data export formats become mandatory?
+1. Python 3.11+ owns the first classical runtime under D011; replacement remains possible.
+2. SQLite owns current local durable state under D012.
+3. JSON, CSV and Markdown are the current readable exports; verified SQLite backup/restore is added by M3.
 
 ## Memory
 
-1. What confidence scale should be canonical?
+1. Ordinal confidence (`unknown`, `weak`, `probable`, `strong`, `established`) is canonical under D013.
 2. What decay rules should apply to preferences versus factual evidence?
 3. What evidence volume triggers consolidation?
 

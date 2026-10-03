@@ -62,4 +62,4 @@ Read-only inspection used ZOS commit `46952de2af418528a2f7911c9583d9c915b1b645`.
 4. Source content changes produce a new manifest ID; M2 does not fetch repositories or attest that a supplied directory matches its claimed commit.
 5. Review authentication and signatures are not implemented. Review/audit records are application-level append-only, not cryptographically tamper-evident.
 6. Candidate extraction is manual-structured. No real ZOS candidate has been approved or imported.
-7. General backup, restore, corruption recovery, concurrency and power-loss hardening remain M3 work.
+7. M3 now provides verified local backup/restore and non-destructive integrity reporting. Corrupt-live-database recovery, concurrency and power-loss hardening remain future resilience work.
