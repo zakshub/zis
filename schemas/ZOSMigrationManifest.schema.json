@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zis.local/schemas/ZOSMigrationManifest.schema.json",
+  "title": "ZIS ZOS Migration Source Manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "source_repository", "source_ref", "source_path", "content_fingerprint", "classification", "classification_rationale", "confidence", "privacy_screening_result", "identity_scrub_status", "specialist_routing_result", "extraction_status", "candidate_ids", "human_review_status", "import_status", "imported_evidence_ids", "rejection_reason", "extracted_at", "updated_at", "migration_version", "transformation_history"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^zsrc_[a-f0-9]{20}$"},
+    "source_repository": {"type": "string", "minLength": 1},
+    "source_ref": {"type": "string", "minLength": 1},
+    "source_path": {"type": "string", "minLength": 1},
+    "content_fingerprint": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "classification": {"enum": ["A", "B", "C", "D", "E", "F", "G"]},
+    "classification_rationale": {"type": "string", "minLength": 1},
+    "confidence": {"enum": ["unknown", "weak", "probable", "strong", "established"]},
+    "privacy_screening_result": {"enum": ["no_structural_signal", "review_required", "blocked"]},
+    "identity_scrub_status": {"enum": ["not_required", "pending_review", "reviewed_safe", "excluded"]},
+    "specialist_routing_result": {"type": "string", "minLength": 1},
+    "extraction_status": {"enum": ["inventoried", "candidate_created", "blocked", "not_applicable"]},
+    "candidate_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^zcand_[a-f0-9]{20}$"}},
+    "human_review_status": {"enum": ["pending", "in_review", "completed", "not_applicable"]},
+    "import_status": {"enum": ["not_started", "partially_imported", "imported", "blocked", "not_applicable"]},
+    "imported_evidence_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^ev_[a-f0-9]{20}$"}},
+    "rejection_reason": {"type": ["string", "null"]},
+    "extracted_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "migration_version": {"type": "integer", "minimum": 1},
+    "transformation_history": {"type": "array", "items": {"type": "string", "minLength": 1}}
+  }
+}

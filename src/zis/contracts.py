@@ -19,6 +19,8 @@ CONTRACTS = {
     "specialist": "SpecialistManifest.schema.json",
     "capability": "CapabilityProposal.schema.json",
     "idea": "IdeaLineage.schema.json",
+    "zos-migration-manifest": "ZOSMigrationManifest.schema.json",
+    "zos-migration-candidate": "ZOSMigrationCandidate.schema.json",
 }
 
 

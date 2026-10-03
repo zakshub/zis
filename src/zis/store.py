@@ -100,27 +100,35 @@ class EvidenceStore:
         validate("evidence", record)
         self.initialize()
         with self.connect() as connection:
-            if record["supersedes"]:
-                previous = self._get_evidence(connection, record["supersedes"])
-                if not previous:
-                    raise ValueError(f"superseded evidence does not exist: {record['supersedes']}")
-                if previous["superseded_by"]:
-                    raise ValueError("evidence has already been superseded")
+            self.insert_evidence(connection, record)
+        return record
+
+    def insert_evidence(self, connection: sqlite3.Connection, record: dict[str, Any]) -> dict[str, Any]:
+        """Apply existing evidence rules inside a caller-owned transaction."""
+        enforce_identity_boundary(record)
+        validate("evidence", record)
+        previous = None
+        if record["supersedes"]:
+            previous = self._get_evidence(connection, record["supersedes"])
+            if not previous:
+                raise ValueError(f"superseded evidence does not exist: {record['supersedes']}")
+            if previous["superseded_by"]:
+                raise ValueError("evidence has already been superseded")
+        connection.execute(
+            "INSERT INTO evidence_records(id,record_json,record_type,scope,status,confidence,observed_at,recorded_at,valid_from,valid_until,supersedes,superseded_by,current_interpretation,version) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            (record["id"], json.dumps(record, ensure_ascii=False, sort_keys=True), record["record_type"], record["scope"], record["status"], record["confidence"], record["observed_at"], record["recorded_at"], record["valid_from"], record["valid_until"], record["supersedes"], record["superseded_by"], int(record["current_interpretation"]), record["version"]),
+        )
+        self._audit(connection, "evidence.captured", "evidence", record["id"], {"record": record})
+        if previous:
+            before = previous
+            after = deepcopy(previous)
+            after.update({"status": "superseded", "superseded_by": record["id"], "current_interpretation": False})
+            validate("evidence", after)
             connection.execute(
-                "INSERT INTO evidence_records(id,record_json,record_type,scope,status,confidence,observed_at,recorded_at,valid_from,valid_until,supersedes,superseded_by,current_interpretation,version) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                (record["id"], json.dumps(record, ensure_ascii=False, sort_keys=True), record["record_type"], record["scope"], record["status"], record["confidence"], record["observed_at"], record["recorded_at"], record["valid_from"], record["valid_until"], record["supersedes"], record["superseded_by"], int(record["current_interpretation"]), record["version"]),
+                "UPDATE evidence_records SET record_json=?,status='superseded',superseded_by=?,current_interpretation=0 WHERE id=?",
+                (json.dumps(after, ensure_ascii=False, sort_keys=True), record["id"], previous["id"]),
             )
-            self._audit(connection, "evidence.captured", "evidence", record["id"], {"record": record})
-            if record["supersedes"]:
-                before = previous
-                after = deepcopy(previous)
-                after.update({"status": "superseded", "superseded_by": record["id"], "current_interpretation": False})
-                validate("evidence", after)
-                connection.execute(
-                    "UPDATE evidence_records SET record_json=?,status='superseded',superseded_by=?,current_interpretation=0 WHERE id=?",
-                    (json.dumps(after, ensure_ascii=False, sort_keys=True), record["id"], previous["id"]),
-                )
-                self._audit(connection, "evidence.superseded", "evidence", previous["id"], {"before": before, "after": after, "by": record["id"]})
+            self._audit(connection, "evidence.superseded", "evidence", previous["id"], {"before": before, "after": after, "by": record["id"]})
         return record
 
     def get_evidence(self, evidence_id: str) -> dict[str, Any] | None:
@@ -172,14 +180,26 @@ class EvidenceStore:
         self.initialize()
         record = {"id": deterministic_id("con", [a, b]), "evidence_id_a": a, "evidence_id_b": b, "status": "unresolved", "created_at": utc_now(), "resolved_at": None, "resolution_rationale": None, "resolution_source_reference": None, "version": 1}
         with self.connect() as connection:
-            if not self._get_evidence(connection, a) or not self._get_evidence(connection, b):
-                raise ValueError("both evidence records must exist")
-            connection.execute(
-                "INSERT INTO contradictions(id,evidence_id_a,evidence_id_b,status,created_at,resolved_at,resolution_rationale,resolution_source_reference,version) VALUES (?,?,?,?,?,?,?,?,?)",
-                tuple(record.values()),
-            )
-            self._audit(connection, "contradiction.recorded", "contradiction", record["id"], record)
-        return record
+            return self.insert_contradiction(connection, a, b, record)
+
+    def insert_contradiction(self, connection: sqlite3.Connection, evidence_id_a: str, evidence_id_b: str, record: dict[str, Any] | None = None) -> dict[str, Any]:
+        """Apply existing contradiction rules inside a caller-owned transaction."""
+        if evidence_id_a == evidence_id_b:
+            raise ValueError("an evidence item cannot contradict itself")
+        a, b = sorted((evidence_id_a, evidence_id_b))
+        if not self._get_evidence(connection, a) or not self._get_evidence(connection, b):
+            raise ValueError("both evidence records must exist")
+        contradiction_id = deterministic_id("con", [a, b])
+        existing = self._get_contradiction(connection, contradiction_id)
+        if existing:
+            return existing
+        item = record or {"id": contradiction_id, "evidence_id_a": a, "evidence_id_b": b, "status": "unresolved", "created_at": utc_now(), "resolved_at": None, "resolution_rationale": None, "resolution_source_reference": None, "version": 1}
+        connection.execute(
+            "INSERT INTO contradictions(id,evidence_id_a,evidence_id_b,status,created_at,resolved_at,resolution_rationale,resolution_source_reference,version) VALUES (?,?,?,?,?,?,?,?,?)",
+            tuple(item.values()),
+        )
+        self._audit(connection, "contradiction.recorded", "contradiction", item["id"], item)
+        return item
 
     def resolve_contradiction(self, contradiction_id: str, rationale: str, source_reference: str) -> dict[str, Any]:
         if not rationale.strip() or not source_reference.strip():

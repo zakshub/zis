@@ -11,12 +11,17 @@ from pathlib import Path
 from . import __version__
 from .contracts import CONTRACTS, ContractError, validate
 from .export import export_store
+from .migration import REVIEW_DECISIONS, SOURCE_REPOSITORY, ZOSMigrationStore, dry_run, load_candidate_specifications
 from .records import build_evidence
 from .store import EvidenceStore
 
 
 def _store(args: argparse.Namespace) -> EvidenceStore:
     return EvidenceStore(args.database)
+
+
+def _migration_store(args: argparse.Namespace) -> ZOSMigrationStore:
+    return ZOSMigrationStore(_store(args))
 
 
 def _print_json(value: object) -> None:
@@ -81,6 +86,58 @@ def cmd_export(args: argparse.Namespace) -> None:
     _print_json({name: str(path) for name, path in export_store(_store(args), args.destination).items()})
 
 
+def cmd_zos_scan(args: argparse.Namespace) -> None:
+    _print_json(_migration_store(args).scan(args.source_root, args.source_ref, args.paths, args.source_repository))
+
+
+def cmd_zos_inventory(args: argparse.Namespace) -> None:
+    migration = _migration_store(args)
+    _print_json(migration.get_source(args.id) if args.id else migration.list_sources())
+
+
+def cmd_zos_candidate_add(args: argparse.Namespace) -> None:
+    specification = json.loads(Path(args.file).read_text(encoding="utf-8"))
+    _print_json(_migration_store(args).create_candidate(specification))
+
+
+def cmd_zos_candidates(args: argparse.Namespace) -> None:
+    migration = _migration_store(args)
+    _print_json(migration.review_packet(args.id) if args.id else migration.list_candidates(args.review_status))
+
+
+def cmd_zos_review(args: argparse.Namespace) -> None:
+    _print_json(_migration_store(args).review_candidate(args.id, args.decision, args.note))
+
+
+def cmd_zos_approve(args: argparse.Namespace) -> None:
+    _print_json(_migration_store(args).review_candidate(args.id, "approve", args.note))
+
+
+def cmd_zos_reject(args: argparse.Namespace) -> None:
+    _print_json(_migration_store(args).review_candidate(args.id, "reject", args.note))
+
+
+def cmd_zos_import(args: argparse.Namespace) -> None:
+    migration = _migration_store(args)
+    _print_json(migration.import_candidate(args.id) if args.id else migration.import_approved())
+
+
+def cmd_zos_status(args: argparse.Namespace) -> None:
+    _print_json(_migration_store(args).status())
+
+
+def cmd_zos_dry_run(args: argparse.Namespace) -> None:
+    specifications = load_candidate_specifications(args.candidate_file)
+    _print_json(dry_run(args.source_root, args.source_ref, args.paths, specifications, args.source_repository))
+
+
+def _add_zos_source_arguments(command: argparse.ArgumentParser) -> None:
+    command.add_argument("--source-root", required=True, help="Read-only local ZOS checkout root")
+    command.add_argument("--source-ref", required=True, help="Exact ZOS commit or immutable ref")
+    command.add_argument("--source-repository", default=SOURCE_REPOSITORY)
+    command.add_argument("paths", nargs="+", help="Selected paths relative to the source root")
+
+
 def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(prog="zis", description="ZIS local evidence foundation")
     root.add_argument("--database", help="SQLite path (default: .zis/zis.sqlite3)")
@@ -136,6 +193,45 @@ def parser() -> argparse.ArgumentParser:
     export = commands.add_parser("export")
     export.add_argument("destination")
     export.set_defaults(function=cmd_export)
+    migrate = commands.add_parser("migrate")
+    migration_commands = migrate.add_subparsers(dest="migration_command", required=True)
+    zos = migration_commands.add_parser("zos")
+    zos_commands = zos.add_subparsers(dest="zos_command", required=True)
+    scan = zos_commands.add_parser("scan")
+    _add_zos_source_arguments(scan)
+    scan.set_defaults(function=cmd_zos_scan)
+    inventory = zos_commands.add_parser("inventory")
+    inventory.add_argument("--id")
+    inventory.set_defaults(function=cmd_zos_inventory)
+    candidate_add = zos_commands.add_parser("candidate-add")
+    candidate_add.add_argument("file")
+    candidate_add.set_defaults(function=cmd_zos_candidate_add)
+    candidates = zos_commands.add_parser("candidates")
+    candidates.add_argument("--id")
+    candidates.add_argument("--review-status")
+    candidates.set_defaults(function=cmd_zos_candidates)
+    review = zos_commands.add_parser("review")
+    review.add_argument("id")
+    review.add_argument("decision", choices=sorted(REVIEW_DECISIONS))
+    review.add_argument("--note", required=True)
+    review.set_defaults(function=cmd_zos_review)
+    approve = zos_commands.add_parser("approve")
+    approve.add_argument("id")
+    approve.add_argument("--note", required=True)
+    approve.set_defaults(function=cmd_zos_approve)
+    reject = zos_commands.add_parser("reject")
+    reject.add_argument("id")
+    reject.add_argument("--note", required=True)
+    reject.set_defaults(function=cmd_zos_reject)
+    import_command = zos_commands.add_parser("import")
+    import_command.add_argument("id", nargs="?")
+    import_command.set_defaults(function=cmd_zos_import)
+    migration_status = zos_commands.add_parser("status")
+    migration_status.set_defaults(function=cmd_zos_status)
+    migration_dry_run = zos_commands.add_parser("dry-run")
+    _add_zos_source_arguments(migration_dry_run)
+    migration_dry_run.add_argument("--candidate-file", action="append", default=[])
+    migration_dry_run.set_defaults(function=cmd_zos_dry_run)
     return root
 
 
