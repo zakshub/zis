@@ -9,7 +9,6 @@ CREATE TABLE IF NOT EXISTS runtime_sources (
     updated_at TEXT NOT NULL,
     version INTEGER NOT NULL
 );
-
 CREATE TABLE IF NOT EXISTS approval_records (
     id TEXT PRIMARY KEY,
     record_json TEXT NOT NULL,
@@ -109,4 +108,3 @@ CREATE TABLE IF NOT EXISTS runtime_operations (
     FOREIGN KEY (capability_id) REFERENCES capability_registry(id),
     FOREIGN KEY (specialist_id) REFERENCES specialist_registry(id)
 );
-
