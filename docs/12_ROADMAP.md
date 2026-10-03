@@ -16,7 +16,7 @@ Outputs: evidence schema, source registry, ZOS inventory, redaction rules, confi
 
 Exit condition: representative ZOS material can be imported, traced and audited.
 
-Status (2026-10-02): the machine contracts, identity/privacy rules, ZOS inventory and migration map are implemented. Actual ZOS record import remains intentionally pending human selection and approval; no personal source material was copied.
+Status (2026-10-03): complete for the bounded M1/M2 scope. The machine contracts, identity/privacy rules, inventory, machine manifest, deterministic/manual candidate workflow, review queue, gates, dry-run and approved import path are implemented. Six deliberately selected ZOS paths were verified in a non-mutating dry-run; no real ZOS candidate was created or imported and no personal source material was copied.
 
 ## Phase 2 Classical Core Runtime
 
@@ -26,7 +26,7 @@ Outputs: local database, CLI, evidence ingestion, memory, deterministic router, 
 
 Exit condition: ZIS can operate basic workflows without any LLM.
 
-Status (2026-10-02): a bounded foundation slice is complete: local SQLite initialization/migrations, evidence storage, audit events, contradictions, temporal supersession, CLI and JSON/CSV/Markdown export. Memory, capability/specialist registries, approvals, deterministic routing, backup and restore remain future Phase 2 work.
+Status (2026-10-03): a bounded foundation slice is complete: local SQLite initialization/migrations, evidence storage, audit events, contradictions, temporal supersession, CLI, JSON/CSV/Markdown export and atomic M2 evidence import. Memory, capability/specialist registries, general approvals, deterministic routing, backup and restore remain future Phase 2 work.
 
 Audit note (2026-10-03): M1 validation and audit guarantees are now explicitly bounded, and current evidence mutations use one transaction/connection per logical operation. The durability/adversarial cases listed in the testing strategy remain a Classical Runtime backlog rather than completed M1 guarantees.
 

@@ -12,7 +12,7 @@ The durable object is the cognitive specification, evidence model, memory, rules
 
 ## Current status
 
-Milestone 1 — Evidence Contracts and ZOS Migration Foundation — is implemented locally. ZIS now has machine-validated contracts, a SQLite evidence store, deterministic identifiers, explicit provenance/confidence/time semantics, contradiction and supersession history, a minimal CLI, durable exports and an audited ZOS migration plan. The dependency-free validator implements the subset of JSON Schema Draft 2020-12 used by ZIS; it is not a standards-complete validator. No AI provider or frontend is required.
+Milestones 1 and 2 are implemented locally. In addition to the M1 evidence foundation, ZIS now has a governed ZOS migration pipeline: selected files can be fingerprinted and classified, manually structured candidates pass privacy, specialist and temporal gates, review decisions are audited, and only explicitly approved safe candidates can enter the existing evidence store. No real ZOS personal evidence has been imported. The dependency-free validator implements only the ZIS-required subset of JSON Schema Draft 2020-12; it is not standards-complete. Audit events are application-level append-only, not cryptographically tamper-evident. No AI provider or frontend is required.
 
 ## Quick start
 
@@ -32,6 +32,8 @@ python -m zis.cli evidence add "Synthetic example" --type observation --source-t
 python -m zis.cli evidence list
 python -m zis.cli export .\local-export
 ```
+
+The bounded M2 commands are under `zis migrate zos`. Start with `--help`; scan only explicitly selected paths from a read-only ZOS checkout and use an immutable source commit. Candidate creation is structured/manual, and `approve` is required before `import`.
 
 Runtime data defaults to `.zis/zis.sqlite3` and is excluded from Git. Exported evidence may be private and must be reviewed before publication.
 
@@ -54,6 +56,6 @@ Read in this order:
 15. docs/14_STATUS.md
 16. docs/15_GOVERNANCE_AND_ACCEPTANCE.md
 
-Implementation details are in `docs/architecture/M1_IMPLEMENTATION.md`; privacy boundaries and the ZOS migration inventory are under `docs/privacy/` and `docs/migration/`.
+Implementation details are in `docs/architecture/M1_IMPLEMENTATION.md` and `docs/migration/M2_IMPLEMENTATION.md`; privacy boundaries and the ZOS migration inventory are under `docs/privacy/` and `docs/migration/`.
 
 No direct personal identity, face, employer or exact private identity data belongs in the public ZIS core.

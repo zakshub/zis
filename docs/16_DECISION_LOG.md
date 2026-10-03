@@ -79,3 +79,14 @@ Architecture impact: none. This clarifies existing behavior.
 Decision: validation reads, evidence/contradiction mutations and their audit writes execute within one connection and transaction for each logical operation.
 Reason: a failed operation must not leave its state and audit history inconsistent.
 Architecture impact: none. This tightens the existing SQLite implementation boundary.
+
+## D019 ZOS migration is manifest-driven and human-gated
+Decision: M2 stores source hashes/metadata and manually structured candidates, screens every candidate, and separates explicit approval from EvidenceStore import.
+Reason: deterministic code cannot safely infer arbitrary prose, raw private sources must not be copied into ZIS, and ZOS remains evidence rather than architecture.
+Alternatives: bulk file copying, automatic paragraph conversion and LLM extraction were rejected for this milestone.
+Migration impact: real ZOS material remains unimported until an owner reviews a specific candidate; specialist, sensitive and obsolete material stays outside core.
+
+## D020 M2 reuses M1 storage and contradiction primitives
+Decision: approved import, lineage updates, contradiction materialization and audit history use the existing SQLite database and one caller-owned transaction.
+Reason: this preserves established contracts and rollback behavior without a second evidence or conflict system.
+Architecture impact: none; migration 002 adds bounded manifest/review tables.

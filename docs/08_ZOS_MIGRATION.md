@@ -15,8 +15,8 @@ ZIS will inherit validated cognitive evidence and reusable architecture while re
 3. Permission model concepts
 4. Model update protocol
 5. Task routing principles
-6. Blind spot model candidates
-7. Writing model and writing corpus structures
+6. General blind-spot pattern candidates, after evidence review
+7. Transferable communication patterns, without specialist writing operations or private corpus content
 8. Cognitive sequence candidates
 9. Human approval rules
 10. Local first and private data separation patterns
@@ -34,22 +34,24 @@ ZIS will inherit validated cognitive evidence and reusable architecture while re
 7. Claims based only on personality tests
 8. Sensitive private records
 
-## Migration phases
+## Implemented M2 flow
 
-Phase 1
-Inventory ZOS documents and datasets.
+The local, dependency-free flow is:
 
-Phase 2
-Classify every item as cognitive evidence, specialist knowledge, identity data, private evidence, implementation pattern or obsolete material.
+`selected source -> SHA-256 fingerprint -> A-G classification -> structured candidate -> privacy/specialist/temporal gates -> human review -> approved EvidenceRecord import`
 
-Phase 3
-Redact and normalize reusable cognitive evidence into ZIS schemas.
+The machine manifest preserves the repository, immutable source ref, path, fingerprint, classification and rationale, ordinal confidence, gate states, candidate IDs, review/import state, resulting evidence IDs, timestamps, version and transformation history. Raw source content is read only for hashing and structural screening and is not stored in the manifest database.
 
-Phase 4
-Import only approved abstractions and provenance references.
+Candidate creation is deterministic for stable semantic input but deliberately manual-structured. M2 does not pretend to understand arbitrary prose and does not turn every paragraph into evidence. Candidate types distinguish statements, observations, patterns, principles, historical preferences, uncertainty, contradictions and obsolete claims.
 
-Phase 5
-Run contradiction review against current ZIS definitions.
+All candidate free text remains `review_required` until a human approves it. Structural identity findings block approval; D-class or primarily specialist candidates route outside core; E-class and obsolete candidates are blocked. A `transferable_cognitive_pattern` hint only moves detected specialist material to review—it never approves it.
 
-Phase 6
-Retain ZOS as historical source. Do not erase lineage.
+Historical and superseded imports are non-current and expired. Uncertain or contradicted imports are non-current. Linked approved candidates use the existing contradiction table when both evidence records exist; no winner is selected.
+
+Review decisions are `approve`, `reject`, `defer`, `requires_redaction`, `route_to_specialist` and `mark_obsolete`. Approval and import are separate audited operations. Import reuses the existing EvidenceStore, is idempotent by deterministic identifiers, and keeps the evidence write, lineage update, contradiction creation and audit event in one SQLite transaction.
+
+Dry-run performs no database write. It reports source classifications, candidate/gate counts and approval/import eligibility. See `docs/migration/M2_IMPLEMENTATION.md` for commands and limitations.
+
+## Deliberate boundaries
+
+No source is mass-imported. No raw private ZOS file is copied into ZIS. No specialist expertise becomes ZIS core. Structural screening cannot prove free-text anonymity, so uncertain material requires human review. ZOS remains the historical source; lineage is preserved rather than erased.

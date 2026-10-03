@@ -65,6 +65,18 @@ ZIS must distinguish observed facts, user statements, inferences, hypotheses and
 
 M1 acceptance is bounded: the validator is not standards-complete, and application-level append-only audit events are not cryptographically tamper-evident. These limits must remain visible until a later approved implementation changes them.
 
+## Milestone 2 acceptance evidence
+
+1. Machine contracts and SQLite state exist for source manifests, candidates and review events.
+2. Selected read-only ZOS paths can be fingerprinted, classified and dry-run without durable mutation.
+3. Candidate creation is deterministic/manual-structured; no LLM or external service is used.
+4. Privacy, specialist, obsolete and approval gates prevent unsafe import.
+5. Approved imports reuse EvidenceStore and preserve confidence, temporal context, provenance and source lineage.
+6. Duplicate import is idempotent and linked conflicts reuse the existing contradiction model.
+7. Synthetic rollback coverage proves a failed final audit cannot leave partial import state.
+8. The 33-test suite passes and contains no real private ZOS fixture.
+9. No actual ZOS candidate/import is approved by this implementation milestone; each future selection remains a human decision.
+
 ## Change governance
 
 Every architecture change should record reason, evidence, alternatives, decision, consequences and migration impact.

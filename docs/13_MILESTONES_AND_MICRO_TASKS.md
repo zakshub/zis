@@ -28,9 +28,9 @@ Status: complete for the five requested Milestone 1 contracts and evidence found
 
 Implemented additions: ordinal confidence, lifecycle states, source/provenance requirements, deterministic identifiers, contradiction relations, temporal validity and strict identity-field rejection.
 
-## M2 ZOS Inventory
+## M2 ZOS Evidence Migration
 
-Status: inventory and migration map complete; sample redaction/import remains pending human approval.
+Status: complete for the bounded migration pipeline (2026-10-03). No real ZOS evidence was imported; future selections still require owner review.
 
 1. Enumerate ZOS files.
 2. Classify each file.
@@ -38,14 +38,16 @@ Status: inventory and migration map complete; sample redaction/import remains pe
 4. Mark specialist knowledge that should not migrate.
 5. Mark cognitive evidence candidates.
 6. Mark reusable architecture patterns.
-7. Produce migration manifest.
-8. Redact sample documents.
-9. Import sample evidence.
-10. Verify provenance round trip.
+7. Produce a machine-readable migration manifest. Complete.
+8. Screen identity/privacy without storing raw sources. Complete with conservative structural detection and mandatory free-text review; no claim of perfect anonymization.
+9. Import only explicitly approved safe candidates. Complete and verified with synthetic records only.
+10. Verify provenance round trip. Complete with source ref, path, fingerprint and candidate lineage.
+11. Route specialist, obsolete and sensitive material away from core. Complete.
+12. Provide non-mutating dry-run and CLI review workflow. Complete.
 
 ## M3 Classical Runtime
 
-Status: foundation slice complete (database migrations, evidence storage, audit events, CLI and export). The remaining broader runtime items stay deferred.
+Status: next recommended milestone. Foundation pieces already exist (database migrations, evidence storage, audit events, CLI, export and atomic migration import); the remaining broader runtime items stay deferred until owner approval.
 
 Pre-runtime audit fixes completed 2026-10-03: validator scope and audit-history limitations documented; atomic evidence transaction boundaries tightened. Future durability/adversarial cases are recorded in `docs/testing/TESTING_STRATEGY.md`.
 

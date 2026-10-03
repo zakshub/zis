@@ -1,6 +1,6 @@
 # Testing Strategy
 
-Milestone 1 uses the standard-library `unittest` runner and temporary directories. Tests require no AI provider, network, external database or private data.
+Milestones 1 and 2 use the standard-library `unittest` runner and temporary directories. Tests require no AI provider, network, external database or private data.
 
 Run:
 
@@ -22,8 +22,16 @@ Coverage includes:
 9. JSON export round trip plus CSV and Markdown readability.
 10. Presence of all required ZOS migration classifications and inspected asset families.
 11. Transaction rollback when an audit write fails during evidence capture or supersession.
+12. Migration manifest creation, deterministic fingerprints and A-G classification preservation.
+13. Candidate privacy, identity, specialist, obsolete and explicit-approval gates.
+14. Temporal mapping, provenance/source lineage and existing contradiction-model reuse.
+15. Rejected-import prevention, approved import and duplicate-import idempotency.
+16. Dry-run non-mutation and full import rollback after a final audit failure.
+17. Absence of raw sensitive source content from the migration database and classical exports.
 
 Synthetic fixtures are visibly synthetic and contain no private identity.
+
+Current verified result on Python 3.13.15: 33 passed (16 accepted M1 tests and 17 M2 tests).
 
 ## Future durability and adversarial backlog
 
