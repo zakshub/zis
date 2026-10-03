@@ -89,9 +89,12 @@ class ZOSMigrationTests(unittest.TestCase):
         self.assertEqual(record["confidence"], "strong")
 
     def test_identity_fields_block_candidate(self):
-        candidate = self.migration.create_candidate(self._spec("Contact: synthetic.person@example.test"))
+        private_text = "Contact: synthetic.person@example.test"
+        candidate = self.migration.create_candidate(self._spec(private_text))
         self.assertEqual(candidate["privacy_status"], "blocked")
         self.assertIn("email", candidate["privacy_findings"])
+        self.assertNotIn(private_text, candidate["content"])
+        self.assertNotIn(private_text, self.db.read_bytes().decode("utf-8", errors="ignore"))
         with self.assertRaisesRegex(ValueError, "redaction"):
             self.migration.review_candidate(candidate["id"], "approve", "Not safe.")
 

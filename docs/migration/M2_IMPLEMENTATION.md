@@ -18,7 +18,7 @@ SQLite migration `002_zos_migration.sql` adds:
 
 1. `scan` reads only selected paths below a supplied local source root, hashes bytes, applies deterministic A-G path rules and stores metadata.
 2. `candidate-add` accepts a human-authored JSON specification. Stable semantic fields produce a deterministic candidate ID.
-3. Privacy screening blocks detected structural identity signals. All otherwise clean free text still requires human review.
+3. Privacy screening blocks detected structural identity signals. The detected candidate text, scope and notes are replaced before persistence by an omission marker plus SHA-256 fingerprint and finding categories. All otherwise clean free text still requires human review.
 4. Specialist screening routes primarily specialist content outside core. An explicitly marked transferable pattern is still review-required, never automatically safe.
 5. Temporal state is explicit: `historical`, `currently_valid`, `uncertain_current_validity`, `superseded`, `contradicted` or `obsolete`.
 6. `candidates --id` returns the candidate, its source manifest and full source reference for review.
@@ -58,7 +58,7 @@ Read-only inspection used ZOS commit `46952de2af418528a2f7911c9583d9c915b1b645`.
 
 1. Path and keyword rules are conservative routing aids, not semantic understanding.
 2. Structural patterns cannot reliably identify every real name, company, address or private fact in prose; human review is mandatory.
-3. No automatic redaction is claimed or performed. A blocked candidate must be rewritten as a new reviewed candidate outside Git.
+3. No semantic anonymization or automatic redaction is claimed. Structurally detected candidate text is omitted from persistence; a blocked candidate must be rewritten as a new reviewed candidate outside Git.
 4. Source content changes produce a new manifest ID; M2 does not fetch repositories or attest that a supplied directory matches its claimed commit.
 5. Review authentication and signatures are not implemented. Review/audit records are application-level append-only, not cryptographically tamper-evident.
 6. Candidate extraction is manual-structured. No real ZOS candidate has been approved or imported.

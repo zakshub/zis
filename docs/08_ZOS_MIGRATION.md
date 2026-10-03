@@ -44,7 +44,7 @@ The machine manifest preserves the repository, immutable source ref, path, finge
 
 Candidate creation is deterministic for stable semantic input but deliberately manual-structured. M2 does not pretend to understand arbitrary prose and does not turn every paragraph into evidence. Candidate types distinguish statements, observations, patterns, principles, historical preferences, uncertainty, contradictions and obsolete claims.
 
-All candidate free text remains `review_required` until a human approves it. Structural identity findings block approval; D-class or primarily specialist candidates route outside core; E-class and obsolete candidates are blocked. A `transferable_cognitive_pattern` hint only moves detected specialist material to review—it never approves it.
+All candidate free text remains `review_required` until a human approves it. Structurally detected identity-bearing candidate text is omitted before persistence and approval is blocked; D-class or primarily specialist candidates route outside core; E-class and obsolete candidates are blocked. A `transferable_cognitive_pattern` hint only moves detected specialist material to review—it never approves it.
 
 Historical and superseded imports are non-current and expired. Uncertain or contradicted imports are non-current. Linked approved candidates use the existing contradiction table when both evidence records exist; no winner is selected.
 

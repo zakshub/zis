@@ -105,6 +105,8 @@ def inspect_source(source_root: str | Path, source_ref: str, source_path: str, s
     content = path.read_bytes()
     fingerprint = fingerprint_bytes(content)
     normalized_path = path.relative_to(Path(source_root).resolve()).as_posix()
+    if privacy_findings(normalized_path.replace("/", " ")):
+        raise ValueError("source path contains structurally detectable identity data; use a human-safe source path")
     classification, rationale = classify_source_path(normalized_path)
     decoded = content.decode("utf-8", errors="replace")
     findings = privacy_findings(decoded)
@@ -211,11 +213,27 @@ class ZOSMigrationStore:
         missing = sorted(required - specification.keys())
         if missing:
             raise ValueError("candidate specification missing: " + ", ".join(missing))
-        content = str(specification["content"]).strip()
-        if not content:
+        raw_content = str(specification["content"]).strip()
+        if not raw_content:
             raise ValueError("candidate content must not be empty")
-        findings = privacy_findings(content)
-        domains = specialist_domains(content)
+        raw_scope = str(specification["scope"]).strip()
+        raw_notes = [str(note) for note in specification.get("transformation_notes", ["manually_structured_candidate"])]
+        screened_text = "\n".join([raw_content, raw_scope, *raw_notes])
+        findings = privacy_findings(screened_text)
+        domains = specialist_domains(raw_content)
+        if findings:
+            omitted_fingerprint = fingerprint_bytes(screened_text.encode("utf-8"))
+            content = "[BLOCKED: identity-bearing candidate content omitted]"
+            content_material = omitted_fingerprint
+            scope = "migration.private_candidate"
+            transformation_notes = ["identity_bearing_text_omitted", f"omitted_content_fingerprint:{omitted_fingerprint}"]
+        else:
+            content = raw_content
+            content_material = content
+            scope = raw_scope
+            transformation_notes = raw_notes
+        if specification.get("transferable_cognitive_pattern", False):
+            transformation_notes.append("transferable_cognitive_pattern_requested")
         transferable = bool(specification.get("transferable_cognitive_pattern", False))
         classification = source["classification"]
         privacy_status = "blocked" if classification == "F" or findings else "review_required"
@@ -237,8 +255,8 @@ class ZOSMigrationStore:
         else:
             review_status, import_status = "pending", "not_imported"
         material = {
-            "source_id": source["id"], "candidate_type": candidate_type, "content": content,
-            "scope": specification["scope"], "confidence": specification["confidence"],
+            "source_id": source["id"], "candidate_type": candidate_type, "content_material": content_material,
+            "scope": scope, "confidence": specification["confidence"],
             "temporal_status": temporal_status, "observed_at": specification["observed_at"],
             "valid_from": specification.get("valid_from") or specification["observed_at"],
             "valid_until": specification.get("valid_until"), "version": MIGRATION_VERSION,
@@ -249,7 +267,7 @@ class ZOSMigrationStore:
             "source_id": source["id"],
             "candidate_type": candidate_type,
             "content": content,
-            "scope": specification["scope"],
+            "scope": scope,
             "confidence": specification["confidence"],
             "privacy_status": privacy_status,
             "identity_scrub_status": identity_status,
@@ -261,7 +279,7 @@ class ZOSMigrationStore:
             "valid_from": specification.get("valid_from") or specification["observed_at"],
             "valid_until": specification.get("valid_until"),
             "contradiction_candidate_ids": sorted(set(specification.get("contradiction_candidate_ids", []))),
-            "transformation_notes": list(specification.get("transformation_notes", ["manually_structured_candidate"])),
+            "transformation_notes": transformation_notes,
             "review_status": review_status,
             "review_note": None,
             "reviewed_at": None,
@@ -342,6 +360,8 @@ class ZOSMigrationStore:
             raise ValueError(f"unsupported review decision: {decision}")
         if not note.strip():
             raise ValueError("review note is required")
+        if privacy_findings(note):
+            raise ValueError("review note contains structurally detectable identity data")
         self.initialize()
         with self.evidence_store.connect() as connection:
             item = self._get_candidate(connection, candidate_id)
