@@ -12,7 +12,7 @@ The durable object is the cognitive specification, evidence model, memory, rules
 
 ## Current status
 
-Milestone 1 — Evidence Contracts and ZOS Migration Foundation — is implemented locally. ZIS now has machine-validated contracts, a SQLite evidence store, deterministic identifiers, explicit provenance/confidence/time semantics, contradiction and supersession history, a minimal CLI, durable exports and an audited ZOS migration plan. No AI provider or frontend is required.
+Milestone 1 — Evidence Contracts and ZOS Migration Foundation — is implemented locally. ZIS now has machine-validated contracts, a SQLite evidence store, deterministic identifiers, explicit provenance/confidence/time semantics, contradiction and supersession history, a minimal CLI, durable exports and an audited ZOS migration plan. The dependency-free validator implements the subset of JSON Schema Draft 2020-12 used by ZIS; it is not a standards-complete validator. No AI provider or frontend is required.
 
 ## Quick start
 

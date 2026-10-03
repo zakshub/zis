@@ -1,6 +1,6 @@
 # Current Status
 
-Date: 2026 10 02
+Date: 2026 10 03
 
 ## Overall state
 
@@ -41,6 +41,14 @@ Milestone 1 — Evidence Contracts and ZOS Migration Foundation — is implement
 12. Git exclusions for databases, runtime/private data, exports and secrets.
 13. Synthetic automated test suite with no AI or network dependency.
 
+## M1 audit fixes completed
+
+1. Validator documentation now states that only the ZIS-required Draft 2020-12 subset is implemented; standards completeness is not claimed.
+2. Audit events are documented as application-level append-only records without cryptographic tamper evidence.
+3. Future durability and adversarial cases are recorded in the testing backlog.
+4. Evidence capture/supersession, lifecycle transitions and contradiction operations now keep their validation reads, mutations and audit writes in one transaction/connection.
+5. Rollback regression coverage verifies that failed audit writes do not leave partial evidence capture or supersession state.
+
 ## Existing assets identified
 
 ZOS provides a substantial historical cognitive and architecture evidence base.
@@ -75,7 +83,7 @@ No general memory engine, approval engine, specialist registry/runtime, router, 
 
 ## Verification
 
-`python -m unittest discover -s tests -v` passes locally on Python 3.13.15. The implementation targets Python 3.11+.
+`python -m unittest discover -s tests -v` passes locally on Python 3.13.15. The implementation targets Python 3.11+. Re-run after every audit fix before acceptance.
 
 ## Next milestone
 

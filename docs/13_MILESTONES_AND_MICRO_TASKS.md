@@ -47,6 +47,8 @@ Status: inventory and migration map complete; sample redaction/import remains pe
 
 Status: foundation slice complete (database migrations, evidence storage, audit events, CLI and export). The remaining broader runtime items stay deferred.
 
+Pre-runtime audit fixes completed 2026-10-03: validator scope and audit-history limitations documented; atomic evidence transaction boundaries tightened. Future durability/adversarial cases are recorded in `docs/testing/TESTING_STRATEGY.md`.
+
 1. Select baseline language and runtime.
 2. Create CLI skeleton.
 3. Create local data directory contract.

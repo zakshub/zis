@@ -21,7 +21,7 @@ Reasons:
 ## Components
 
 - `schemas/*.schema.json`: Draft 2020-12 machine contracts.
-- `src/zis/contracts.py`: dependency-free validator for the contract subset used by M1.
+- `src/zis/contracts.py`: dependency-free validator for the contract subset used by M1. It is not a standards-complete JSON Schema implementation.
 - `src/zis/records.py`: normalized timestamps and deterministic, content-derived IDs.
 - `src/zis/store.py`: SQLite migrations, evidence projection, contradictions and append-only audit events.
 - `src/zis/export.py`: JSON, CSV and Markdown exports.
@@ -52,6 +52,14 @@ Record identifiers use SHA-256 over canonical JSON material with a type prefix. 
 
 Contracts reject undeclared fields, including direct identity fields. Runtime ingestion also performs recursive forbidden-field checks. This is a structural guard, not a claim of perfect content anonymization. Free text and uncertain source material still require human review.
 
+The bundled validator intentionally implements only the JSON Schema Draft 2020-12 keywords required by the current ZIS contracts: the used portions of types, required/properties, additional properties, enums/constants, string patterns and timestamps, numeric bounds, array constraints, and conditional/all-of evaluation. The schema documents remain Draft 2020-12 contracts, but applications needing arbitrary JSON Schema support must use a standards-complete validator and run compatibility tests rather than assuming this module supports the full specification.
+
+## Transaction and audit boundary
+
+Each logically atomic evidence operation now performs its validation read, state mutation and audit-event write through one SQLite transaction and connection. A failure rolls the operation back as a unit.
+
+M1 audit events are application-level append-only history: the public API only inserts events and does not expose update/delete operations. They are not cryptographically signed, hash-chained, externally witnessed or otherwise tamper-evident. A user or process with direct database write access can alter them. Cryptographic tamper evidence is a future security/durability decision, not an M1 claim.
+
 ## Local data boundary
 
 The default database is `.zis/zis.sqlite3`, which is ignored by Git. Exports default only to the destination explicitly selected by the operator; `exports/` is ignored because exports can contain private evidence.
@@ -77,4 +85,6 @@ zis export DESTINATION
 - M1 does not claim perfect identity detection in free text.
 - M1 does not import ZOS records.
 - M1 does not register or invoke specialists.
+- M1 audit history is not cryptographically tamper-evident.
+- The bundled validator is not a standards-complete JSON Schema implementation.
 

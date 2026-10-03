@@ -63,6 +63,8 @@ ZIS must distinguish observed facts, user statements, inferences, hypotheses and
 7. The automated suite runs without AI, network or external services.
 8. Human acceptance is still required before beginning the next milestone or importing reviewed ZOS evidence.
 
+M1 acceptance is bounded: the validator is not standards-complete, and application-level append-only audit events are not cryptographically tamper-evident. These limits must remain visible until a later approved implementation changes them.
+
 ## Change governance
 
 Every architecture change should record reason, evidence, alternatives, decision, consequences and migration impact.

@@ -69,3 +69,13 @@ Reason: the requested definition of done explicitly includes contracts, ZOS inve
 ## D016 No internal documentation contradiction blocked implementation
 Decision: treat open runtime/confidence/export questions as intentionally deferred choices resolved by the approved Milestone 1 request.
 Reason: the foundation documents name options and boundaries but do not prescribe conflicting implementations.
+
+## D017 M1 validator and audit guarantees are explicitly bounded
+Decision: describe the bundled validator as the ZIS-required subset of JSON Schema Draft 2020-12, and describe audit events as application-level append-only rather than cryptographically tamper-evident.
+Reason: accurate guarantees are required for portability, security review and future replacement decisions.
+Architecture impact: none. This clarifies existing behavior.
+
+## D018 Logical evidence operations use one SQLite transaction and connection
+Decision: validation reads, evidence/contradiction mutations and their audit writes execute within one connection and transaction for each logical operation.
+Reason: a failed operation must not leave its state and audit history inconsistent.
+Architecture impact: none. This tightens the existing SQLite implementation boundary.

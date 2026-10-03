@@ -28,6 +28,8 @@ Exit condition: ZIS can operate basic workflows without any LLM.
 
 Status (2026-10-02): a bounded foundation slice is complete: local SQLite initialization/migrations, evidence storage, audit events, contradictions, temporal supersession, CLI and JSON/CSV/Markdown export. Memory, capability/specialist registries, approvals, deterministic routing, backup and restore remain future Phase 2 work.
 
+Audit note (2026-10-03): M1 validation and audit guarantees are now explicitly bounded, and current evidence mutations use one transaction/connection per logical operation. The durability/adversarial cases listed in the testing strategy remain a Classical Runtime backlog rather than completed M1 guarantees.
+
 ## Phase 3 Modern Intelligence Layer
 
 Goal: add optional AI acceleration through provider adapters.
