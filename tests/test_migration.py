@@ -64,6 +64,19 @@ class ZOSMigrationTests(unittest.TestCase):
         self.assertEqual(first["id"], second["id"])
 
     def test_classification_is_preserved_in_manifest_store(self):
+        expected = {
+            "core/kernel/PERSONAL-CONSTITUTION.md": "B",
+            "core/models/PRODUCT-THINKING-MODEL.md": "C",
+            "core/models/DESIGN-OPERATING-MODEL.md": "D",
+            "deploy/Caddyfile": "E",
+            "private/.env": "F",
+            "unclassified/material.md": "G",
+        }
+        for path in expected:
+            self._write(path, "synthetic classification fixture")
+        scanned = self.migration.scan(self.root, "synthetic-ref", expected)
+        observed = {item["source_path"]: item["classification"] for item in scanned}
+        self.assertEqual(observed, expected)
         stored = self.migration.get_source(self.source["id"])
         self.assertEqual(stored["classification"], "A")
         self.assertEqual(stored["classification_rationale"], self.source["classification_rationale"])
@@ -146,6 +159,7 @@ class ZOSMigrationTests(unittest.TestCase):
         self.assertTrue(result["dry_run"])
         self.assertEqual(result["durable_mutations"], 0)
         self.assertEqual(result["eligible_for_import"], 0)
+        self.assertEqual(result["privacy_review_cases"], 2)
         self.assertEqual(len(self.evidence.list_evidence()), 0)
 
     def test_failed_import_rolls_back_evidence_and_candidate_state(self):
