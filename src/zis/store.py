@@ -85,13 +85,23 @@ class EvidenceStore:
             (event_id, event_type, entity_type, entity_id, occurred_at, json.dumps(payload, ensure_ascii=False, sort_keys=True)),
         )
 
+    @staticmethod
+    def _get_evidence(connection: sqlite3.Connection, evidence_id: str) -> dict[str, Any] | None:
+        row = connection.execute("SELECT record_json FROM evidence_records WHERE id=?", (evidence_id,)).fetchone()
+        return json.loads(row[0]) if row else None
+
+    @staticmethod
+    def _get_contradiction(connection: sqlite3.Connection, contradiction_id: str) -> dict[str, Any] | None:
+        row = connection.execute("SELECT * FROM contradictions WHERE id=?", (contradiction_id,)).fetchone()
+        return dict(row) if row else None
+
     def add_evidence(self, record: dict[str, Any]) -> dict[str, Any]:
         enforce_identity_boundary(record)
         validate("evidence", record)
         self.initialize()
         with self.connect() as connection:
             if record["supersedes"]:
-                previous = self.get_evidence(record["supersedes"])
+                previous = self._get_evidence(connection, record["supersedes"])
                 if not previous:
                     raise ValueError(f"superseded evidence does not exist: {record['supersedes']}")
                 if previous["superseded_by"]:
@@ -116,8 +126,7 @@ class EvidenceStore:
     def get_evidence(self, evidence_id: str) -> dict[str, Any] | None:
         self.initialize()
         with self.connect() as connection:
-            row = connection.execute("SELECT record_json FROM evidence_records WHERE id=?", (evidence_id,)).fetchone()
-            return json.loads(row[0]) if row else None
+            return self._get_evidence(connection, evidence_id)
 
     def list_evidence(self, status: str | None = None, scope: str | None = None) -> list[dict[str, Any]]:
         self.initialize()
@@ -137,17 +146,18 @@ class EvidenceStore:
             return [json.loads(row[0]) for row in connection.execute(query, values)]
 
     def set_evidence_status(self, evidence_id: str, status: str) -> dict[str, Any]:
-        record = self.get_evidence(evidence_id)
-        if not record:
-            raise KeyError(evidence_id)
-        if status not in self.STATUS_TRANSITIONS.get(record["status"], set()):
-            raise ValueError(f"invalid evidence transition: {record['status']} -> {status}")
-        before = deepcopy(record)
-        record["status"] = status
-        if status in {"rejected", "expired"}:
-            record["current_interpretation"] = False
-        validate("evidence", record)
+        self.initialize()
         with self.connect() as connection:
+            record = self._get_evidence(connection, evidence_id)
+            if not record:
+                raise KeyError(evidence_id)
+            if status not in self.STATUS_TRANSITIONS.get(record["status"], set()):
+                raise ValueError(f"invalid evidence transition: {record['status']} -> {status}")
+            before = deepcopy(record)
+            record["status"] = status
+            if status in {"rejected", "expired"}:
+                record["current_interpretation"] = False
+            validate("evidence", record)
             connection.execute(
                 "UPDATE evidence_records SET record_json=?,status=?,current_interpretation=? WHERE id=?",
                 (json.dumps(record, ensure_ascii=False, sort_keys=True), status, int(record["current_interpretation"]), evidence_id),
@@ -159,10 +169,11 @@ class EvidenceStore:
         if evidence_id_a == evidence_id_b:
             raise ValueError("an evidence item cannot contradict itself")
         a, b = sorted((evidence_id_a, evidence_id_b))
-        if not self.get_evidence(a) or not self.get_evidence(b):
-            raise ValueError("both evidence records must exist")
+        self.initialize()
         record = {"id": deterministic_id("con", [a, b]), "evidence_id_a": a, "evidence_id_b": b, "status": "unresolved", "created_at": utc_now(), "resolved_at": None, "resolution_rationale": None, "resolution_source_reference": None, "version": 1}
         with self.connect() as connection:
+            if not self._get_evidence(connection, a) or not self._get_evidence(connection, b):
+                raise ValueError("both evidence records must exist")
             connection.execute(
                 "INSERT INTO contradictions(id,evidence_id_a,evidence_id_b,status,created_at,resolved_at,resolution_rationale,resolution_source_reference,version) VALUES (?,?,?,?,?,?,?,?,?)",
                 tuple(record.values()),
@@ -173,11 +184,12 @@ class EvidenceStore:
     def resolve_contradiction(self, contradiction_id: str, rationale: str, source_reference: str) -> dict[str, Any]:
         if not rationale.strip() or not source_reference.strip():
             raise ValueError("resolution rationale and source reference are required")
+        self.initialize()
         with self.connect() as connection:
-            row = connection.execute("SELECT * FROM contradictions WHERE id=?", (contradiction_id,)).fetchone()
-            if not row:
+            contradiction = self._get_contradiction(connection, contradiction_id)
+            if not contradiction:
                 raise KeyError(contradiction_id)
-            if row["status"] == "resolved":
+            if contradiction["status"] == "resolved":
                 raise ValueError("contradiction is already resolved")
             resolved_at = utc_now()
             connection.execute(
@@ -185,14 +197,17 @@ class EvidenceStore:
                 (resolved_at, rationale, source_reference, contradiction_id),
             )
             self._audit(connection, "contradiction.resolved", "contradiction", contradiction_id, {"rationale": rationale, "source_reference": source_reference, "resolved_at": resolved_at})
-        return self.get_contradiction(contradiction_id)
+            resolved = self._get_contradiction(connection, contradiction_id)
+            assert resolved is not None
+            return resolved
 
     def get_contradiction(self, contradiction_id: str) -> dict[str, Any]:
+        self.initialize()
         with self.connect() as connection:
-            row = connection.execute("SELECT * FROM contradictions WHERE id=?", (contradiction_id,)).fetchone()
-            if not row:
+            contradiction = self._get_contradiction(connection, contradiction_id)
+            if not contradiction:
                 raise KeyError(contradiction_id)
-            return dict(row)
+            return contradiction
 
     def list_contradictions(self) -> list[dict[str, Any]]:
         self.initialize()

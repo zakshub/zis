@@ -1,6 +1,7 @@
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from tests.helpers import STAMP
 from zis.records import build_evidence
@@ -72,6 +73,26 @@ class StoreTests(unittest.TestCase):
         self.assertIn("evidence.promoted", [event["event_type"] for event in self.store.audit_events()])
         with self.assertRaises(ValueError):
             self.store.set_evidence_status(record["id"], "reviewed")
+
+    def test_add_evidence_and_audit_roll_back_together(self):
+        record = make_record("Atomic capture")
+        with patch.object(self.store, "_audit", side_effect=RuntimeError("synthetic audit failure")):
+            with self.assertRaisesRegex(RuntimeError, "synthetic audit failure"):
+                self.store.add_evidence(record)
+        self.assertIsNone(self.store.get_evidence(record["id"]))
+
+    def test_supersession_and_audit_roll_back_together(self):
+        old = make_record("Atomic earlier interpretation")
+        self.store.add_evidence(old)
+        new = make_record("Atomic later interpretation", "correction", old["id"])
+        with patch.object(self.store, "_audit", side_effect=RuntimeError("synthetic audit failure")):
+            with self.assertRaisesRegex(RuntimeError, "synthetic audit failure"):
+                self.store.add_evidence(new)
+        self.assertIsNone(self.store.get_evidence(new["id"]))
+        unchanged = self.store.get_evidence(old["id"])
+        self.assertEqual(unchanged["status"], "captured")
+        self.assertIsNone(unchanged["superseded_by"])
+        self.assertTrue(unchanged["current_interpretation"])
 
 
 if __name__ == "__main__":

@@ -1,4 +1,8 @@
-"""Dependency-free validation for the portable JSON contracts."""
+"""Dependency-free validation for the portable JSON contracts.
+
+This implements only the JSON Schema Draft 2020-12 keywords required by the
+current ZIS contracts. It is not a standards-complete JSON Schema validator.
+"""
 
 from __future__ import annotations
 
