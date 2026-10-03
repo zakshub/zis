@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zis.local/schemas/RuntimeOperation.schema.json",
+  "title": "ZIS RuntimeOperation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "request_id", "route_decision_id", "approval_id", "capability_id", "specialist_id", "execution_status", "result_metadata", "error", "created_at", "updated_at", "version"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^op_[a-f0-9]{20}$"},
+    "request_id": {"type": "string", "pattern": "^task_[a-f0-9]{20}$"},
+    "route_decision_id": {"type": "string", "pattern": "^route_[a-f0-9]{20}$"},
+    "approval_id": {"type": ["string", "null"], "pattern": "^apr_[a-f0-9]{20}$"},
+    "capability_id": {"type": ["string", "null"], "pattern": "^cr_[a-f0-9]{20}$"},
+    "specialist_id": {"type": ["string", "null"], "pattern": "^sp_[a-z0-9_-]+$"},
+    "execution_status": {"enum": ["completed", "routed", "blocked", "unsupported", "failed"]},
+    "result_metadata": {"type": "object"},
+    "error": {"type": ["string", "null"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "version": {"type": "integer", "minimum": 1}
+  }
+}

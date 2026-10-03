@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zis.local/schemas/ApprovalRecord.schema.json",
+  "title": "ZIS ApprovalRecord v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "action_type", "action_reference", "rationale", "scope", "risk", "impact", "status", "requested_at", "decided_at", "decision", "decision_note", "provenance", "version"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^apr_[a-f0-9]{20}$"},
+    "action_type": {"type": "string", "minLength": 1},
+    "action_reference": {"type": "string", "minLength": 1},
+    "rationale": {"type": "string", "minLength": 1},
+    "scope": {"type": "string", "minLength": 1},
+    "risk": {"enum": ["low", "medium", "high", "critical"]},
+    "impact": {"type": "string", "minLength": 1},
+    "status": {"enum": ["pending", "approved", "rejected", "deferred", "expired", "revoked"]},
+    "requested_at": {"type": "string", "format": "date-time"},
+    "decided_at": {"type": ["string", "null"], "format": "date-time"},
+    "decision": {"type": ["string", "null"], "enum": ["approved", "rejected", "deferred", "expired", "revoked", null]},
+    "decision_note": {"type": ["string", "null"]},
+    "provenance": {"type": "object", "additionalProperties": false, "required": ["method", "actor", "chain"], "properties": {"method": {"type": "string", "minLength": 1}, "actor": {"type": "string", "minLength": 1}, "chain": {"type": "array", "items": {"type": "string", "minLength": 1}}}},
+    "version": {"type": "integer", "minimum": 1}
+  }
+}

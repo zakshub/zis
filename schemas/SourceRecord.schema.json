@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zis.local/schemas/SourceRecord.schema.json",
+  "title": "ZIS SourceRecord v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "source_type", "label", "canonical_reference", "reliability", "privacy_class", "status", "provenance", "created_at", "updated_at", "version"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^src_[a-f0-9]{20}$"},
+    "source_type": {"enum": ["manual", "repository", "file_reference", "runtime", "synthetic"]},
+    "label": {"type": "string", "minLength": 1},
+    "canonical_reference": {"type": "string", "minLength": 1},
+    "reliability": {"enum": ["unknown", "weak", "probable", "strong", "established"]},
+    "privacy_class": {"enum": ["public", "internal", "private", "restricted"]},
+    "status": {"enum": ["active", "inactive"]},
+    "provenance": {"type": "object", "additionalProperties": false, "required": ["method", "actor", "chain"], "properties": {"method": {"type": "string", "minLength": 1}, "actor": {"type": "string", "minLength": 1}, "chain": {"type": "array", "items": {"type": "string", "minLength": 1}}}},
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "version": {"type": "integer", "minimum": 1}
+  }
+}

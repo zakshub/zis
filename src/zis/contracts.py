@@ -21,6 +21,13 @@ CONTRACTS = {
     "idea": "IdeaLineage.schema.json",
     "zos-migration-manifest": "ZOSMigrationManifest.schema.json",
     "zos-migration-candidate": "ZOSMigrationCandidate.schema.json",
+    "source": "SourceRecord.schema.json",
+    "memory": "MemoryRecord.schema.json",
+    "capability-record": "CapabilityRecord.schema.json",
+    "approval": "ApprovalRecord.schema.json",
+    "route": "RouteDecision.schema.json",
+    "operation": "RuntimeOperation.schema.json",
+    "backup-manifest": "BackupManifest.schema.json",
 }
 
 

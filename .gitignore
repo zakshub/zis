@@ -3,6 +3,8 @@
 data/
 private/
 exports/
+backups/
+zis-backup-*.manifest.json
 *.sqlite
 *.sqlite3
 *.db

@@ -1,4 +1,4 @@
-"""Minimal Milestone 1 command-line interface."""
+"""Local deterministic ZIS command-line interface."""
 
 from __future__ import annotations
 
@@ -9,10 +9,12 @@ import sys
 from pathlib import Path
 
 from . import __version__
+from .backup import create_backup, restore_backup, verify_backup
 from .contracts import CONTRACTS, ContractError, validate
 from .export import export_store
 from .migration import REVIEW_DECISIONS, SOURCE_REPOSITORY, ZOSMigrationStore, dry_run, load_candidate_specifications
 from .records import build_evidence
+from .runtime import ClassicalRuntime, build_approval_record
 from .store import EvidenceStore
 
 
@@ -22,6 +24,10 @@ def _store(args: argparse.Namespace) -> EvidenceStore:
 
 def _migration_store(args: argparse.Namespace) -> ZOSMigrationStore:
     return ZOSMigrationStore(_store(args))
+
+
+def _runtime(args: argparse.Namespace) -> ClassicalRuntime:
+    return ClassicalRuntime(_store(args))
 
 
 def _print_json(value: object) -> None:
@@ -131,6 +137,127 @@ def cmd_zos_dry_run(args: argparse.Namespace) -> None:
     _print_json(dry_run(args.source_root, args.source_ref, args.paths, specifications, args.source_repository))
 
 
+def _load_json_file(path: str) -> dict[str, object]:
+    return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
+def cmd_runtime_status(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).status())
+
+
+def cmd_runtime_operations(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).list_operations())
+
+
+def cmd_source_add(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).register_source(_load_json_file(args.file)))
+
+
+def cmd_source_list(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).list_sources())
+
+
+def cmd_source_show(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).get_source(args.id))
+
+
+def cmd_source_status(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).set_source_status(args.id, args.status))
+
+
+def cmd_memory_propose(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).propose_memory(args.content, args.type, args.evidence_ids, args.scope, args.confidence, args.rationale, args.risk, args.impact, args.valid_from, args.valid_until))
+
+
+def cmd_memory_list(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).list_memories())
+
+
+def cmd_memory_show(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).get_memory(args.id))
+
+
+def cmd_memory_status(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).set_memory_status(args.id, args.status, args.approval_id))
+
+
+def cmd_capability_add(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).register_capability(_load_json_file(args.file)))
+
+
+def cmd_capability_list(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).list_capabilities())
+
+
+def cmd_capability_show(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).get_capability(args.id))
+
+
+def cmd_capability_status(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).set_capability_status(args.id, args.status, args.approval_id))
+
+
+def cmd_specialist_add(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).register_specialist(_load_json_file(args.file)))
+
+
+def cmd_specialist_list(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).list_specialists())
+
+
+def cmd_specialist_show(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).get_specialist(args.id))
+
+
+def cmd_specialist_status(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).set_specialist_status(args.id, args.status, args.approval_id))
+
+
+def cmd_approval_request(args: argparse.Namespace) -> None:
+    record = build_approval_record(args.action_type, args.action_reference, args.rationale, args.scope, args.risk, args.impact)
+    _print_json(_runtime(args).request_approval(record))
+
+
+def cmd_approval_list(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).list_approvals())
+
+
+def cmd_approval_show(args: argparse.Namespace) -> None:
+    _print_json(_runtime(args).get_approval(args.id))
+
+
+def cmd_approval_decide(args: argparse.Namespace) -> None:
+    decisions = {"approve": "approved", "reject": "rejected", "defer": "deferred", "expire": "expired", "revoke": "revoked"}
+    _print_json(_runtime(args).decide_approval(args.id, decisions[args.decision], args.note))
+
+
+def cmd_route(args: argparse.Namespace) -> None:
+    request = {"action_type": args.action_type, "scope": args.scope, "requested_at": args.requested_at, "action_reference": args.action_reference, "capability_id": args.capability_id, "specialist_id": args.specialist_id, "approval_id": args.approval_id}
+    _print_json(_runtime(args).run_task(request))
+
+
+def cmd_backup_create(args: argparse.Namespace) -> None:
+    _print_json(create_backup(_store(args), args.destination))
+
+
+def cmd_backup_verify(args: argparse.Namespace) -> None:
+    result = verify_backup(args.manifest)
+    if not result["valid"]:
+        raise ValueError("backup verification failed: " + "; ".join(result["errors"]))
+    _print_json(result)
+
+
+def cmd_restore(args: argparse.Namespace) -> None:
+    _print_json(restore_backup(args.manifest, args.destination, args.overwrite))
+
+
+def cmd_health(args: argparse.Namespace) -> None:
+    result = _runtime(args).health()
+    _print_json(result)
+    if not result["healthy"]:
+        raise SystemExit(1)
+
+
 def _add_zos_source_arguments(command: argparse.ArgumentParser) -> None:
     command.add_argument("--source-root", required=True, help="Read-only local ZOS checkout root")
     command.add_argument("--source-ref", required=True, help="Exact ZOS commit or immutable ref")
@@ -139,7 +266,7 @@ def _add_zos_source_arguments(command: argparse.ArgumentParser) -> None:
 
 
 def parser() -> argparse.ArgumentParser:
-    root = argparse.ArgumentParser(prog="zis", description="ZIS local evidence foundation")
+    root = argparse.ArgumentParser(prog="zis", description="ZIS local deterministic classical runtime")
     root.add_argument("--database", help="SQLite path (default: .zis/zis.sqlite3)")
     commands = root.add_subparsers(dest="command", required=True)
     for name, function in (("init", cmd_init), ("status", cmd_status), ("contradictions", cmd_contradictions)):
@@ -232,6 +359,124 @@ def parser() -> argparse.ArgumentParser:
     _add_zos_source_arguments(migration_dry_run)
     migration_dry_run.add_argument("--candidate-file", action="append", default=[])
     migration_dry_run.set_defaults(function=cmd_zos_dry_run)
+    runtime = commands.add_parser("runtime")
+    runtime_commands = runtime.add_subparsers(dest="runtime_command", required=True)
+    runtime_status = runtime_commands.add_parser("status")
+    runtime_status.set_defaults(function=cmd_runtime_status)
+    runtime_operations = runtime_commands.add_parser("operations")
+    runtime_operations.set_defaults(function=cmd_runtime_operations)
+    source = commands.add_parser("source")
+    source_commands = source.add_subparsers(dest="source_command", required=True)
+    source_add = source_commands.add_parser("add")
+    source_add.add_argument("file")
+    source_add.set_defaults(function=cmd_source_add)
+    source_list = source_commands.add_parser("list")
+    source_list.set_defaults(function=cmd_source_list)
+    source_show = source_commands.add_parser("show")
+    source_show.add_argument("id")
+    source_show.set_defaults(function=cmd_source_show)
+    source_status = source_commands.add_parser("status")
+    source_status.add_argument("id")
+    source_status.add_argument("status", choices=["active", "inactive"])
+    source_status.set_defaults(function=cmd_source_status)
+    memory = commands.add_parser("memory")
+    memory_commands = memory.add_subparsers(dest="memory_command", required=True)
+    memory_propose = memory_commands.add_parser("propose")
+    memory_propose.add_argument("evidence_ids", nargs="+")
+    memory_propose.add_argument("--content", required=True)
+    memory_propose.add_argument("--type", required=True, choices=["core_principle", "pattern", "preference", "project", "evidence_backed", "experimental"])
+    memory_propose.add_argument("--scope", required=True)
+    memory_propose.add_argument("--confidence", required=True, choices=["unknown", "weak", "probable", "strong", "established"])
+    memory_propose.add_argument("--rationale", required=True)
+    memory_propose.add_argument("--risk", default="medium", choices=["low", "medium", "high", "critical"])
+    memory_propose.add_argument("--impact", default="Promotes reviewed evidence into durable memory storage.")
+    memory_propose.add_argument("--valid-from")
+    memory_propose.add_argument("--valid-until")
+    memory_propose.set_defaults(function=cmd_memory_propose)
+    memory_list = memory_commands.add_parser("list")
+    memory_list.set_defaults(function=cmd_memory_list)
+    memory_show = memory_commands.add_parser("show")
+    memory_show.add_argument("id")
+    memory_show.set_defaults(function=cmd_memory_show)
+    memory_status = memory_commands.add_parser("status")
+    memory_status.add_argument("id")
+    memory_status.add_argument("status", choices=["active", "superseded", "rejected", "expired", "deprecated"])
+    memory_status.add_argument("--approval-id")
+    memory_status.set_defaults(function=cmd_memory_status)
+    capability = commands.add_parser("capability")
+    capability_commands = capability.add_subparsers(dest="capability_command", required=True)
+    capability_add = capability_commands.add_parser("add")
+    capability_add.add_argument("file")
+    capability_add.set_defaults(function=cmd_capability_add)
+    capability_list = capability_commands.add_parser("list")
+    capability_list.set_defaults(function=cmd_capability_list)
+    capability_show = capability_commands.add_parser("show")
+    capability_show.add_argument("id")
+    capability_show.set_defaults(function=cmd_capability_show)
+    capability_status = capability_commands.add_parser("status")
+    capability_status.add_argument("id")
+    capability_status.add_argument("status", choices=["approved", "available", "unavailable", "deprecated", "retired"])
+    capability_status.add_argument("--approval-id")
+    capability_status.set_defaults(function=cmd_capability_status)
+    specialist = commands.add_parser("specialist")
+    specialist_commands = specialist.add_subparsers(dest="specialist_command", required=True)
+    specialist_add = specialist_commands.add_parser("add")
+    specialist_add.add_argument("file")
+    specialist_add.set_defaults(function=cmd_specialist_add)
+    specialist_list = specialist_commands.add_parser("list")
+    specialist_list.set_defaults(function=cmd_specialist_list)
+    specialist_show = specialist_commands.add_parser("show")
+    specialist_show.add_argument("id")
+    specialist_show.set_defaults(function=cmd_specialist_show)
+    specialist_status = specialist_commands.add_parser("status")
+    specialist_status.add_argument("id")
+    specialist_status.add_argument("status", choices=["approved", "available", "unavailable", "retired"])
+    specialist_status.add_argument("--approval-id")
+    specialist_status.set_defaults(function=cmd_specialist_status)
+    approval = commands.add_parser("approval")
+    approval_commands = approval.add_subparsers(dest="approval_command", required=True)
+    approval_request = approval_commands.add_parser("request")
+    approval_request.add_argument("action_type")
+    approval_request.add_argument("action_reference")
+    approval_request.add_argument("--rationale", required=True)
+    approval_request.add_argument("--scope", required=True)
+    approval_request.add_argument("--risk", required=True, choices=["low", "medium", "high", "critical"])
+    approval_request.add_argument("--impact", required=True)
+    approval_request.set_defaults(function=cmd_approval_request)
+    approval_list = approval_commands.add_parser("list")
+    approval_list.set_defaults(function=cmd_approval_list)
+    approval_show = approval_commands.add_parser("show")
+    approval_show.add_argument("id")
+    approval_show.set_defaults(function=cmd_approval_show)
+    approval_decide = approval_commands.add_parser("decide")
+    approval_decide.add_argument("id")
+    approval_decide.add_argument("decision", choices=["approve", "reject", "defer", "expire", "revoke"])
+    approval_decide.add_argument("--note", required=True)
+    approval_decide.set_defaults(function=cmd_approval_decide)
+    route = commands.add_parser("route")
+    route.add_argument("action_type", choices=["no_action", "runtime_status", "existing_capability", "specialist", "persistent_change"])
+    route.add_argument("--scope", required=True)
+    route.add_argument("--requested-at")
+    route.add_argument("--action-reference")
+    route.add_argument("--capability-id")
+    route.add_argument("--specialist-id")
+    route.add_argument("--approval-id")
+    route.set_defaults(function=cmd_route)
+    backup = commands.add_parser("backup")
+    backup_commands = backup.add_subparsers(dest="backup_command", required=True)
+    backup_create = backup_commands.add_parser("create")
+    backup_create.add_argument("destination")
+    backup_create.set_defaults(function=cmd_backup_create)
+    backup_verify = backup_commands.add_parser("verify")
+    backup_verify.add_argument("manifest")
+    backup_verify.set_defaults(function=cmd_backup_verify)
+    restore = commands.add_parser("restore")
+    restore.add_argument("manifest")
+    restore.add_argument("destination")
+    restore.add_argument("--overwrite", action="store_true")
+    restore.set_defaults(function=cmd_restore)
+    health = commands.add_parser("health")
+    health.set_defaults(function=cmd_health)
     return root
 
 
@@ -241,7 +486,7 @@ def main(argv: list[str] | None = None) -> None:
     args = parser().parse_args(argv)
     try:
         args.function(args)
-    except (ContractError, KeyError, ValueError, sqlite3.IntegrityError) as error:
+    except (ContractError, KeyError, ValueError, OSError, sqlite3.IntegrityError) as error:
         raise SystemExit(str(error)) from error
 
 

@@ -18,7 +18,7 @@ def observation():
 
 
 def specialist():
-    return {"id": "sp_synthetic", "name": "Synthetic specialist", "purpose": "Contract testing", "capabilities": ["validate fixtures"], "input_contract": "fixture input v1", "output_contract": "fixture output v1", "when_to_use": ["contract tests"], "when_not_to_use": ["production"], "maturity": "experimental", "location": "repository:synthetic", "invocation_modes": ["manual"], "health_check": None, "security_boundary": "No private data", "fallback": "Manual validation", "provenance_requirement": "Return source references", "owner_approval_required_for_changes": True, "status": "proposed", "confidence": "weak", "provenance": PROVENANCE, "created_at": STAMP, "updated_at": STAMP, "source_references": ["fixture:source"], "version": 1}
+    return {"id": "sp_synthetic", "name": "Synthetic specialist", "domain": "synthetic validation", "purpose": "Contract testing", "capabilities": ["validate fixtures"], "input_contract": "fixture input v1", "output_contract": "fixture output v1", "interface_version": "1", "compatible_runtime_versions": ["0.3"], "when_to_use": ["contract tests"], "when_not_to_use": ["production"], "maturity": "experimental", "location": "repository:synthetic", "invocation_modes": ["manual"], "health_check": None, "security_boundary": "No private data", "fallback": "Manual validation", "provenance_requirement": "Return source references", "owner_approval_required_for_changes": True, "status": "proposed", "availability": "unknown", "confidence": "weak", "provenance": PROVENANCE, "created_at": STAMP, "updated_at": STAMP, "source_references": ["fixture:source"], "version": 1}
 
 
 def capability():

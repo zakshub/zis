@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zis.local/schemas/BackupManifest.schema.json",
+  "title": "ZIS BackupManifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "format", "backup_file", "checksum", "checksum_algorithm", "created_at", "schema_version", "runtime_version", "source_database", "counts", "integrity_check", "version"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^bkp_[a-f0-9]{20}$"},
+    "format": {"const": "zis-sqlite-backup"},
+    "backup_file": {"type": "string", "minLength": 1},
+    "checksum": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "checksum_algorithm": {"const": "sha256"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "schema_version": {"type": "integer", "minimum": 1},
+    "runtime_version": {"type": "string", "minLength": 1},
+    "source_database": {"type": "string", "minLength": 1},
+    "counts": {"type": "object"},
+    "integrity_check": {"const": "ok"},
+    "version": {"type": "integer", "minimum": 1}
+  }
+}
