@@ -121,7 +121,7 @@ ZIST is a local first Urdu content intelligence and archive system.
 5. Only explicit, externally approved `public` or `internal` structured context may be transmitted.
 6. Existing structural and direct-text identity/credential guards run before transport and again on provider output.
 7. Credentials are read from `OPENAI_API_KEY` at call time and never stored, audited, exported or included in backup metadata.
-8. Provider response parsing and requested-schema validation reject malformed or extra output without semantic repair.
+8. Provider response parsing, caller-independent recursive hidden-reasoning checks and requested-schema validation reject forbidden, malformed or extra output without semantic repair.
 9. Successful output becomes only an `ai_candidate_not_truth` pending-review record; no evidence, memory, approval, contradiction or execution state changes.
 10. Timeout, authentication, rate limit, server, network, invalid-provider and invalid-structured-output failures are normalized without fabricated success.
 11. Usage preserves provider values or explicit nulls. Cost remains unknown without versioned local pricing and is labeled estimated when calculated.
@@ -148,7 +148,7 @@ No full Memory Engine, Learning Engine, learning/consolidation or model-update a
 
 ## Verification
 
-With `PYTHONPATH=src`, `python -m unittest discover -s tests -v` passes 95 tests locally on Python 3.13.15: the accepted 79 M1-M4 tests plus 16 M5 tests. `python -m compileall -q src tests` also passes. The implementation targets Python 3.11+; classical operation and the tests require no network, live AI credential or specialist runtime.
+With `PYTHONPATH=src`, `python -m unittest discover -s tests -v` passes 100 tests locally on Python 3.13.15: the accepted 79 M1-M4 tests plus 21 M5 tests. `python -m compileall -q src tests` also passes. The implementation targets Python 3.11+; classical operation and the tests require no network, live AI credential or specialist runtime.
 
 ## Next milestone
 

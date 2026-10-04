@@ -65,11 +65,13 @@ Only `public` or `internal` context with `external_transmission_approved: true` 
 
 Prompt construction uses stable JSON ordering. The fingerprint excludes execution time and depends on exactly what would be sent structurally. The fixed provider instruction requests concise structured output and explicitly rejects chain-of-thought, hidden reasoning, credentials and unrelated context.
 
+Hidden-reasoning exclusion is enforced structurally in ZIS code and does not depend on provider obedience or the caller's output schema. Before transport, ZIS recursively rejects forbidden hidden-reasoning keys in request structures and schemas, and rejects instructions that solicit those traces. After transport, it recursively checks structured output before schema validation or persistence. The narrow forbidden set covers `chain_of_thought`, `chain-of-thought`, `hidden_reasoning`, `reasoning_trace`, `internal_reasoning`, `private_reasoning`, `scratchpad` and `internal_monologue`. Ordinary user-visible `reason`, `rationale` and `explanation` fields remain permitted.
+
 ## Response validation and candidate boundary
 
 AIResponse statuses are `success`, `unavailable`, `timeout`, `provider_error`, `invalid_output`, `cancelled` and `disabled`. Error categories distinguish disabled, not configured, authentication, rate limit, provider server, transport/network, timeout, invalid provider response, invalid structured output, cancellation and unsupported provider.
 
-The OpenAI response envelope must contain structured output text parseable as one JSON object. The object is checked against the request's expected schema using the documented ZIS-required JSON Schema subset. Identity/credential checking runs on output before persistence. M5 performs no semantic repair or partial acceptance. Invalid output is discarded from the normalized response and creates no candidate.
+The OpenAI response envelope must contain structured output text parseable as one JSON object. Independent recursive hidden-reasoning checks run before the object is checked against the request's expected schema using the documented ZIS-required JSON Schema subset. Identity/credential checking also runs before persistence. M5 performs no semantic repair or partial acceptance. Invalid output is discarded from the normalized response and creates no candidate.
 
 Successful output creates one AICandidate with provider/model, source references, validated output, `pending_review` and `ai_candidate_not_truth`. It is never converted automatically into evidence, memory, pattern, hypothesis, idea, evaluation or reflection. It cannot resolve contradictions, approve itself or execute an action.
 
@@ -100,7 +102,7 @@ There is no chat UI, autonomous loop, tool calling, specialist dispatch or backg
 
 ## Verification and limitations
 
-The verified suite contains the accepted 79 M1-M4 tests plus 16 M5 tests: 95 total. It covers disabled and missing-credential behavior, fake-provider success, deterministic request construction, explicit context, privacy rejection before transport, credential/header non-persistence, timeout/error normalization, malformed output, candidate isolation, usage/cost states, metadata-only audit, transactional rollback, provider switching, explicit cognitive augmentation, migration 004-to-005, fresh initialization, health, export, backup/restore and CLI smoke.
+The verified suite contains the accepted 79 M1-M4 tests plus 21 M5 tests: 100 total. It covers disabled and missing-credential behavior, fake-provider success, deterministic request construction, explicit context, privacy rejection before transport, credential/header non-persistence, timeout/error normalization, malformed output, structural hidden-reasoning rejection before and after transport, ordinary visible reasons, candidate isolation, usage/cost states, metadata-only audit, transactional rollback, provider switching, explicit cognitive augmentation, migration 004-to-005, fresh initialization, health, export, backup/restore and CLI smoke.
 
 The dependency-free validator is not a standards-complete Draft 2020-12 implementation. External provider compatibility was not proven against a live account. Timeout relies on the underlying blocking HTTPS timeout and there is no streaming or active cancellation handle. Application audit remains non-cryptographic. External transmission still requires human judgment because deterministic identity screening cannot prove free-text anonymity.
 

@@ -71,7 +71,7 @@ M5 adds:
 49. Credential and Authorization-header absence from SQLite, audit, export and backup.
 50. Timeout, authentication, rate-limit, server and transport error normalization.
 51. Invalid provider envelope, malformed JSON and schema-invalid output rejection.
-52. Hidden-reasoning field rejection and no raw provider-envelope persistence.
+52. Caller-independent hidden-reasoning rejection in request schemas, structured request fields, instructions and nested provider output; rejected traces and raw provider envelopes never persist, while ordinary visible reasons remain allowed.
 53. Proof that provider output does not create evidence, memory, approval or contradiction changes.
 54. Provider usage preservation, explicit unknown usage and bounded estimated-cost calculation.
 55. Metadata-only AI audit and full durable rollback when audit fails.
@@ -79,7 +79,7 @@ M5 adds:
 57. Migration 004-to-005 upgrade, fresh schema-5 initialization, AI health/export and full AI backup/restore equivalence.
 58. End-to-end disabled-mode AI CLI smoke.
 
-Current verified result on Python 3.13.15: 95 passed (79 accepted M1-M4 tests and 16 M5 tests).
+Current verified result on Python 3.13.15: 100 passed (79 accepted M1-M4 tests and 21 M5 tests).
 
 ## Future durability and adversarial backlog
 

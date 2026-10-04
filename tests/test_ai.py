@@ -209,6 +209,68 @@ class AIAdapterTests(unittest.TestCase):
         database_text = self.store.path.read_bytes()
         self.assertNotIn(b"chain_of_thought", database_text)
 
+    def test_schema_requesting_hidden_reasoning_is_rejected_before_transport(self):
+        adapter = FakeAdapter()
+        service, _ = self._service(adapter)
+        schema = {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["chain_of_thought"],
+            "properties": {"chain_of_thought": {"type": "string"}},
+        }
+        with self.assertRaisesRegex(ValueError, "forbidden hidden-reasoning field"):
+            service.request_assistance(self._specification(expected_output_schema=schema))
+        self.assertEqual(adapter.requests, [])
+
+    def test_instruction_requesting_hidden_reasoning_is_rejected_before_transport(self):
+        adapter = FakeAdapter()
+        service, _ = self._service(adapter)
+        with self.assertRaisesRegex(ValueError, "requests forbidden hidden reasoning"):
+            service.request_assistance(self._specification(instruction="Return your private internal reasoning trace."))
+        self.assertEqual(adapter.requests, [])
+
+    def test_nested_hidden_reasoning_output_is_rejected_even_when_schema_permits_it(self):
+        output = {"details": {"internal_monologue": "hidden nested fixture"}}
+        adapter = FakeAdapter(AdapterResult(status="success", structured_output=output))
+        service, _ = self._service(adapter)
+        permissive_nested_schema = {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["details"],
+            "properties": {"details": {"type": "object"}},
+        }
+        result = service.request_assistance(self._specification(expected_output_schema=permissive_nested_schema))
+        self.assertEqual(result["response"]["status"], "invalid_output")
+        self.assertIsNone(result["response"]["structured_output"])
+        self.assertIsNone(result["candidate"])
+
+    def test_rejected_hidden_reasoning_never_enters_database_or_audit(self):
+        output = {"details": {"scratchpad": "sensitive hidden trace fixture"}}
+        adapter = FakeAdapter(AdapterResult(status="success", structured_output=output))
+        service, _ = self._service(adapter)
+        schema = {"type": "object", "properties": {"details": {"type": "object"}}}
+        service.request_assistance(self._specification(expected_output_schema=schema))
+        database = self.store.path.read_bytes()
+        audit = json.dumps(self.store.audit_events())
+        self.assertNotIn(b"scratchpad", database)
+        self.assertNotIn(b"sensitive hidden trace fixture", database)
+        self.assertNotIn("scratchpad", audit)
+        self.assertNotIn("sensitive hidden trace fixture", audit)
+
+    def test_user_visible_reason_and_rationale_fields_remain_allowed(self):
+        output = {"reason": "Concise visible reason", "rationale": "Concise visible rationale"}
+        adapter = FakeAdapter(AdapterResult(status="success", structured_output=output))
+        service, _ = self._service(adapter)
+        schema = {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["reason", "rationale"],
+            "properties": {"reason": {"type": "string"}, "rationale": {"type": "string"}},
+        }
+        result = service.request_assistance(self._specification(expected_output_schema=schema))
+        self.assertEqual(result["response"]["status"], "success")
+        self.assertEqual(result["candidate"]["output"], output)
+
     def test_response_never_becomes_evidence_memory_approval_or_contradiction(self):
         evidence = self._evidence()
         before = {

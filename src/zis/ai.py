@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import socket
 import time
 import urllib.error
@@ -30,6 +31,30 @@ REQUEST_FIELDS = {
     "context_references", "privacy_class", "external_transmission_approved",
     "timeout_seconds", "max_output_tokens", "model_id", "created_at",
 }
+HIDDEN_REASONING_KEYS = frozenset({
+    "chain_of_thought",
+    "chain-of-thought",
+    "hidden_reasoning",
+    "reasoning_trace",
+    "internal_reasoning",
+    "private_reasoning",
+    "scratchpad",
+    "internal_monologue",
+})
+HIDDEN_REASONING_PHRASES = (
+    "chain of thought",
+    "hidden reasoning",
+    "reasoning trace",
+    "internal reasoning",
+    "private reasoning",
+    "scratchpad",
+    "internal monologue",
+)
+HIDDEN_REASONING_REQUEST_VERBS = (
+    "show", "provide", "include", "return", "reveal", "expose", "write",
+    "output", "give", "share", "record", "generate", "display", "list",
+    "describe", "explain", "request", "want", "need",
+)
 
 
 def _canonical(value: Any) -> str:
@@ -46,6 +71,27 @@ def _unknown_usage() -> dict[str, int | None]:
 
 def _unknown_cost() -> dict[str, Any]:
     return {"status": "unknown", "amount": None, "currency": None, "pricing_version": None, "pricing_source": None}
+
+
+def _contains_hidden_reasoning_key(value: Any) -> bool:
+    if isinstance(value, dict):
+        return any(
+            str(key).strip().casefold() in HIDDEN_REASONING_KEYS
+            or _contains_hidden_reasoning_key(item)
+            for key, item in value.items()
+        )
+    if isinstance(value, list):
+        return any(_contains_hidden_reasoning_key(item) for item in value)
+    return False
+
+
+def _instruction_requests_hidden_reasoning(instruction: str) -> bool:
+    normalized = re.sub(r"[_-]+", " ", instruction.casefold())
+    phrases = "|".join(re.escape(phrase) for phrase in HIDDEN_REASONING_PHRASES)
+    verbs = "|".join(re.escape(verb) for verb in HIDDEN_REASONING_REQUEST_VERBS)
+    direct_request = rf"\b(?:{verbs})\b.{{0,100}}\b(?:{phrases})\b"
+    passive_request = rf"\b(?:{phrases})\b.{{0,100}}\b(?:must|should|needs? to)\s+be\s+(?:included|returned|provided|shown|revealed|exposed|written|output|recorded|generated|displayed)\b"
+    return bool(re.search(direct_request, normalized) or re.search(passive_request, normalized))
 
 
 @dataclass(frozen=True)
@@ -328,6 +374,10 @@ class AIService:
         schema = specification["expected_output_schema"]
         if not isinstance(schema, dict) or schema.get("type") != "object":
             raise ValueError("expected_output_schema must describe an object")
+        if _contains_hidden_reasoning_key(specification):
+            raise ValueError("AI request contains a forbidden hidden-reasoning field name")
+        if _instruction_requests_hidden_reasoning(specification["instruction"]):
+            raise ValueError("AI instruction requests forbidden hidden reasoning")
         self._validate_external_input(specification)
         provider_id = self.configuration.provider_id if self.configuration.enabled else "none"
         model_id = str(specification.get("model_id") or self.configuration.model_id or "none")
@@ -419,6 +469,8 @@ class AIService:
             try:
                 if result.structured_output is None:
                     raise ContractError("structured output is missing")
+                if _contains_hidden_reasoning_key(result.structured_output):
+                    raise ContractError("structured output contains a forbidden hidden-reasoning field")
                 self._validate_external_input(result.structured_output)
                 validate_schema(result.structured_output, request_record["expected_output_schema"])
             except (ContractError, ValueError):

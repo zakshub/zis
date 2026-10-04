@@ -114,13 +114,13 @@ M4 acceptance remains human-controlled. An ordinal attention level is not import
 2. Disabled and missing-credential modes return explicit normalized states while core health and M4 cognition remain operational.
 3. Exactly one real provider adapter is isolated from EvidenceStore, ClassicalRuntime and CognitiveEngine.
 4. External transmission requires explicit safe context and privacy approval; identity/credential signals are rejected before transport.
-5. Credentials, authorization headers, raw provider envelopes and hidden reasoning are absent from durable records and audit payloads.
+5. Credentials, authorization headers, raw provider envelopes and hidden reasoning are absent from durable records and audit payloads; recursive code checks enforce the hidden-reasoning boundary independently of caller schemas and provider obedience.
 6. Malformed envelopes, malformed JSON and schema-invalid structured output create `invalid_output`, never partial candidates.
 7. Successful output becomes only a pending-review AI candidate and cannot mutate evidence, memory, contradictions, approvals or operations.
 8. Usage and optional estimated cost retain unknown states and never equate token count with billing.
 9. AI request, response, candidate and metadata-only audit write atomically; injected audit failure rolls back all M5 durable state.
 10. Migration 005, health, export and backup/restore cover M5 records; optional AI availability remains separate from core health.
-11. The 95-test suite passes without a live provider credential, external network or private fixture.
+11. The 100-test suite passes without a live provider credential, external network or private fixture.
 
 M5 acceptance does not authorize AI output as truth, approval, decision or execution and does not authorize specialist federation.
 
