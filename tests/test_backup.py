@@ -46,7 +46,7 @@ class BackupRestoreTests(unittest.TestCase):
         self.assertTrue(Path(result["backup"]).is_file())
         self.assertTrue(Path(result["manifest"]).is_file())
         self.assertTrue(result["verification"]["valid"])
-        self.assertEqual(result["metadata"]["schema_version"], 3)
+        self.assertEqual(result["metadata"]["schema_version"], 4)
         self.assertEqual(set(result["metadata"]["counts"]), set(DURABLE_TABLES))
 
     def test_tampered_backup_is_detected(self):

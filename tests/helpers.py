@@ -18,7 +18,7 @@ def observation():
 
 
 def specialist():
-    return {"id": "sp_synthetic", "name": "Synthetic specialist", "domain": "synthetic validation", "purpose": "Contract testing", "capabilities": ["validate fixtures"], "input_contract": "fixture input v1", "output_contract": "fixture output v1", "interface_version": "1", "compatible_runtime_versions": ["0.3"], "when_to_use": ["contract tests"], "when_not_to_use": ["production"], "maturity": "experimental", "location": "repository:synthetic", "invocation_modes": ["manual"], "health_check": None, "security_boundary": "No private data", "fallback": "Manual validation", "provenance_requirement": "Return source references", "owner_approval_required_for_changes": True, "status": "proposed", "availability": "unknown", "confidence": "weak", "provenance": PROVENANCE, "created_at": STAMP, "updated_at": STAMP, "source_references": ["fixture:source"], "version": 1}
+    return {"id": "sp_synthetic", "name": "Synthetic specialist", "domain": "synthetic validation", "purpose": "Contract testing", "capabilities": ["validate fixtures"], "input_contract": "fixture input v1", "output_contract": "fixture output v1", "interface_version": "1", "compatible_runtime_versions": ["0.4"], "when_to_use": ["contract tests"], "when_not_to_use": ["production"], "maturity": "experimental", "location": "repository:synthetic", "invocation_modes": ["manual"], "health_check": None, "security_boundary": "No private data", "fallback": "Manual validation", "provenance_requirement": "Return source references", "owner_approval_required_for_changes": True, "status": "proposed", "availability": "unknown", "confidence": "weak", "provenance": PROVENANCE, "created_at": STAMP, "updated_at": STAMP, "source_references": ["fixture:source"], "version": 1}
 
 
 def capability():
@@ -28,5 +28,5 @@ def capability():
 
 def idea():
     item_id = deterministic_id("idea", "synthetic idea")
-    return {"id": item_id, "created_at": STAMP, "updated_at": STAMP, "origin_type": "curiosity", "origin_evidence_ids": [], "source_references": ["fixture:source"], "initial_signal": "Could this contract work?", "questions": ["Is it valid?"], "associations": [], "research_references": [], "hypotheses": [], "concept_versions": ["v1"], "evaluations": [], "specialists_consulted": [], "decisions": [], "approval_references": [], "execution_references": [], "outcome": None, "reflection": None, "learning_ids": [], "status": "spark", "provenance": PROVENANCE, "confidence": "unknown", "version": 1}
+    return {"id": item_id, "session_id": "cog_11111111111111111111", "statement": "Could this contract work?", "scope": "tests", "origin_type": "curiosity", "parent_idea_ids": [], "evidence_ids": [], "pattern_ids": [], "hypothesis_ids": [], "association_ids": [], "trigger": "Synthetic contract fixture", "transformations": ["explicit fixture"], "status": "spark", "rationale": "Validate the portable idea contract.", "truth_status": "idea_not_truth", "provenance": PROVENANCE, "confidence": "unknown", "created_at": STAMP, "updated_at": STAMP, "version": 1}
 

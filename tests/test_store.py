@@ -21,9 +21,9 @@ class StoreTests(unittest.TestCase):
         self.temp.cleanup()
 
     def test_database_initialization_and_idempotent_migration(self):
-        self.assertEqual(self.store.initialize(), [1, 2, 3])
+        self.assertEqual(self.store.initialize(), [1, 2, 3, 4])
         self.assertEqual(self.store.initialize(), [])
-        self.assertEqual(self.store.schema_version(), 3)
+        self.assertEqual(self.store.schema_version(), 4)
 
     def test_provenance_and_confidence_preserved(self):
         record = make_record("Synthetic source-preservation test", confidence="strong")
