@@ -42,7 +42,7 @@ class ExportTests(unittest.TestCase):
             payload = json.loads(paths["json"].read_text(encoding="utf-8"))
 
             self.assertEqual(payload["format"], "zis-cognitive-runtime-export")
-            self.assertEqual(payload["format_version"], 3)
+            self.assertEqual(payload["format_version"], 4)
             self.assertEqual(payload["runtime"]["sources"], [source])
             self.assertIn("Sources: 1", paths["markdown"].read_text(encoding="utf-8"))
 
