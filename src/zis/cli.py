@@ -14,6 +14,7 @@ from .backup import create_backup, restore_backup, verify_backup
 from .cognition import CognitiveEngine
 from .contracts import CONTRACTS, ContractError, validate
 from .export import export_store
+from .federation import SpecialistFederation
 from .migration import REVIEW_DECISIONS, SOURCE_REPOSITORY, ZOSMigrationStore, dry_run, load_candidate_specifications
 from .records import build_evidence
 from .runtime import ClassicalRuntime, build_approval_record
@@ -40,13 +41,18 @@ def _ai(args: argparse.Namespace) -> AIService:
     return AIService(_store(args))
 
 
+def _federation(args: argparse.Namespace) -> SpecialistFederation:
+    return SpecialistFederation(_store(args))
+
+
 def _print_json(value: object) -> None:
     print(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True))
 
 
 def cmd_init(args: argparse.Namespace) -> None:
     applied = _store(args).initialize()
-    _print_json({"database": str(_store(args).path), "schema_version": _store(args).schema_version(), "migrations_applied": applied})
+    specialists_added = _federation(args).initialize()
+    _print_json({"database": str(_store(args).path), "schema_version": _store(args).schema_version(), "migrations_applied": applied, "specialists_registered": specialists_added})
 
 
 def cmd_status(args: argparse.Namespace) -> None:
@@ -263,6 +269,7 @@ def cmd_restore(args: argparse.Namespace) -> None:
 
 def cmd_health(args: argparse.Namespace) -> None:
     result = _runtime(args).health()
+    result["federation"] = _federation(args).health()
     _print_json(result)
     if not result["healthy"]:
         raise SystemExit(1)
@@ -311,6 +318,35 @@ def cmd_ai_request(args: argparse.Namespace) -> None:
 def cmd_ai_records(args: argparse.Namespace) -> None:
     service = _ai(args)
     _print_json(service.get_record(args.family, args.id) if args.id else service.list_records(args.family))
+
+
+def cmd_specialists_list(args: argparse.Namespace) -> None:
+    _federation(args).initialize()
+    _print_json(_runtime(args).list_specialists())
+
+
+def cmd_specialists_show(args: argparse.Namespace) -> None:
+    _federation(args).initialize()
+    _print_json(_runtime(args).get_specialist(args.id))
+
+
+def cmd_specialists_status(args: argparse.Namespace) -> None:
+    _federation(args).initialize()
+    _print_json(_federation(args).health(args.id))
+
+
+def cmd_specialists_invoke(args: argparse.Namespace) -> None:
+    specification = _load_json_file(args.file)
+    specification["specialist_id"] = args.id
+    _print_json(_federation(args).invoke(specification))
+
+
+def cmd_specialists_records(args: argparse.Namespace) -> None:
+    _print_json(_federation(args).list_records(args.family))
+
+
+def cmd_specialists_zist(args: argparse.Namespace) -> None:
+    _print_json(_federation(args).zist_evaluation())
 
 
 def _add_zos_source_arguments(command: argparse.ArgumentParser) -> None:
@@ -488,6 +524,25 @@ def parser() -> argparse.ArgumentParser:
     specialist_status.add_argument("status", choices=["approved", "available", "unavailable", "retired"])
     specialist_status.add_argument("--approval-id")
     specialist_status.set_defaults(function=cmd_specialist_status)
+    specialists = commands.add_parser("specialists")
+    specialists_commands = specialists.add_subparsers(dest="specialists_command", required=True)
+    specialists_list = specialists_commands.add_parser("list")
+    specialists_list.set_defaults(function=cmd_specialists_list)
+    specialists_show = specialists_commands.add_parser("show")
+    specialists_show.add_argument("id")
+    specialists_show.set_defaults(function=cmd_specialists_show)
+    specialists_status = specialists_commands.add_parser("status")
+    specialists_status.add_argument("--id")
+    specialists_status.set_defaults(function=cmd_specialists_status)
+    specialists_invoke = specialists_commands.add_parser("invoke")
+    specialists_invoke.add_argument("id")
+    specialists_invoke.add_argument("file")
+    specialists_invoke.set_defaults(function=cmd_specialists_invoke)
+    specialists_records = specialists_commands.add_parser("records")
+    specialists_records.add_argument("family", choices=["requests", "responses", "receipts"])
+    specialists_records.set_defaults(function=cmd_specialists_records)
+    specialists_zist = specialists_commands.add_parser("zist")
+    specialists_zist.set_defaults(function=cmd_specialists_zist)
     approval = commands.add_parser("approval")
     approval_commands = approval.add_subparsers(dest="approval_command", required=True)
     approval_request = approval_commands.add_parser("request")

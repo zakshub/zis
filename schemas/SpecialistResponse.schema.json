@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zis.local/schemas/SpecialistResponse.schema.json",
+  "title": "ZIS SpecialistResponse v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "request_id", "specialist_id", "specialist_version", "adapter_version", "status", "structured_output", "warnings", "limitations", "provenance_receipt_id", "latency_ms", "error_category", "error_message", "created_at", "version"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^spresp_[a-f0-9]{20}$"},
+    "request_id": {"type": "string", "pattern": "^spreq_[a-f0-9]{20}$"},
+    "specialist_id": {"type": "string", "pattern": "^sp_[a-z0-9_-]+$"},
+    "specialist_version": {"type": "string", "minLength": 1},
+    "adapter_version": {"type": "string", "minLength": 1},
+    "status": {"enum": ["success", "unavailable", "incompatible", "timeout", "specialist_error", "invalid_output", "rejected", "disabled"]},
+    "structured_output": {"type": ["object", "null"]},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "provenance_receipt_id": {"type": ["string", "null"]},
+    "latency_ms": {"type": "integer", "minimum": 0},
+    "error_category": {"type": ["string", "null"]},
+    "error_message": {"type": ["string", "null"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "version": {"const": 1}
+  }
+}

@@ -47,6 +47,9 @@ DURABLE_TABLES = (
     "ai_requests",
     "ai_responses",
     "ai_candidates",
+    "specialist_requests",
+    "specialist_responses",
+    "specialist_provenance_receipts",
 )
 
 

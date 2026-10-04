@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zis.local/schemas/SpecialistRequest.schema.json",
+  "title": "ZIS SpecialistRequest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "specialist_id", "action", "purpose", "requested_capability", "structured_input", "context_references", "privacy_class", "context_forwarding_approved", "approval_id", "timeout_seconds", "request_contract_version", "response_contract_version", "input_fingerprint", "created_at", "version"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^spreq_[a-f0-9]{20}$"},
+    "specialist_id": {"type": "string", "pattern": "^sp_[a-z0-9_-]+$"},
+    "action": {"type": "string", "minLength": 1},
+    "purpose": {"type": "string", "minLength": 1},
+    "requested_capability": {"type": "string", "minLength": 1},
+    "structured_input": {"type": "object"},
+    "context_references": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "privacy_class": {"enum": ["public", "internal"]},
+    "context_forwarding_approved": {"const": true},
+    "approval_id": {"type": ["string", "null"]},
+    "timeout_seconds": {"type": "number", "minimum": 0.1, "maximum": 300},
+    "request_contract_version": {"const": "1.0"},
+    "response_contract_version": {"const": "1.0"},
+    "input_fingerprint": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "version": {"const": 1}
+  }
+}

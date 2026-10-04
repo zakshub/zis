@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zis.local/schemas/SpecialistProvenanceReceipt.schema.json",
+  "title": "ZIS SpecialistProvenanceReceipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "specialist_id", "specialist_version", "request_id", "response_id", "capability", "action", "context_references", "executed_at", "adapter_version", "output_fingerprint", "warnings", "limitations", "trace_id", "version"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^spreceipt_[a-f0-9]{20}$"},
+    "specialist_id": {"type": "string", "pattern": "^sp_[a-z0-9_-]+$"},
+    "specialist_version": {"type": "string", "minLength": 1},
+    "request_id": {"type": "string", "pattern": "^spreq_[a-f0-9]{20}$"},
+    "response_id": {"type": "string", "pattern": "^spresp_[a-f0-9]{20}$"},
+    "capability": {"type": "string", "minLength": 1},
+    "action": {"type": "string", "minLength": 1},
+    "context_references": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "executed_at": {"type": "string", "format": "date-time"},
+    "adapter_version": {"type": "string", "minLength": 1},
+    "output_fingerprint": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "trace_id": {"type": ["string", "null"]},
+    "version": {"const": 1}
+  }
+}

@@ -39,6 +39,9 @@ CONTRACTS = {
     "ai-request": "AIRequest.schema.json",
     "ai-response": "AIResponse.schema.json",
     "ai-candidate": "AICandidate.schema.json",
+    "specialist-request": "SpecialistRequest.schema.json",
+    "specialist-response": "SpecialistResponse.schema.json",
+    "specialist-receipt": "SpecialistProvenanceReceipt.schema.json",
 }
 
 

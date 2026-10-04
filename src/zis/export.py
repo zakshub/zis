@@ -8,6 +8,7 @@ from pathlib import Path
 
 from .ai import AIService
 from .cognition import CognitiveEngine
+from .federation import SpecialistFederation
 from .runtime import ClassicalRuntime
 from .store import EvidenceStore, utc_now
 
@@ -21,9 +22,10 @@ def export_store(store: EvidenceStore, destination: str | Path) -> dict[str, Pat
     runtime = ClassicalRuntime(store).snapshot()
     cognition = CognitiveEngine(store).snapshot()
     ai = AIService(store).snapshot()
+    federation = SpecialistFederation(store).snapshot()
     payload = {
         "format": "zis-cognitive-runtime-export",
-        "format_version": 4,
+        "format_version": 5,
         "exported_at": utc_now(),
         "schema_version": store.schema_version(),
         "evidence": evidence,
@@ -32,6 +34,7 @@ def export_store(store: EvidenceStore, destination: str | Path) -> dict[str, Pat
         "runtime": runtime,
         "cognition": cognition,
         "ai": ai,
+        "federation": federation,
     }
     json_path = target / "zis-export.json"
     json_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -45,7 +48,7 @@ def export_store(store: EvidenceStore, destination: str | Path) -> dict[str, Pat
             writer.writerow({**{key: record.get(key) for key in fields}, "source_type": record["source"]["type"], "source_reference": record["source"]["reference"]})
 
     markdown_path = target / "SUMMARY.md"
-    lines = ["# ZIS Cognitive Runtime Export", "", f"Exported: {payload['exported_at']}", f"Schema version: {payload['schema_version']}", f"Evidence records: {len(evidence)}", f"Contradictions: {len(contradictions)}", *(f"{name.replace('_', ' ').title()}: {len(records)}" for name, records in runtime.items()), *(f"Cognitive {name.replace('_', ' ').title()}: {len(records)}" for name, records in cognition.items()), *(f"AI {name.replace('_', ' ').title()}: {len(records)}" for name, records in ai.items()), "", "## Evidence", ""]
+    lines = ["# ZIS Cognitive Runtime Export", "", f"Exported: {payload['exported_at']}", f"Schema version: {payload['schema_version']}", f"Evidence records: {len(evidence)}", f"Contradictions: {len(contradictions)}", *(f"{name.replace('_', ' ').title()}: {len(records)}" for name, records in runtime.items()), *(f"Cognitive {name.replace('_', ' ').title()}: {len(records)}" for name, records in cognition.items()), *(f"AI {name.replace('_', ' ').title()}: {len(records)}" for name, records in ai.items()), f"Federation Requests: {len(federation['requests'])}", f"Federation Responses: {len(federation['responses'])}", f"Federation Receipts: {len(federation['receipts'])}", "", "## Evidence", ""]
     for record in evidence:
         lines.extend([f"### {record['id']}", "", f"- Type: {record['record_type']}", f"- Status: {record['status']}", f"- Confidence: {record['confidence']}", f"- Scope: {record['scope']}", f"- Observed: {record['observed_at']}", f"- Source: {record['source']['type']} — `{record['source']['reference']}`", f"- Current interpretation: {str(record['current_interpretation']).lower()}", "", record["content"], ""])
     if contradictions:

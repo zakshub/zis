@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "zis-core"
-version = "0.5.0"
-description = "Deterministic ZIS core with an optional provider-neutral AI adapter"
+version = "0.6.0"
+description = "Deterministic ZIS core with optional AI and explicit specialist federation"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = []
