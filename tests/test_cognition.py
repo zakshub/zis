@@ -265,8 +265,8 @@ class CognitiveEngineTests(unittest.TestCase):
         finally:
             connection.close()
         store = EvidenceStore(path)
-        self.assertEqual(store.initialize(), [4, 5])
-        self.assertEqual(store.schema_version(), 5)
+        self.assertEqual(store.initialize(), [4, 5, 6])
+        self.assertEqual(store.schema_version(), 6)
         self.assertTrue(ClassicalRuntime(store).health()["healthy"])
 
     def test_health_detects_cognitive_reference_orphan(self):
@@ -289,7 +289,7 @@ class CognitiveEngineTests(unittest.TestCase):
         result = self.engine.run_session(self._spec([first, second]))
         export = export_store(self.store, self.root / "export")
         payload = json.loads(export["json"].read_text(encoding="utf-8"))
-        self.assertEqual(payload["format_version"], 4)
+        self.assertEqual(payload["format_version"], 5)
         self.assertEqual(payload["cognition"]["sessions"][0]["id"], result["session"]["id"])
         self.assertIn("Cognitive Sessions: 1", export["markdown"].read_text(encoding="utf-8"))
 
