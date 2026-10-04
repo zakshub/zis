@@ -10,6 +10,7 @@ from pathlib import Path
 
 from . import __version__
 from .backup import create_backup, restore_backup, verify_backup
+from .cognition import CognitiveEngine
 from .contracts import CONTRACTS, ContractError, validate
 from .export import export_store
 from .migration import REVIEW_DECISIONS, SOURCE_REPOSITORY, ZOSMigrationStore, dry_run, load_candidate_specifications
@@ -28,6 +29,10 @@ def _migration_store(args: argparse.Namespace) -> ZOSMigrationStore:
 
 def _runtime(args: argparse.Namespace) -> ClassicalRuntime:
     return ClassicalRuntime(_store(args))
+
+
+def _cognition(args: argparse.Namespace) -> CognitiveEngine:
+    return CognitiveEngine(_store(args))
 
 
 def _print_json(value: object) -> None:
@@ -258,6 +263,33 @@ def cmd_health(args: argparse.Namespace) -> None:
         raise SystemExit(1)
 
 
+def cmd_cognition_run(args: argparse.Namespace) -> None:
+    _print_json(_cognition(args).run_session(_load_json_file(args.file)))
+
+
+def cmd_cognition_sessions(args: argparse.Namespace) -> None:
+    engine = _cognition(args)
+    _print_json(engine.session_result(args.id) if args.id else engine.list_family("sessions"))
+
+
+def cmd_cognition_artifacts(args: argparse.Namespace) -> None:
+    engine = _cognition(args)
+    _print_json(engine.get_record(args.family, args.id) if args.id else engine.list_family(args.family, args.session_id))
+
+
+def cmd_cognition_transition(args: argparse.Namespace) -> None:
+    engine = _cognition(args)
+    if args.family == "patterns":
+        result = engine.set_pattern_status(args.id, args.status)
+    elif args.family == "hypotheses":
+        result = engine.set_hypothesis_status(args.id, args.status)
+    elif args.family == "ideas":
+        result = engine.set_idea_status(args.id, args.status)
+    else:
+        result = engine.set_model_update_status(args.id, args.status, args.approval_id)
+    _print_json(result)
+
+
 def _add_zos_source_arguments(command: argparse.ArgumentParser) -> None:
     command.add_argument("--source-root", required=True, help="Read-only local ZOS checkout root")
     command.add_argument("--source-ref", required=True, help="Exact ZOS commit or immutable ref")
@@ -266,7 +298,7 @@ def _add_zos_source_arguments(command: argparse.ArgumentParser) -> None:
 
 
 def parser() -> argparse.ArgumentParser:
-    root = argparse.ArgumentParser(prog="zis", description="ZIS local deterministic classical runtime")
+    root = argparse.ArgumentParser(prog="zis", description="ZIS local deterministic runtime")
     root.add_argument("--database", help="SQLite path (default: .zis/zis.sqlite3)")
     commands = root.add_subparsers(dest="command", required=True)
     for name, function in (("init", cmd_init), ("status", cmd_status), ("contradictions", cmd_contradictions)):
@@ -477,6 +509,25 @@ def parser() -> argparse.ArgumentParser:
     restore.set_defaults(function=cmd_restore)
     health = commands.add_parser("health")
     health.set_defaults(function=cmd_health)
+    cognition = commands.add_parser("cognition")
+    cognition_commands = cognition.add_subparsers(dest="cognition_command", required=True)
+    cognition_run = cognition_commands.add_parser("run")
+    cognition_run.add_argument("file", help="Structured cognitive-session JSON input")
+    cognition_run.set_defaults(function=cmd_cognition_run)
+    cognition_sessions = cognition_commands.add_parser("sessions")
+    cognition_sessions.add_argument("--id")
+    cognition_sessions.set_defaults(function=cmd_cognition_sessions)
+    cognition_artifacts = cognition_commands.add_parser("artifacts")
+    cognition_artifacts.add_argument("family", choices=["attention", "associations", "patterns", "hypotheses", "ideas", "evaluations", "reflections", "proposals"])
+    cognition_artifacts.add_argument("--id")
+    cognition_artifacts.add_argument("--session-id")
+    cognition_artifacts.set_defaults(function=cmd_cognition_artifacts)
+    cognition_transition = cognition_commands.add_parser("transition")
+    cognition_transition.add_argument("family", choices=["patterns", "hypotheses", "ideas", "proposals"])
+    cognition_transition.add_argument("id")
+    cognition_transition.add_argument("status")
+    cognition_transition.add_argument("--approval-id")
+    cognition_transition.set_defaults(function=cmd_cognition_transition)
     return root
 
 

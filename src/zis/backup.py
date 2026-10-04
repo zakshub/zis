@@ -34,6 +34,16 @@ DURABLE_TABLES = (
     "specialist_registry",
     "route_decisions",
     "runtime_operations",
+    "cognitive_sessions",
+    "attention_signals",
+    "association_records",
+    "pattern_candidates",
+    "hypothesis_records",
+    "idea_records",
+    "evaluation_records",
+    "reflection_records",
+    "model_update_proposals",
+    "cognitive_references",
 )
 
 

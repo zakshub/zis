@@ -6,6 +6,7 @@ import csv
 import json
 from pathlib import Path
 
+from .cognition import CognitiveEngine
 from .runtime import ClassicalRuntime
 from .store import EvidenceStore, utc_now
 
@@ -17,15 +18,17 @@ def export_store(store: EvidenceStore, destination: str | Path) -> dict[str, Pat
     contradictions = store.list_contradictions()
     audit = store.audit_events()
     runtime = ClassicalRuntime(store).snapshot()
+    cognition = CognitiveEngine(store).snapshot()
     payload = {
-        "format": "zis-classical-runtime-export",
-        "format_version": 2,
+        "format": "zis-cognitive-runtime-export",
+        "format_version": 3,
         "exported_at": utc_now(),
         "schema_version": store.schema_version(),
         "evidence": evidence,
         "contradictions": contradictions,
         "audit_events": audit,
         "runtime": runtime,
+        "cognition": cognition,
     }
     json_path = target / "zis-export.json"
     json_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -39,7 +42,7 @@ def export_store(store: EvidenceStore, destination: str | Path) -> dict[str, Pat
             writer.writerow({**{key: record.get(key) for key in fields}, "source_type": record["source"]["type"], "source_reference": record["source"]["reference"]})
 
     markdown_path = target / "SUMMARY.md"
-    lines = ["# ZIS Classical Runtime Export", "", f"Exported: {payload['exported_at']}", f"Schema version: {payload['schema_version']}", f"Evidence records: {len(evidence)}", f"Contradictions: {len(contradictions)}", *(f"{name.replace('_', ' ').title()}: {len(records)}" for name, records in runtime.items()), "", "## Evidence", ""]
+    lines = ["# ZIS Cognitive Runtime Export", "", f"Exported: {payload['exported_at']}", f"Schema version: {payload['schema_version']}", f"Evidence records: {len(evidence)}", f"Contradictions: {len(contradictions)}", *(f"{name.replace('_', ' ').title()}: {len(records)}" for name, records in runtime.items()), *(f"Cognitive {name.replace('_', ' ').title()}: {len(records)}" for name, records in cognition.items()), "", "## Evidence", ""]
     for record in evidence:
         lines.extend([f"### {record['id']}", "", f"- Type: {record['record_type']}", f"- Status: {record['status']}", f"- Confidence: {record['confidence']}", f"- Scope: {record['scope']}", f"- Observed: {record['observed_at']}", f"- Source: {record['source']['type']} — `{record['source']['reference']}`", f"- Current interpretation: {str(record['current_interpretation']).lower()}", "", record["content"], ""])
     if contradictions:

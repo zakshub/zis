@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zis.local/schemas/HypothesisRecord.schema.json",
+  "title": "ZIS HypothesisRecord v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "session_id", "statement", "scope", "originating_pattern_ids", "originating_evidence_ids", "originating_idea_ids", "supporting_evidence_ids", "counterevidence_ids", "confidence", "status", "assumptions", "strengthening_conditions", "falsification_conditions", "valid_from", "valid_until", "truth_status", "is_memory", "provenance", "created_at", "updated_at", "version"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^hyp_[a-f0-9]{20}$"},
+    "session_id": {"type": "string", "pattern": "^cog_[a-f0-9]{20}$"},
+    "statement": {"type": "string", "minLength": 1},
+    "scope": {"type": "string", "minLength": 1},
+    "originating_pattern_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^pat_[a-f0-9]{20}$"}},
+    "originating_evidence_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^ev_[a-f0-9]{20}$"}},
+    "originating_idea_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^idea_[a-f0-9]{20}$"}},
+    "supporting_evidence_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^ev_[a-f0-9]{20}$"}},
+    "counterevidence_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^ev_[a-f0-9]{20}$"}},
+    "confidence": {"enum": ["unknown", "weak", "probable", "strong", "established"]},
+    "status": {"enum": ["proposed", "exploring", "supported", "weakened", "rejected", "superseded"]},
+    "assumptions": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "strengthening_conditions": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "falsification_conditions": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "valid_from": {"type": "string", "format": "date-time"},
+    "valid_until": {"type": ["string", "null"], "format": "date-time"},
+    "truth_status": {"const": "untested_interpretation"},
+    "is_memory": {"const": false},
+    "provenance": {"type": "object", "additionalProperties": false, "required": ["method", "actor", "chain"], "properties": {"method": {"type": "string", "minLength": 1}, "actor": {"type": "string", "minLength": 1}, "chain": {"type": "array", "items": {"type": "string", "minLength": 1}}}},
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "version": {"type": "integer", "minimum": 1}
+  }
+}

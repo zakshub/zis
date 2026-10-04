@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zis.local/schemas/EvaluationRecord.schema.json",
+  "title": "ZIS EvaluationRecord v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "session_id", "target_type", "target_id", "scope", "criteria", "outcome", "decision_authority", "provenance", "created_at", "version"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^eval_[a-f0-9]{20}$"},
+    "session_id": {"type": "string", "pattern": "^cog_[a-f0-9]{20}$"},
+    "target_type": {"enum": ["pattern", "hypothesis", "idea"]},
+    "target_id": {"type": "string", "minLength": 1},
+    "scope": {"type": "string", "minLength": 1},
+    "criteria": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["criterion", "finding", "rationale", "supporting_references"], "properties": {"criterion": {"type": "string", "minLength": 1}, "finding": {"enum": ["supported", "weak", "unknown", "contradicted", "current", "historical", "needs_review"]}, "rationale": {"type": "string", "minLength": 1}, "supporting_references": {"type": "array", "items": {"type": "string", "minLength": 1}}}}},
+    "outcome": {"enum": ["insufficient_evidence", "needs_review", "promising", "weak", "contradicted", "supported_for_current_scope"]},
+    "decision_authority": {"const": false},
+    "provenance": {"type": "object", "additionalProperties": false, "required": ["method", "actor", "chain"], "properties": {"method": {"type": "string", "minLength": 1}, "actor": {"type": "string", "minLength": 1}, "chain": {"type": "array", "items": {"type": "string", "minLength": 1}}}},
+    "created_at": {"type": "string", "format": "date-time"},
+    "version": {"type": "integer", "minimum": 1}
+  }
+}

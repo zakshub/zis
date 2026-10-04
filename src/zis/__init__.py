@@ -1,4 +1,4 @@
-"""ZIS local classical runtime foundation."""
+"""ZIS local deterministic runtime and Cognitive Engine foundation."""
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 

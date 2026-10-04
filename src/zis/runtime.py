@@ -16,7 +16,7 @@ from .ids import deterministic_id
 from .store import EvidenceStore, utc_now
 
 
-LATEST_SCHEMA_VERSION = 3
+LATEST_SCHEMA_VERSION = 4
 APPROVAL_TRANSITIONS = {
     "pending": {"approved", "rejected", "deferred", "expired"},
     "deferred": {"approved", "rejected", "expired"},
@@ -657,6 +657,15 @@ class ClassicalRuntime:
             "routes": "route_decisions",
             "operations": "runtime_operations",
             "audit_events": "audit_events",
+            "cognitive_sessions": "cognitive_sessions",
+            "attention_signals": "attention_signals",
+            "associations": "association_records",
+            "patterns": "pattern_candidates",
+            "hypotheses": "hypothesis_records",
+            "ideas": "idea_records",
+            "evaluations": "evaluation_records",
+            "reflections": "reflection_records",
+            "model_update_proposals": "model_update_proposals",
         }
         return {name: int(connection.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]) for name, table in tables.items()}
 
@@ -681,7 +690,7 @@ class ClassicalRuntime:
 
     def health(self) -> dict[str, Any]:
         errors: list[str] = []
-        required_tables = {"schema_migrations", "evidence_records", "contradictions", "audit_events", "migration_sources", "migration_candidates", "migration_review_events", "runtime_sources", "memory_records", "memory_evidence_links", "capability_registry", "capability_dependencies", "specialist_registry", "approval_records", "route_decisions", "runtime_operations"}
+        required_tables = {"schema_migrations", "evidence_records", "contradictions", "audit_events", "migration_sources", "migration_candidates", "migration_review_events", "runtime_sources", "memory_records", "memory_evidence_links", "capability_registry", "capability_dependencies", "specialist_registry", "approval_records", "route_decisions", "runtime_operations", "cognitive_sessions", "attention_signals", "association_records", "pattern_candidates", "hypothesis_records", "idea_records", "evaluation_records", "reflection_records", "model_update_proposals", "cognitive_references"}
         try:
             self.initialize()
             with self.store.connect() as connection:
@@ -698,6 +707,19 @@ class ClassicalRuntime:
                 foreign_key_issues = [tuple(row) for row in connection.execute("PRAGMA foreign_key_check")]
                 if foreign_key_issues:
                     errors.append(f"foreign_key_issues:{len(foreign_key_issues)}")
+                reference_tables = {
+                    "evidence": "evidence_records", "memory": "memory_records", "contradiction": "contradictions",
+                    "approval": "approval_records", "association": "association_records", "pattern": "pattern_candidates",
+                    "hypothesis": "hypothesis_records", "idea": "idea_records", "evaluation": "evaluation_records",
+                }
+                cognitive_orphans = 0
+                if "cognitive_references" in existing_tables:
+                    for reference_type, reference_id in connection.execute("SELECT DISTINCT reference_type,reference_id FROM cognitive_references"):
+                        table = reference_tables.get(reference_type)
+                        if table and not connection.execute(f"SELECT 1 FROM {table} WHERE id=?", (reference_id,)).fetchone():
+                            cognitive_orphans += 1
+                if cognitive_orphans:
+                    errors.append(f"cognitive_orphan_references:{cognitive_orphans}")
                 counts = self._counts(connection) if not missing else {}
                 schema_version = max(versions, default=0)
         except (sqlite3.DatabaseError, OSError, ValueError) as error:

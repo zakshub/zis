@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zis.local/schemas/AttentionSignal.schema.json",
+  "title": "ZIS AttentionSignal v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "session_id", "evidence_id", "attention_level", "reasons", "novelty_state", "repetition_count", "temporal_state", "confidence", "contradiction_ids", "provenance", "created_at", "version"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^att_[a-f0-9]{20}$"},
+    "session_id": {"type": "string", "pattern": "^cog_[a-f0-9]{20}$"},
+    "evidence_id": {"type": "string", "pattern": "^ev_[a-f0-9]{20}$"},
+    "attention_level": {"enum": ["low", "medium", "high", "critical"]},
+    "reasons": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "novelty_state": {"enum": ["exact_duplicate", "repeated_support", "possible_variation", "novel_in_context", "insufficient_basis"]},
+    "repetition_count": {"type": "integer", "minimum": 1},
+    "temporal_state": {"enum": ["current", "historical", "expired", "superseded", "not_yet_valid", "non_current"]},
+    "confidence": {"enum": ["unknown", "weak", "probable", "strong", "established"]},
+    "contradiction_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^con_[a-f0-9]{20}$"}},
+    "provenance": {"type": "object", "additionalProperties": false, "required": ["method", "actor", "chain"], "properties": {"method": {"type": "string", "minLength": 1}, "actor": {"type": "string", "minLength": 1}, "chain": {"type": "array", "items": {"type": "string", "minLength": 1}}}},
+    "created_at": {"type": "string", "format": "date-time"},
+    "version": {"type": "integer", "minimum": 1}
+  }
+}

@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "zis-core"
-version = "0.3.0"
-description = "Local-first ZIS evidence contracts and migration foundation"
+version = "0.4.0"
+description = "Local-first deterministic ZIS cognitive runtime"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = []

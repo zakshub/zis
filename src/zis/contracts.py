@@ -28,6 +28,14 @@ CONTRACTS = {
     "route": "RouteDecision.schema.json",
     "operation": "RuntimeOperation.schema.json",
     "backup-manifest": "BackupManifest.schema.json",
+    "cognitive-session": "CognitiveSession.schema.json",
+    "attention": "AttentionSignal.schema.json",
+    "association": "AssociationRecord.schema.json",
+    "pattern": "PatternCandidate.schema.json",
+    "hypothesis": "HypothesisRecord.schema.json",
+    "evaluation": "EvaluationRecord.schema.json",
+    "reflection": "ReflectionRecord.schema.json",
+    "model-update-proposal": "ModelUpdateProposal.schema.json",
 }
 
 
