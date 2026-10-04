@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 
 from . import __version__
+from .ai import AIService
 from .backup import create_backup, restore_backup, verify_backup
 from .cognition import CognitiveEngine
 from .contracts import CONTRACTS, ContractError, validate
@@ -33,6 +34,10 @@ def _runtime(args: argparse.Namespace) -> ClassicalRuntime:
 
 def _cognition(args: argparse.Namespace) -> CognitiveEngine:
     return CognitiveEngine(_store(args))
+
+
+def _ai(args: argparse.Namespace) -> AIService:
+    return AIService(_store(args))
 
 
 def _print_json(value: object) -> None:
@@ -290,6 +295,24 @@ def cmd_cognition_transition(args: argparse.Namespace) -> None:
     _print_json(result)
 
 
+def cmd_ai_status(args: argparse.Namespace) -> None:
+    _print_json(_ai(args).status())
+
+
+def cmd_ai_providers(args: argparse.Namespace) -> None:
+    service = _ai(args)
+    _print_json({"registered": service.registry.providers(), "selected": service.provider_status()})
+
+
+def cmd_ai_request(args: argparse.Namespace) -> None:
+    _print_json(_ai(args).request_assistance(_load_json_file(args.file)))
+
+
+def cmd_ai_records(args: argparse.Namespace) -> None:
+    service = _ai(args)
+    _print_json(service.get_record(args.family, args.id) if args.id else service.list_records(args.family))
+
+
 def _add_zos_source_arguments(command: argparse.ArgumentParser) -> None:
     command.add_argument("--source-root", required=True, help="Read-only local ZOS checkout root")
     command.add_argument("--source-ref", required=True, help="Exact ZOS commit or immutable ref")
@@ -528,6 +551,19 @@ def parser() -> argparse.ArgumentParser:
     cognition_transition.add_argument("status")
     cognition_transition.add_argument("--approval-id")
     cognition_transition.set_defaults(function=cmd_cognition_transition)
+    ai = commands.add_parser("ai")
+    ai_commands = ai.add_subparsers(dest="ai_command", required=True)
+    ai_status = ai_commands.add_parser("status")
+    ai_status.set_defaults(function=cmd_ai_status)
+    ai_providers = ai_commands.add_parser("providers")
+    ai_providers.set_defaults(function=cmd_ai_providers)
+    ai_request = ai_commands.add_parser("request")
+    ai_request.add_argument("file", help="Structured, externally approved AI request JSON")
+    ai_request.set_defaults(function=cmd_ai_request)
+    ai_records = ai_commands.add_parser("records")
+    ai_records.add_argument("family", choices=["requests", "responses", "candidates"])
+    ai_records.add_argument("--id")
+    ai_records.set_defaults(function=cmd_ai_records)
     return root
 
 

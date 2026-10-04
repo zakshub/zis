@@ -16,13 +16,15 @@ FORBIDDEN_IDENTITY_FIELDS = {
     "email_address", "phone", "phone_number", "address", "precise_address",
     "account_id", "account_identifier", "credential", "credentials", "token",
     "access_token", "refresh_token", "family_name", "family_identifier",
-    "personal_document", "personal_document_id",
+    "personal_document", "personal_document_id", "api_key", "secret_key",
+    "authorization", "authorization_header",
 }
 
 DIRECT_IDENTITY_TEXT_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("email", re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.I)),
     ("phone", re.compile(r"(?:\+\d{8,15}\b|\b\d{2,4}[ ()]\d{3,4}[ -]\d{3,6}\b)")),
     ("credential_or_token", re.compile(r"\b(?:api[_-]?key|access[_-]?token|refresh[_-]?token|password|secret)\s*[:=]", re.I)),
+    ("authorization_bearer", re.compile(r"\bBearer\s+[A-Za-z0-9._~+/=-]{8,}", re.I)),
     ("precise_address", re.compile(r"\b\d{1,5}\s+[A-Za-z][A-Za-z .'-]+\s(?:street|st|road|rd|avenue|ave|lane|ln|house)\b", re.I)),
 )
 

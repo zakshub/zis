@@ -44,6 +44,9 @@ DURABLE_TABLES = (
     "reflection_records",
     "model_update_proposals",
     "cognitive_references",
+    "ai_requests",
+    "ai_responses",
+    "ai_candidates",
 )
 
 

@@ -36,6 +36,9 @@ CONTRACTS = {
     "evaluation": "EvaluationRecord.schema.json",
     "reflection": "ReflectionRecord.schema.json",
     "model-update-proposal": "ModelUpdateProposal.schema.json",
+    "ai-request": "AIRequest.schema.json",
+    "ai-response": "AIResponse.schema.json",
+    "ai-candidate": "AICandidate.schema.json",
 }
 
 
@@ -128,7 +131,12 @@ def _validate(value: Any, schema: dict[str, Any], path: str) -> list[str]:
 
 
 def validate(contract: str, document: dict[str, Any]) -> None:
-    errors = _validate(document, load_schema(contract), "$")
+    validate_schema(document, load_schema(contract))
+
+
+def validate_schema(document: Any, schema: dict[str, Any]) -> None:
+    """Validate a document against the ZIS-supported JSON Schema subset."""
+    errors = _validate(document, schema, "$")
     if errors:
         raise ContractError("; ".join(errors))
 

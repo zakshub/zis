@@ -16,7 +16,7 @@ from .ids import deterministic_id
 from .store import EvidenceStore, utc_now
 
 
-LATEST_SCHEMA_VERSION = 4
+LATEST_SCHEMA_VERSION = 5
 APPROVAL_TRANSITIONS = {
     "pending": {"approved", "rejected", "deferred", "expired"},
     "deferred": {"approved", "rejected", "expired"},
@@ -666,6 +666,9 @@ class ClassicalRuntime:
             "evaluations": "evaluation_records",
             "reflections": "reflection_records",
             "model_update_proposals": "model_update_proposals",
+            "ai_requests": "ai_requests",
+            "ai_responses": "ai_responses",
+            "ai_candidates": "ai_candidates",
         }
         return {name: int(connection.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]) for name, table in tables.items()}
 
@@ -690,7 +693,7 @@ class ClassicalRuntime:
 
     def health(self) -> dict[str, Any]:
         errors: list[str] = []
-        required_tables = {"schema_migrations", "evidence_records", "contradictions", "audit_events", "migration_sources", "migration_candidates", "migration_review_events", "runtime_sources", "memory_records", "memory_evidence_links", "capability_registry", "capability_dependencies", "specialist_registry", "approval_records", "route_decisions", "runtime_operations", "cognitive_sessions", "attention_signals", "association_records", "pattern_candidates", "hypothesis_records", "idea_records", "evaluation_records", "reflection_records", "model_update_proposals", "cognitive_references"}
+        required_tables = {"schema_migrations", "evidence_records", "contradictions", "audit_events", "migration_sources", "migration_candidates", "migration_review_events", "runtime_sources", "memory_records", "memory_evidence_links", "capability_registry", "capability_dependencies", "specialist_registry", "approval_records", "route_decisions", "runtime_operations", "cognitive_sessions", "attention_signals", "association_records", "pattern_candidates", "hypothesis_records", "idea_records", "evaluation_records", "reflection_records", "model_update_proposals", "cognitive_references", "ai_requests", "ai_responses", "ai_candidates"}
         try:
             self.initialize()
             with self.store.connect() as connection:

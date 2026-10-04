@@ -1,4 +1,4 @@
-"""ZIS local deterministic runtime and Cognitive Engine foundation."""
+"""ZIS deterministic core with an optional provider-neutral AI adapter."""
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 

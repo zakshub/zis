@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zis.local/schemas/AICandidate.schema.json",
+  "title": "ZIS AICandidate v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "request_id", "response_id", "provider_id", "model_id", "purpose", "context_references", "output", "review_state", "truth_status", "provenance", "created_at", "version"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^aicand_[a-f0-9]{20}$"},
+    "request_id": {"type": "string", "pattern": "^aireq_[a-f0-9]{20}$"},
+    "response_id": {"type": "string", "pattern": "^airesp_[a-f0-9]{20}$"},
+    "provider_id": {"type": "string", "minLength": 1},
+    "model_id": {"type": "string", "minLength": 1},
+    "purpose": {"type": "string", "minLength": 1},
+    "context_references": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "output": {"type": "object"},
+    "review_state": {"enum": ["pending_review", "rejected"]},
+    "truth_status": {"const": "ai_candidate_not_truth"},
+    "provenance": {"type": "object", "additionalProperties": false, "required": ["method", "actor", "chain"], "properties": {"method": {"type": "string", "minLength": 1}, "actor": {"type": "string", "minLength": 1}, "chain": {"type": "array", "items": {"type": "string", "minLength": 1}}}},
+    "created_at": {"type": "string", "format": "date-time"},
+    "version": {"type": "integer", "minimum": 1}
+  }
+}

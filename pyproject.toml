@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "zis-core"
-version = "0.4.0"
-description = "Local-first deterministic ZIS cognitive runtime"
+version = "0.5.0"
+description = "Deterministic ZIS core with an optional provider-neutral AI adapter"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = []

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zis.local/schemas/AIRequest.schema.json",
+  "title": "ZIS AIRequest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "purpose", "task_type", "provider_id", "model_id", "instruction", "context", "expected_output_schema", "context_references", "privacy_class", "external_transmission_approved", "timeout_seconds", "max_output_tokens", "prompt_fingerprint", "created_at", "version"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^aireq_[a-f0-9]{20}$"},
+    "purpose": {"type": "string", "minLength": 1},
+    "task_type": {"enum": ["structured_assistance", "semantic_interpretation", "association_proposal", "hypothesis_wording", "idea_variants", "evaluation_commentary"]},
+    "provider_id": {"type": "string", "minLength": 1},
+    "model_id": {"type": "string", "minLength": 1},
+    "instruction": {"type": "string", "minLength": 1},
+    "context": {"type": "object"},
+    "expected_output_schema": {"type": "object"},
+    "context_references": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "privacy_class": {"enum": ["public", "internal"]},
+    "external_transmission_approved": {"const": true},
+    "timeout_seconds": {"type": "number", "minimum": 0.1, "maximum": 300},
+    "max_output_tokens": {"type": "integer", "minimum": 1},
+    "prompt_fingerprint": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "version": {"type": "integer", "minimum": 1}
+  }
+}
