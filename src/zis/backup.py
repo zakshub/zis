@@ -50,6 +50,12 @@ DURABLE_TABLES = (
     "specialist_requests",
     "specialist_responses",
     "specialist_provenance_receipts",
+    "observation_sources",
+    "observation_collection_sessions",
+    "observation_records",
+    "observation_duplicate_links",
+    "observation_evidence_proposals",
+    "observation_proposal_links",
 )
 
 

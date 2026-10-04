@@ -363,15 +363,15 @@ class AIAdapterTests(unittest.TestCase):
         finally:
             connection.close()
         legacy = EvidenceStore(legacy_path)
-        self.assertEqual(legacy.initialize(), [5, 6])
-        self.assertEqual(legacy.schema_version(), 6)
+        self.assertEqual(legacy.initialize(), [5, 6, 7])
+        self.assertEqual(legacy.schema_version(), 7)
 
         service, _ = self._service()
         result = service.request_assistance(self._specification())
         self.assertTrue(ClassicalRuntime(self.store).health()["healthy"])
         export = export_store(self.store, self.root / "m5-export")
         payload = json.loads(export["json"].read_text(encoding="utf-8"))
-        self.assertEqual(payload["format_version"], 5)
+        self.assertEqual(payload["format_version"], 6)
         self.assertEqual(payload["ai"]["responses"][0]["id"], result["response"]["id"])
         self.assertIn("AI Responses: 1", export["markdown"].read_text(encoding="utf-8"))
         backup = create_backup(self.store, self.root / "m5-backup")

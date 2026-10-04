@@ -42,6 +42,9 @@ CONTRACTS = {
     "specialist-request": "SpecialistRequest.schema.json",
     "specialist-response": "SpecialistResponse.schema.json",
     "specialist-receipt": "SpecialistProvenanceReceipt.schema.json",
+    "observation-source": "ObservationSource.schema.json",
+    "observation-session": "ObservationCollectionSession.schema.json",
+    "observation-evidence-proposal": "ObservationEvidenceProposal.schema.json",
 }
 
 

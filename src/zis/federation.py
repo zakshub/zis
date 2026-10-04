@@ -144,7 +144,7 @@ def _manifest(
         "input_contract": "SpecialistRequest/1.0",
         "output_contract": "SpecialistResponse/1.0",
         "interface_version": "metadata-1",
-        "compatible_runtime_versions": ["0.6"],
+        "compatible_runtime_versions": ["0.7"],
         "when_to_use": [f"Explicit, bounded request in the {domain} domain after a callable adapter is approved."],
         "when_not_to_use": [limitation],
         "maturity": "working",

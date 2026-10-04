@@ -16,6 +16,7 @@ from .contracts import CONTRACTS, ContractError, validate
 from .export import export_store
 from .federation import SpecialistFederation
 from .migration import REVIEW_DECISIONS, SOURCE_REPOSITORY, ZOSMigrationStore, dry_run, load_candidate_specifications
+from .observations import ObservationLedger
 from .records import build_evidence
 from .runtime import ClassicalRuntime, build_approval_record
 from .store import EvidenceStore
@@ -43,6 +44,10 @@ def _ai(args: argparse.Namespace) -> AIService:
 
 def _federation(args: argparse.Namespace) -> SpecialistFederation:
     return SpecialistFederation(_store(args))
+
+
+def _observations(args: argparse.Namespace) -> ObservationLedger:
+    return ObservationLedger(_store(args))
 
 
 def _print_json(value: object) -> None:
@@ -270,6 +275,7 @@ def cmd_restore(args: argparse.Namespace) -> None:
 def cmd_health(args: argparse.Namespace) -> None:
     result = _runtime(args).health()
     result["federation"] = _federation(args).health()
+    result["observations"] = _observations(args).health()
     _print_json(result)
     if not result["healthy"]:
         raise SystemExit(1)
@@ -347,6 +353,62 @@ def cmd_specialists_records(args: argparse.Namespace) -> None:
 
 def cmd_specialists_zist(args: argparse.Namespace) -> None:
     _print_json(_federation(args).zist_evaluation())
+
+
+def cmd_observation_sources(args: argparse.Namespace) -> None:
+    _print_json(_observations(args).list_sources())
+
+
+def cmd_observation_source_add(args: argparse.Namespace) -> None:
+    _print_json(_observations(args).register_source(_load_json_file(args.file)))
+
+
+def cmd_observation_source_status(args: argparse.Namespace) -> None:
+    _print_json(_observations(args).set_source_status(args.id, args.status, args.approval_id))
+
+
+def cmd_observation_collect(args: argparse.Namespace) -> None:
+    _print_json(_observations(args).collect(args.id, args.scope, args.operation, _load_json_file(args.file)))
+
+
+def cmd_observation_list(args: argparse.Namespace) -> None:
+    _print_json(_observations(args).list_observations(args.source_id, args.review_state, args.privacy_class, args.recorded_from, args.recorded_until))
+
+
+def cmd_observation_show(args: argparse.Namespace) -> None:
+    _print_json(_observations(args).get_observation(args.id))
+
+
+def cmd_observation_sessions(args: argparse.Namespace) -> None:
+    _print_json(_observations(args).list_sessions(args.source_id))
+
+
+def cmd_observation_quarantine(args: argparse.Namespace) -> None:
+    _print_json(_observations(args).list_quarantine())
+
+
+def cmd_observation_review(args: argparse.Namespace) -> None:
+    _print_json(_observations(args).set_review_state(args.id, args.state))
+
+
+def cmd_observation_purge(args: argparse.Namespace) -> None:
+    _print_json(_observations(args).purge(args.id))
+
+
+def cmd_observation_proposals(args: argparse.Namespace) -> None:
+    _print_json(_observations(args).list_evidence_proposals(args.status))
+
+
+def cmd_observation_propose_evidence(args: argparse.Namespace) -> None:
+    _print_json(_observations(args).propose_evidence(_load_json_file(args.file)))
+
+
+def cmd_observation_decide_proposal(args: argparse.Namespace) -> None:
+    _print_json(_observations(args).decide_evidence_proposal(args.id, args.decision, args.note))
+
+
+def cmd_observation_promote(args: argparse.Namespace) -> None:
+    _print_json(_observations(args).promote_evidence_proposal(args.id))
 
 
 def _add_zos_source_arguments(command: argparse.ArgumentParser) -> None:
@@ -619,6 +681,60 @@ def parser() -> argparse.ArgumentParser:
     ai_records.add_argument("family", choices=["requests", "responses", "candidates"])
     ai_records.add_argument("--id")
     ai_records.set_defaults(function=cmd_ai_records)
+    observations = commands.add_parser("observations")
+    observation_commands = observations.add_subparsers(dest="observations_command", required=True)
+    observation_sources = observation_commands.add_parser("sources")
+    observation_sources.set_defaults(function=cmd_observation_sources)
+    observation_source_add = observation_commands.add_parser("source-add")
+    observation_source_add.add_argument("file")
+    observation_source_add.set_defaults(function=cmd_observation_source_add)
+    observation_source_status = observation_commands.add_parser("source-status")
+    observation_source_status.add_argument("id")
+    observation_source_status.add_argument("status", choices=["approved", "paused", "revoked", "retired"])
+    observation_source_status.add_argument("--approval-id")
+    observation_source_status.set_defaults(function=cmd_observation_source_status)
+    observation_collect = observation_commands.add_parser("collect")
+    observation_collect.add_argument("id")
+    observation_collect.add_argument("file")
+    observation_collect.add_argument("--scope", required=True)
+    observation_collect.add_argument("--operation", required=True, choices=["manual_capture", "file_import", "synthetic_test"])
+    observation_collect.set_defaults(function=cmd_observation_collect)
+    observation_list = observation_commands.add_parser("list")
+    observation_list.add_argument("--source-id")
+    observation_list.add_argument("--review-state")
+    observation_list.add_argument("--privacy-class")
+    observation_list.add_argument("--recorded-from")
+    observation_list.add_argument("--recorded-until")
+    observation_list.set_defaults(function=cmd_observation_list)
+    observation_show = observation_commands.add_parser("show")
+    observation_show.add_argument("id")
+    observation_show.set_defaults(function=cmd_observation_show)
+    observation_sessions = observation_commands.add_parser("sessions")
+    observation_sessions.add_argument("--source-id")
+    observation_sessions.set_defaults(function=cmd_observation_sessions)
+    observation_quarantine = observation_commands.add_parser("quarantine")
+    observation_quarantine.set_defaults(function=cmd_observation_quarantine)
+    observation_review = observation_commands.add_parser("review")
+    observation_review.add_argument("id")
+    observation_review.add_argument("state", choices=["review_pending", "accepted_for_evidence_review", "rejected", "quarantined", "expired"])
+    observation_review.set_defaults(function=cmd_observation_review)
+    observation_purge = observation_commands.add_parser("purge")
+    observation_purge.add_argument("id")
+    observation_purge.set_defaults(function=cmd_observation_purge)
+    observation_proposals = observation_commands.add_parser("proposals")
+    observation_proposals.add_argument("--status")
+    observation_proposals.set_defaults(function=cmd_observation_proposals)
+    observation_propose = observation_commands.add_parser("propose-evidence")
+    observation_propose.add_argument("file")
+    observation_propose.set_defaults(function=cmd_observation_propose_evidence)
+    observation_decide = observation_commands.add_parser("review-proposal")
+    observation_decide.add_argument("id")
+    observation_decide.add_argument("decision", choices=["approved", "rejected"])
+    observation_decide.add_argument("--note", required=True)
+    observation_decide.set_defaults(function=cmd_observation_decide_proposal)
+    observation_promote = observation_commands.add_parser("promote-evidence")
+    observation_promote.add_argument("id")
+    observation_promote.set_defaults(function=cmd_observation_promote)
     return root
 
 

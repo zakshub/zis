@@ -308,10 +308,10 @@ class SpecialistFederationTests(unittest.TestCase):
         finally:
             connection.close()
         legacy = EvidenceStore(legacy_path)
-        self.assertEqual(legacy.initialize(), [6])
-        self.assertEqual(legacy.schema_version(), 6)
+        self.assertEqual(legacy.initialize(), [6, 7])
+        self.assertEqual(legacy.schema_version(), 7)
         fresh = EvidenceStore(self.root / "fresh.sqlite3")
-        self.assertEqual(fresh.initialize(), [1, 2, 3, 4, 5, 6])
+        self.assertEqual(fresh.initialize(), [1, 2, 3, 4, 5, 6, 7])
         self.assertTrue(ClassicalRuntime(fresh).health()["healthy"])
 
     def test_backup_restore_export_and_health_include_m6_state(self):
@@ -319,7 +319,7 @@ class SpecialistFederationTests(unittest.TestCase):
         result = service.invoke(self._spec())
         exported = export_store(self.store, self.root / "m6-export")
         payload = json.loads(exported["json"].read_text(encoding="utf-8"))
-        self.assertEqual(payload["format_version"], 5)
+        self.assertEqual(payload["format_version"], 6)
         self.assertEqual(payload["federation"]["responses"][0]["id"], result["response"]["id"])
         self.assertIn("Federation Responses: 1", exported["markdown"].read_text(encoding="utf-8"))
         backup = create_backup(self.store, self.root / "m6-backup")

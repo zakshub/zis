@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zis.local/schemas/ObservationCollectionSession.schema.json",
+  "title": "ZIS ObservationCollectionSession v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "source_id", "approval_scope", "requested_operation", "adapter_id", "adapter_version", "started_at", "completed_at", "status", "items_considered", "items_accepted", "items_quarantined", "items_rejected", "duplicates", "observation_ids", "duplicate_observation_ids", "privacy_findings", "errors", "provenance", "version"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^ocsession_[a-f0-9]{20}$"},
+    "source_id": {"type": "string", "pattern": "^osrc_[a-f0-9]{20}$"},
+    "approval_scope": {"type": "string", "minLength": 1},
+    "requested_operation": {"enum": ["manual_capture", "file_import", "synthetic_test"]},
+    "adapter_id": {"type": "string", "minLength": 1},
+    "adapter_version": {"type": "string", "minLength": 1},
+    "started_at": {"type": "string", "format": "date-time"},
+    "completed_at": {"type": ["string", "null"], "format": "date-time"},
+    "status": {"enum": ["running", "completed", "failed"]},
+    "items_considered": {"type": "integer", "minimum": 0},
+    "items_accepted": {"type": "integer", "minimum": 0},
+    "items_quarantined": {"type": "integer", "minimum": 0},
+    "items_rejected": {"type": "integer", "minimum": 0},
+    "duplicates": {"type": "integer", "minimum": 0},
+    "observation_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^obs_[a-f0-9]{20}$"}},
+    "duplicate_observation_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^obs_[a-f0-9]{20}$"}},
+    "privacy_findings": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "errors": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "provenance": {"type": "object", "additionalProperties": false, "required": ["method", "actor", "chain"], "properties": {"method": {"type": "string", "minLength": 1}, "actor": {"type": "string", "minLength": 1}, "chain": {"type": "array", "items": {"type": "string", "minLength": 1}}}},
+    "version": {"type": "integer", "minimum": 1}
+  }
+}
