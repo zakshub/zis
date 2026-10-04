@@ -70,18 +70,20 @@ Pre-runtime audit fixes completed 2026-10-03: validator scope and audit-history 
 
 ## M4 Cognitive Engine v0.1
 
-Status: exact next recommended milestone; do not begin without owner review of M3.
+Status: complete and verified locally (2026-10-04). M3 was accepted before implementation; M5 has not started.
 
-1. Implement attention scoring rules.
-2. Implement novelty and repetition signals.
-3. Implement contradiction detection.
-4. Implement association links.
-5. Implement pattern candidate creation.
-6. Implement hypothesis state.
-7. Implement idea lineage record.
-8. Implement evaluation record.
-9. Implement reflection record.
-10. Implement model update proposal.
+1. Deterministic, explainable ordinal attention rules. Complete.
+2. Exact-structured novelty, repetition, duplicate, variation and insufficient-basis signals. Complete.
+3. Existing contradictions surfaced and explicit candidates recorded without automatic resolution. Complete.
+4. Deterministic association links with reasons, provenance and no prose semantics. Complete.
+5. Pattern candidates requiring at least two distinct supporting evidence records. Complete.
+6. Explicit, testable hypothesis state with strengthening and falsification conditions. Complete.
+7. Idea lineage with pre-execution lifecycle only. Complete.
+8. Criteria-based evaluation without decision authority. Complete.
+9. Structured reflection preserving uncertainty and no consciousness claim. Complete.
+10. Approval-linked model-update proposal with application unavailable in M4. Complete.
+11. Explicit cognitive sessions, migration 004, atomic audit, portable export, health and backup/restore coverage. Complete.
+12. Synthetic M4 adversarial/integration suite and CLI smoke. Complete.
 
 ## M5 Modern AI Adapter
 

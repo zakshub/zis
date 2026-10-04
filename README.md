@@ -12,7 +12,7 @@ The durable object is the cognitive specification, evidence model, memory, rules
 
 ## Current status
 
-Milestones 1, 2 and 3 are implemented locally. ZIS now has the evidence and governed ZOS migration foundations plus a deterministic Classical Runtime: source, memory-storage, capability and specialist registries; scoped approval records; explainable routing; operation history; verified local SQLite backup/restore; health checks; and JSON/CSV/Markdown export. This remains infrastructure, not the Cognitive Engine. No real ZOS personal evidence or specialist knowledge has been imported. The dependency-free validator implements only the ZIS-required subset of JSON Schema Draft 2020-12; it is not standards-complete. Audit and approval records are application-level governance, not cryptographic identity or tamper evidence. No AI provider, frontend or network is required.
+Milestones 1 through 4 are implemented locally. In addition to the evidence, governed ZOS migration and Classical Runtime foundations, ZIS now has a deterministic Cognitive Engine v0.1. Explicitly supplied evidence and memory references can produce explainable attention, novelty/repetition, associations, pattern candidates, explicit hypotheses, idea lineage, criteria evaluations, structured reflection and governed model-update proposals. These artifacts are candidates, not automatic truth or memory. Contradictions are not resolved and model updates are not applied by M4. No real ZOS personal evidence or specialist knowledge has been imported. The dependency-free validator implements only the ZIS-required subset of JSON Schema Draft 2020-12; it is not standards-complete. Audit and approval records are application-level governance, not cryptographic identity or tamper evidence. No AI provider, specialist invocation, frontend or network is required.
 
 ## Quick start
 
@@ -35,7 +35,15 @@ python -m zis.cli evidence list
 python -m zis.cli export .\local-export
 ```
 
-The bounded M2 commands remain under `zis migrate zos`. M3 adds `source`, `memory`, `capability`, `specialist`, `approval`, `route`, `backup`, `restore`, `health` and `runtime` command families. Use `--help` for exact structured inputs.
+An M4 cognitive run accepts a JSON file containing an explicit `trigger_reference`, `scope`, `evidence_ids` and `effective_at`; optional memory and candidate inputs remain explicit:
+
+```powershell
+python -m zis.cli cognition run .\cognitive-session.json
+python -m zis.cli cognition sessions
+python -m zis.cli cognition artifacts patterns
+```
+
+The bounded M2 commands remain under `zis migrate zos`. M3 adds `source`, `memory`, `capability`, `specialist`, `approval`, `route`, `backup`, `restore`, `health` and `runtime`; M4 adds the minimal `cognition` command family. Use `--help` for exact structured inputs.
 
 Runtime data defaults to `.zis/zis.sqlite3` and is excluded from Git. Backups must use an explicit private destination and are never uploaded. Exports and backups may contain private state and must not be committed.
 
@@ -58,6 +66,6 @@ Read in this order:
 15. docs/14_STATUS.md
 16. docs/15_GOVERNANCE_AND_ACCEPTANCE.md
 
-Implementation details are in `docs/architecture/M1_IMPLEMENTATION.md`, `docs/migration/M2_IMPLEMENTATION.md` and `docs/architecture/M3_CLASSICAL_RUNTIME.md`; privacy boundaries and the ZOS migration inventory are under `docs/privacy/` and `docs/migration/`.
+Implementation details are in `docs/architecture/M1_IMPLEMENTATION.md`, `docs/migration/M2_IMPLEMENTATION.md`, `docs/architecture/M3_CLASSICAL_RUNTIME.md` and `docs/architecture/M4_COGNITIVE_ENGINE.md`; privacy boundaries and the ZOS migration inventory are under `docs/privacy/` and `docs/migration/`.
 
 No direct personal identity, face, employer or exact private identity data belongs in the public ZIS core.

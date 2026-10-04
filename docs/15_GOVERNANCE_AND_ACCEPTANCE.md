@@ -93,6 +93,21 @@ M1 acceptance is bounded: the validator is not standards-complete, and applicati
 
 M3 approvals are application-level governance records. They do not authenticate a human cryptographically, provide non-repudiation or make audit history tamper-evident against direct database access.
 
+## Milestone 4 acceptance evidence
+
+1. Explicit cognitive sessions and ruleset/state fingerprints provide an inspectable deterministic boundary.
+2. Attention and novelty/repetition are ordinal, reasoned and limited to explicit structured comparison.
+3. Known contradictions remain unresolved unless the existing human-governed contradiction API is used; candidates never choose a winner.
+4. Associations require deterministic bases and are not semantic proof.
+5. Pattern, hypothesis and idea contracts explicitly distinguish candidates from truth and memory.
+6. Evaluations preserve per-criterion reasoning and carry no decision authority; reflections preserve uncertainty and claim no consciousness.
+7. Model-update proposals require exact M3 approval and cannot be applied by M4 or mutate target memory.
+8. Session writes, references, generated approvals and audit events commit in one transaction; injected final-audit failure rolls them all back.
+9. Migration 004 upgrades schema v3 and initializes cleanly; health, export and backup/restore cover M4 durable state.
+10. The 79-test suite passes with synthetic fixtures and no AI, network, specialist invocation or private evidence.
+
+M4 acceptance remains human-controlled. An ordinal attention level is not importance truth, repetition is not correctness, confidence is not probability and approval remains application-level governance rather than cryptographic identity.
+
 ## Change governance
 
 Every architecture change should record reason, evidence, alternatives, decision, consequences and migration impact.

@@ -4,7 +4,7 @@ Date: 2026 10 04
 
 ## Overall state
 
-Milestone 3 — Classical Runtime — is implemented and verified. M0–M2 remain closed. The broader ZIS product remains pre-cognition, pre-specialist-execution, pre-observation and pre-frontend.
+Milestone 4 — Cognitive Engine v0.1 — is implemented and verified. M0-M3 remain closed. The broader ZIS product remains pre-AI-adapter, pre-learning-application, pre-specialist-execution, pre-observation and pre-frontend.
 
 ## Completed foundation documentation
 
@@ -94,6 +94,24 @@ ZIST is a local first Urdu content intelligence and archive system.
 12. Structured health check for SQLite integrity, required tables, migration sequence and foreign-key/orphan state.
 13. Synthetic restore drill covers evidence, contradiction, ZOS migration metadata, M3 registries, approval/memory state, runtime operations and audit continuity.
 
+## Milestone 4 implemented
+
+1. Explicit CognitiveSession boundary loads only supplied evidence and memory references.
+2. Deterministic ordinal attention records preserve reasons, source confidence, novelty/repetition, time and contradiction references.
+3. Novelty comparison is limited to exact normalized content and explicit structured properties; unsupported semantic equivalence remains unknown.
+4. Known contradictions are surfaced and explicit contradiction candidates remain candidates; neither is automatically resolved.
+5. Associations require an implemented structured basis and preserve reason, support, strength and provenance.
+6. PatternCandidate requires at least two distinct evidence records and remains non-truth/non-memory.
+7. HypothesisRecord requires explicit testable input, including strengthening and falsification conditions, and remains non-memory.
+8. IdeaLineage v2 preserves explicit lineage and validates only pre-execution states through `ready`.
+9. EvaluationRecord stores per-criterion findings and has no decision authority.
+10. ReflectionRecord preserves uncertainty, missing evidence and unresolved contradictions and makes no consciousness claim.
+11. ModelUpdateProposal creates an exact pending M3 approval but cannot be applied or mutate target memory in M4.
+12. Migration 004 adds focused projections and normalized cognitive references; entire session mutation and audit are one transaction.
+13. JSON/Markdown export, backup/restore and health checks include M4 state.
+14. Minimal `cognition` CLI supports run, inspection and bounded lifecycle transitions.
+15. All cognition remains local, deterministic, inspectable and functional without AI or specialist invocation.
+
 ## Not yet implemented
 
 No general external-source ingestion pipeline or observation connector exists; M2 only reads explicitly selected local ZOS files.
@@ -110,12 +128,12 @@ No ZIS simulation world exists yet.
 
 No real ZOS evidence, personal content or specialist knowledge has been imported; human selection and review are still required for any future candidate.
 
-No Memory Engine, Cognitive Engine, learning/consolidation, specialist federation/execution, capability sensing, semantic routing, background job system or cryptographic approval identity exists yet. M3 provides only their classical storage/governance substrate where stated.
+No full Memory Engine, Learning Engine, learning/consolidation or model-update application, specialist federation/execution, capability sensing, semantic routing, background job system or cryptographic approval identity exists yet. M4 provides bounded deterministic cognition, not semantic understanding or autonomous agency.
 
 ## Verification
 
-`python -m unittest discover -s tests -v` passes 59 tests locally on Python 3.13.15: the accepted 33 M1/M2 tests plus 26 M3 tests. The implementation targets Python 3.11+ and requires no network or AI service.
+With `PYTHONPATH=src`, `python -m unittest discover -s tests -v` passes 79 tests locally on Python 3.13.15: the accepted 59 M1-M3 tests plus 20 M4 tests. `python -m compileall -q src tests` also passes. The implementation targets Python 3.11+ and requires no network, AI service or specialist runtime.
 
 ## Next milestone
 
-Recommended next: M4 — Cognitive Engine v0.1. Do not begin until M3 is reviewed and accepted.
+Recommended next after owner review: M5 — Modern AI Adapter. Do not begin automatically. The deterministic M1-M4 path must remain complete when an adapter is disabled.

@@ -1,6 +1,6 @@
 # Testing Strategy
 
-Milestones 1–3 use the standard-library `unittest` runner and temporary directories. Tests require no AI provider, network, external database or private data.
+Milestones 1-4 use the standard-library `unittest` runner and temporary directories. Tests require no AI provider, network, external database, specialist runtime or private data.
 
 Run:
 
@@ -42,7 +42,26 @@ Synthetic fixtures are visibly synthetic and contain no private identity.
 26. SQLite integrity, required-table, migration-sequence and foreign-key/orphan checks.
 27. Portable JSON and Markdown export of M3 runtime state.
 
-Current verified result on Python 3.13.15: 59 passed (33 accepted M1/M2 tests and 26 M3 tests).
+M4 adds:
+
+28. Explainable attention and contradiction escalation without opaque numeric scores.
+29. Exact duplicate, repeated support, possible variation, novel and insufficient-comparison states.
+30. Known contradiction surfacing, candidate preservation and no automatic resolution.
+31. Association rejection without an explicit deterministic basis and no prose-semantic invention.
+32. Multi-record pattern support, provenance, counterevidence and explicit non-truth/non-memory fields.
+33. Explicit testable hypotheses with strengthening/falsification conditions and no memory promotion.
+34. Parent-preserving idea lineage and invalid pre-execution lifecycle rejection.
+35. Per-criterion evaluation, unresolved-contradiction effects and no decision authority.
+36. Reflection uncertainty/missing evidence plus proof that reflection does not mutate memory.
+37. Approval-linked model-update proposals, unchanged target memory and blocked application.
+38. Historical/expired temporal handling, first-class unknown and deterministic same-state identities.
+39. Structural and conservative direct-text identity rejection for cognitive input.
+40. Entire-session rollback after injected final audit failure.
+41. Fresh migration through 004 and an explicit schema-v3 to schema-v4 upgrade.
+42. Cognitive orphan health detection, M4 export and full M4 backup/restore state equivalence.
+43. End-to-end cognition CLI run/session/artifact/health/export smoke coverage.
+
+Current verified result on Python 3.13.15: 79 passed (59 accepted M1-M3 tests and 20 M4 tests).
 
 ## Future durability and adversarial backlog
 

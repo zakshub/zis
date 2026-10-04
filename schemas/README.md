@@ -25,6 +25,18 @@ M3 classical runtime contracts:
 6. RuntimeOperation
 7. BackupManifest
 
-SpecialistManifest was extended for registry use with explicit domain, interface version, compatible runtime versions and availability. It remains metadata only and does not authorize invocation.
+M4 deterministic cognitive contracts:
 
-Validation is available through `zis validate`. Core synthetic examples are covered by `tests/test_contracts.py`; migration contracts are exercised by `tests/test_migration.py`. Contracts are strict (`additionalProperties: false`) and use ordinal confidence rather than pseudo-precise numeric scores. The dependency-free validator implements only the schema keywords required by these ZIS contracts, not all of Draft 2020-12.
+1. CognitiveSession
+2. AttentionSignal
+3. AssociationRecord
+4. PatternCandidate
+5. HypothesisRecord
+6. IdeaLineage v2
+7. EvaluationRecord
+8. ReflectionRecord
+9. ModelUpdateProposal
+
+SpecialistManifest was extended for registry use with explicit domain, interface version, compatible runtime versions and availability. It remains metadata only and does not authorize invocation. IdeaLineage v2 is the M4 durable idea contract and intentionally stops at the pre-execution `ready` state.
+
+Validation is available through `zis validate`. Core synthetic examples are covered by `tests/test_contracts.py`; migration contracts by `tests/test_migration.py`; M4 contracts and behavior by `tests/test_cognition.py`. Contracts are strict (`additionalProperties: false`) and use ordinal confidence rather than pseudo-precise numeric scores. The dependency-free validator implements only the schema keywords required by these ZIS contracts, not all of Draft 2020-12.

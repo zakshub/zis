@@ -26,7 +26,7 @@ Outputs: local database, CLI, evidence ingestion, memory, deterministic router, 
 
 Exit condition: ZIS can operate basic workflows without any LLM.
 
-Status (2026-10-04): complete for M3. The accepted M1/M2 foundation now includes governed memory storage, source/capability/specialist registries, scoped approval records, explainable deterministic routing, runtime operations, schema/foreign-key health checks, expanded readable export, and verified local backup/restore. This is classical infrastructure, not cognition, specialist execution or capability sensing.
+Status (2026-10-04): complete through M4. The accepted M1-M3 foundation now includes governed memory storage, registries, approvals, explainable routing, health checks, export and verified backup/restore. M4 adds deterministic cognition over explicit context: attention, novelty/repetition, structured associations, candidate patterns and hypotheses, idea lineage, per-criterion evaluation, reflection and governed model-update proposals. It remains useful with AI disabled and does not apply learning, invoke specialists or sense capabilities.
 
 Audit note (2026-10-04): M3 implements the relevant checksum, tamper detection, fresh restore, state-equivalence, orphan detection and rollback cases. Power-loss simulation, disk-full behavior, high-contention concurrency, cryptographic audit tamper evidence and cross-version restore remain later resilience work.
 
@@ -37,6 +37,8 @@ Goal: add optional AI acceleration through provider adapters.
 Outputs: model adapter contract, retrieval, synthesis, tool calling, structured proposal generation and human approval integration.
 
 Exit condition: disabling AI leaves Phase 2 functional.
+
+Exact next milestone: M5 Modern AI Adapter. It may add optional provider-neutral acceleration but must not weaken or replace the complete deterministic M1-M4 path.
 
 ## Phase 4 Specialist Intelligence Federation
 

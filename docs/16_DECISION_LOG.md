@@ -111,3 +111,24 @@ Architecture impact: capability sensing remains M8, specialist invocation remain
 Decision: use SQLite's backup API, publish a checksum/version/count manifest, restore through a verified temporary database, and refuse destination overwrite by default.
 Reason: copying a live database directly or replacing a destination before verification creates avoidable partial-state risk.
 Architecture impact: backup remains local and explicit; cloud synchronization and cross-version recovery are not introduced.
+
+## D025 M4 cognition uses explicit context and versioned deterministic rules
+Decision: each cognitive run names its evidence, optional memory, scope, trigger and effective time; content identities include explicit input, referenced state and ruleset `m4.v1`, while execution timestamps remain metadata.
+Reason: cognition must be reproducible and inspectable without hidden global personality state or automatic history loading.
+Alternatives: implicit whole-database context and provider-generated reasoning were rejected as privacy risks and non-deterministic M4 scope expansion.
+Architecture impact: CognitiveSession becomes the boundary; M5 adapters, if approved later, must preserve it.
+
+## D026 Cognitive artifacts remain candidates distinct from truth and memory
+Decision: patterns, hypotheses and ideas carry explicit non-truth/non-memory semantics; evaluations have no decision authority and reflections make no consciousness claim.
+Reason: repetition, interpretation, ideation and analysis must not silently become durable belief.
+Architecture impact: durable memory remains governed by the accepted M3 substrate and future Learning Engine.
+
+## D027 Model-update proposal reuses M3 approval and cannot apply in M4
+Decision: proposal creation atomically requests an exact M3 approval; M4 may record approval but rejects `applied` and never mutates the target memory.
+Reason: recognizing that an interpretation may need revision is cognition, while applying durable learning belongs to a future approved Learning Engine.
+Architecture impact: no second approval system and no autonomous self-modification path are introduced.
+
+## D028 M4 stores portable projections plus normalized important references
+Decision: migration 004 stores strict JSON contract projections with indexed lifecycle fields and one normalized reference table.
+Reason: portable reconstruction and queryable lineage are both required; a single opaque blob is insufficient and dozens of relation-specific tables are unnecessary.
+Architecture impact: export, backup and health include all M4 tables and orphan-reference checks.

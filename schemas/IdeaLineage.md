@@ -1,71 +1,20 @@
-# IdeaLineage
+# IdeaLineage v2
 
-Machine contract: `IdeaLineage.schema.json`. Implemented as a contract only; no cognitive idea engine is built in Milestone 1.
+Machine contract: `IdeaLineage.schema.json`. M4 implements this as the durable IdeaRecord/lineage contract.
 
-Required fields:
+It requires the idea ID and cognitive session, statement, scope, origin type, parent idea IDs, evidence/pattern/hypothesis/association references, trigger, transformations, current status, rationale, explicit `idea_not_truth` marker, provenance, ordinal confidence, timestamps and version.
 
-id
+M4 states are limited to:
 
-created_at
+1. `spark`
+2. `unclear`
+3. `exploring`
+4. `researching`
+5. `promising`
+6. `rejected`
+7. `parked`
+8. `ready`
 
-origin_type
+`approved`, `executing`, `completed` and `learned` are not M4 states because execution and learning belong to later milestones. An M4 idea requires at least one explicit lineage reference and begins at `spark`; it is not truth, execution authority or durable memory.
 
-origin_evidence_ids
-
-initial_signal
-
-questions
-
-associations
-
-research_refs
-
-hypotheses
-
-concept_versions
-
-evaluations
-
-specialists_consulted
-
-decisions
-
-approval_refs
-
-execution_refs
-
-outcome
-
-reflection
-
-learning_ids
-
-status
-
-Suggested states:
-
-spark
-
-unclear
-
-exploring
-
-researching
-
-promising
-
-parked
-
-rejected
-
-ready
-
-approved
-
-executing
-
-completed
-
-learned
-
-Invariant: lineage must preserve the path from origin to outcome rather than only the final idea.
+Invariant: lineage preserves the path from explicit origin references and transformations to the current pre-execution idea state rather than only a final statement.

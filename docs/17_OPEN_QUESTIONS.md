@@ -14,6 +14,13 @@ These questions are intentionally deferred until the relevant milestone. They ar
 2. What decay rules should apply to preferences versus factual evidence?
 3. What evidence volume triggers consolidation?
 
+## Cognitive engine
+
+1. M4 resolves the first deterministic ruleset boundary: explicit context, exact structured comparisons, ordinal signals and first-class unknowns.
+2. Which M5 provider-neutral adapter interface can add optional semantic assistance without changing deterministic artifact contracts?
+3. Which future Learning Engine policy may apply an approved ModelUpdateProposal, and how will it preserve prior memory plus rollback/reconstruction evidence?
+4. What reviewed rule-change process should version a future `m4.v2` ruleset without making old session reconstruction ambiguous?
+
 ## Observation
 
 1. Which source is the first real connector?
