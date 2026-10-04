@@ -1,6 +1,6 @@
 # Testing Strategy
 
-Milestones 1-6 use the standard-library `unittest` runner and temporary directories. Tests require no live AI credential, network, external database, specialist runtime or private data.
+Milestones 1-7 use the standard-library `unittest` runner and temporary directories. Tests require no live AI credential, network, external database, specialist runtime, external observation connector or real private data.
 
 Run:
 
@@ -98,7 +98,28 @@ M6 adds:
 73. M6 export, health separation and full backup/restore state equivalence.
 74. End-to-end metadata-only specialist CLI smoke.
 
-Current verified result on Python 3.13.15: 115 passed (100 accepted M1-M5 tests and 15 M6 test methods covering the required federation cases).
+M7 adds:
+
+75. Observation source registry and exact pending/approved/paused/revoked/retired consent behavior.
+76. Exact approved scope, data-class and adapter compatibility enforcement.
+77. Manual capture plus explicit collection-session counts and complete provenance.
+78. Observed/recorded/imported time distinction and explicit unknown observed time.
+79. Bounded UTF-8 single-file import, extension/size/directory/symlink rejection and path non-persistence.
+80. Exact duplicate linking without observation multiplication or semantic inference.
+81. Private-vault local retention and public-safe export redaction.
+82. Restricted, denied and suspected-secret content-free quarantine with secret non-persistence.
+83. Review-transition validation and logical purge marker without private audit payload.
+84. Evidence proposal eligibility, lineage, explicit decision and unapproved-promotion rejection.
+85. Idempotent approved M1 evidence creation with governed confidence and original time.
+86. Identity rejection before evidence proposal and proof of no direct observation-to-memory path.
+87. No contradiction resolution, cognition, AI or specialist auto-collection side effects.
+88. Metadata-only collection audit and whole completed-session rollback on final audit failure.
+89. Explicit failed-session recording after adapter failure with zero observation rows.
+90. Migration 006-to-007 and fresh schema-7 initialization.
+91. M7 public export, private backup/restore, provenance preservation, health/orphan checks and CLI smoke.
+92. Adapter separation, no connector inventory and no background collection state.
+
+Current verified result on Python 3.13.15: 134 passed (115 accepted M1-M6 tests and 19 M7 test methods covering the required observation-ledger cases).
 
 ## Future durability and adversarial backlog
 

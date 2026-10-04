@@ -4,7 +4,7 @@ Date: 2026 10 04
 
 ## Overall state
 
-Milestone 6 — Specialist Federation — is implemented and verified. M0-M5 remain closed. The deterministic core remains authoritative; the broader product remains pre-learning-application, pre-observation and pre-frontend.
+Milestone 7 — Observation Ledger — is implemented and verified. M0-M6 remain closed. The deterministic core remains authoritative; the broader product remains pre-learning-application, pre-capability-sensing and pre-frontend.
 
 ## Completed foundation documentation
 
@@ -148,11 +148,27 @@ ZIST is a local first Urdu content intelligence and archive system.
 14. Export format 5, schema-6 health and backup/restore include safe federation state; specialist availability remains separate from core health.
 15. Minimal `specialists` CLI supports list, show, status, explicit invoke, record inspection and ZIST evaluation.
 
+## Milestone 7 implemented
+
+1. Strict ObservationSource, ObservationCollectionSession, ObservationRecord v2 and ObservationEvidenceProposal contracts.
+2. Exact M3 approval controls pending, approved, paused, revoked and retired observation sources without broadening scope.
+3. Separate ObservationAdapter protocol with explicit manual and bounded UTF-8 file-import adapters plus an injected synthetic test adapter.
+4. No daemon, recursive scan, arbitrary command adapter, external connector or background collection path.
+5. Every collection is an explicit session with counts, safe findings, errors, adapter provenance and atomic completed-session persistence.
+6. Observation provenance preserves source/session/adapter, safe source reference, event/import/record time, content fingerprint, transformation notes and original privacy class.
+7. Capture confidence is ordinal capture integrity, not truth confidence; observations remain distinct from evidence and memory.
+8. Private observations stay in the local vault; restricted, denied and suspected-secret items become content-free quarantine markers.
+9. Exact duplicate identity links a session to the existing observation and creates no duplicate record.
+10. Explicit review transitions and logical purge remove current content without claiming secure erasure from SQLite pages or old backups.
+11. Evidence proposals require accepted observations, public-safe authored content and an exact M3 approval; approved promotion creates one M1 EvidenceRecord idempotently.
+12. Observation APIs do not create memory, resolve contradictions, invoke cognition/AI/specialists or change routing.
+13. Default export includes full safe public/internal observations and metadata/fingerprints only for private/restricted/quarantined observations.
+14. Migration 007, private backup/restore, read-only health and exact-filter query APIs cover M7 state.
+15. Minimal `observations` CLI supports source, collection, review, quarantine, purge, proposal and promotion operations.
+
 ## Not yet implemented
 
-No general external-source ingestion pipeline or observation connector exists; M2 only reads explicitly selected local ZOS files.
-
-No ZIS Observation Ledger exists yet.
+No live browser, social, messaging, email, application or directory-watching observation connector exists. M7 supports only explicit manual and single-file local collection.
 
 No ZIS operations frontend exists yet.
 
@@ -160,12 +176,12 @@ No ZIS simulation world exists yet.
 
 No real ZOS evidence, personal content or specialist knowledge has been imported; human selection and review are still required for any future candidate.
 
-No full Memory Engine, Learning Engine, learning/consolidation or model-update application, live callable specialist integration, capability sensing, semantic routing, background job system or cryptographic approval identity exists yet. M4 provides bounded deterministic cognition, not semantic understanding or autonomous agency.
+No full Memory Engine, Learning Engine, learning/consolidation or model-update application, live callable specialist integration, capability sensing, semantic routing, background job system or cryptographic approval identity exists yet. M4 provides bounded deterministic cognition, and M7 provides learning input rather than autonomous learning.
 
 ## Verification
 
-With `PYTHONPATH=src`, `python -m unittest discover -s tests -v` passes 115 tests locally on Python 3.13.15: the accepted 100 M1-M5 tests plus 15 M6 test methods covering the required federation cases. `python -m compileall -q src tests` also passes. The implementation targets Python 3.11+; classical operation and the tests require no network, live AI credential or specialist runtime.
+With `PYTHONPATH=src`, `python -m unittest discover -s tests -v` passes 134 tests locally on Python 3.13.15: the accepted 115 M1-M6 tests plus 19 M7 test methods covering the required observation, privacy, governance, recovery and integration cases. The implementation targets Python 3.11+; classical operation and the tests require no network, live AI credential, specialist runtime or external observation connector.
 
 ## Next milestone
 
-Recommended next after owner review: M7 — Observation Ledger. Do not begin automatically.
+Recommended next after owner review: M8 — Capability Sensing. Do not begin automatically.

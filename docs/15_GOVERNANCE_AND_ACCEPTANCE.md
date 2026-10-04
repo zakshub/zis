@@ -140,6 +140,21 @@ M5 acceptance does not authorize AI output as truth, approval, decision or execu
 
 M6 acceptance authorizes only explicit federation through an approved adapter. It does not authorize autonomous selection, fallback, specialist chains, capability sensing, observation or any M7+ behavior.
 
+## Milestone 7 acceptance evidence
+
+1. Observation sources require exact application-level approval and enforce declared scope/data classes through explicit collection sessions.
+2. Manual and bounded file-import adapters are separate from AI and specialist adapters; no background or external connector exists.
+3. ObservationRecord preserves capture provenance, time, privacy, capture integrity, retention and review state without becoming evidence, memory or truth.
+4. Restricted, denied and suspected-secret input is quarantined without durable raw payload or private-content audit.
+5. Private local observations remain in the gitignored vault and default public-safe export emits metadata/fingerprints only.
+6. Exact duplicates link to prior observations; conflict is not resolved and no semantic deduplication is claimed.
+7. Evidence promotion requires accepted observations, a separately authored public-safe proposal, exact M3 approval and one atomic M1 EvidenceRecord insertion.
+8. Observation APIs cannot mutate memory, resolve contradictions, auto-run cognition, call AI/specialists or sense capabilities.
+9. Migration 007, health, query, export and private backup/restore cover durable M7 state.
+10. The 134-test suite passes with synthetic fixtures and no network, credentials, real observation content or external connector.
+
+M7 acceptance authorizes only explicit local collection through an approved adapter. It does not authorize surveillance, external-source integration, autonomous learning, memory rewriting, contradiction resolution or M8 capability sensing. Logical purge is not a secure-erasure guarantee, and backups remain private.
+
 ## Change governance
 
 Every architecture change should record reason, evidence, alternatives, decision, consequences and migration impact.

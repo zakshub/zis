@@ -29,6 +29,12 @@ The default local database lives under `.zis/`. Private source material belongs 
 
 Exports inherit the highest privacy class of their contents. JSON, CSV and Markdown being readable does not make them public-safe. Review is mandatory before adding any derived export to Git.
 
+## M7 local observation vault
+
+The SQLite database may contain owner-approved private observation content. It is a private local vault, not a public-core artifact. The default JSON/Markdown export is public-safe for observation state: private, restricted and quarantined observations are represented only by bounded metadata and fingerprints. Public/internal observation content is included only after deterministic identity/secret gates at capture.
+
+SQLite backups contain the full local observation state, including private content, provenance and retention state. They must remain outside Git. Logical purge removes content from the current projection but is not secure erasure: older backups, filesystem copies and SQLite storage behavior may retain prior bytes and require separate owner-controlled retirement.
+
 ## Enforcement
 
 1. Contracts disallow undeclared identity fields.
@@ -36,6 +42,7 @@ Exports inherit the highest privacy class of their contents. JSON, CSV and Markd
 3. `.gitignore` excludes local databases, runtime data, exports and secrets.
 4. Tests use synthetic records only.
 5. Human review remains required for free text and uncertain cases.
+6. M7 audits store observation IDs, decisions, counts and fingerprints rather than raw observation content.
 
 These controls reduce risk but do not replace repository scanning, secret scanning or human judgment.
 

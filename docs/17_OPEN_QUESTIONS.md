@@ -31,9 +31,11 @@ These questions are intentionally deferred until the relevant milestone. They ar
 
 ## Observation
 
-1. Which source is the first real connector?
-2. Which data categories are never allowed into durable memory?
-3. What default retention period applies to raw observations?
+1. M7 resolves the local foundation: explicit approved sources, manual/file adapters, sessions, quarantine, retention state and evidence proposals.
+2. Which separately reviewed source should become the first real external connector?
+3. Which data categories are never allowed into durable memory under a future Learning Engine?
+4. What owner-selected default retention periods should replace M7's per-source explicit policy?
+5. Which secure-deletion guarantees are feasible across SQLite, filesystem copies and backup retirement?
 
 ## Specialist federation
 
@@ -41,7 +43,7 @@ These questions are intentionally deferred until the relevant milestone. They ar
 2. M6 requires exact request/response contract versions and declared runtime-major/minor compatibility; future range negotiation needs a separate proposal.
 3. M6 returns a visible unavailable/incompatible state and does not fallback automatically.
 4. Which specialist will first publish an approved stable, privacy-scoped task endpoint?
-5. Should ZIST become a writing specialist, an M7 corpus source, or remain outside ZIS after its interface and privacy boundary are reviewed?
+5. Should ZIST become a writing specialist, a future approved corpus source, or remain outside ZIS after its interface and privacy boundary are reviewed?
 
 ## Simulation world
 

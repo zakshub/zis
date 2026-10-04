@@ -54,7 +54,7 @@ Every automated state change must be auditable.
 
 Every external capability must fail visibly rather than invent success.
 
-## Implemented M1-M6 boundary
+## Implemented M1-M7 boundary
 
 M3 implements storage and deterministic governance across the evidence, memory-substrate, capability, approval, router, runtime and recovery layers. Registries store metadata and lifecycle projections; audit events preserve state-change history. Memory promotion and persistent capability/specialist activation require exact application-level approval records.
 
@@ -70,4 +70,6 @@ Provider failure or disabled state does not make the classical runtime unhealthy
 
 M6 adds a separate explicit SpecialistFederation boundary. Designer, Studio, SEO and TaxBot are governed metadata registrations with metadata-only adapters until each repository publishes an approved stable task contract. The federation validates bounded requests, privacy, registry state, exact contract/runtime compatibility and approvals before adapter invocation; it validates complete output and records normalized responses plus execution provenance. ZIST is evaluated but deferred.
 
-The M3 router still only returns `specialist_candidate`; M4 cognition and M5 AI never invoke or select specialists automatically. Specialist availability is reported separately from core health, and a specialist result is not evidence, memory, truth, approval, contradiction resolution or execution authority. Migration 006, backup, export and health cover M6 records. Observation, capability sensing, autonomous specialist chains and interfaces remain unimplemented.
+The M3 router still only returns `specialist_candidate`; M4 cognition and M5 AI never invoke or select specialists automatically. Specialist availability is reported separately from core health, and a specialist result is not evidence, memory, truth, approval, contradiction resolution or execution authority. Migration 006, backup, export and health cover M6 records.
+
+M7 adds a separate local Observation Ledger. An exact M3 approval activates each bounded source; every collection is an explicit session through the manual, file-import or injected synthetic adapter. Observation capture preserves provenance, time, privacy, capture integrity and retention without becoming evidence, memory or truth. Restricted, denied and suspected-secret items become content-free quarantine markers. Exact duplicates link to the existing record. Evidence creation requires a separate public-safe proposal, exact approval and the existing M1 EvidenceStore transaction. Migration 007, public-safe export, private backup/restore and observation health cover this state. No background observer, external connector, semantic search, autonomous learning or M8 capability sensing exists.

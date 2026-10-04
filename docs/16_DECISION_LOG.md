@@ -178,3 +178,23 @@ Migration impact: migration 006 stores requests, responses and receipts atomical
 Decision: require exact request/response contract versions and declared runtime compatibility, return normalized failures, and never substitute another specialist automatically.
 Reason: silent coercion or fallback could change domain authority, privacy exposure and consequences.
 Architecture impact: health is read-only and specialist availability remains independent of core integrity.
+
+## D038 M7 collection is explicit, session-bound and source-approved
+Decision: every collection call names one approved ObservationSource, its exact approval scope, one adapter operation and one explicit input; no background observer exists.
+Reason: observation must be transparent and attributable rather than becoming surveillance or implied unlimited permission.
+Architecture impact: migration 007 adds source/session projections while adapters remain separate from AI and specialist protocols.
+
+## D039 M7 uses a local private vault with public-safe projection
+Decision: owner-approved private observation content may exist only in the gitignored SQLite vault; default export emits metadata/fingerprints for private, restricted and quarantined observations.
+Reason: local identity-bearing capture and public/external safety are different boundaries and must not be conflated.
+Architecture impact: backups contain private vault state and remain private; audit stores metadata, not raw observation payload.
+
+## D040 M7 exact duplicates link and logical purge marks
+Decision: exact source/reference/event/fingerprint duplicates create a session link to the existing record, not another observation. Purge removes current content and leaves a metadata marker.
+Reason: deterministic behavior avoids silent multiplication while retaining collection accountability; portable SQLite cannot honestly guarantee secure erasure across pages and old backups.
+Architecture impact: duplicate links and purge markers are durable; semantic deduplication and secure erasure are not claimed.
+
+## D041 Observation-to-evidence is a separately approved transaction
+Decision: only accepted observations may support a public-safe ObservationEvidenceProposal; exact M3 approval is required before one idempotent M1 EvidenceRecord is created.
+Reason: observation, review acceptance, evidence and memory carry different authority and confidence meanings.
+Architecture impact: M7 reuses M1 evidence insertion and M3 approvals; it adds no memory mutation, contradiction resolution or learning application.

@@ -122,17 +122,19 @@ Status: complete and verified locally (2026-10-04). No specialist expertise was 
 
 ## M7 Observation Ledger
 
-1. Define connector permission model.
-2. Define observation categories.
-3. Build source connection registry.
-4. Build visible permission screen.
-5. Build pause all control.
-6. Build source revoke flow.
-7. Implement observation ingestion.
-8. Implement identity scrubber.
-9. Build inference explanation view.
-10. Build retention state control.
-11. Build learning promotion queue.
+Status: complete and verified locally (2026-10-04) for the approved backend-only foundation. UI, real connectors and autonomous learning remain unimplemented.
+
+1. Define governed source permission and lifecycle model. Complete.
+2. Define ObservationRecord v2, collection-session and evidence-proposal contracts. Complete.
+3. Build source registry with exact M3 approval. Complete.
+4. Implement explicit manual and bounded file-import adapters plus synthetic test adapter. Complete.
+5. Preserve provenance, observed/recorded/imported time and capture-integrity confidence. Complete.
+6. Implement privacy classification, content-free secret/restricted quarantine and local private vault. Complete.
+7. Implement exact duplicate linking without semantic deduplication. Complete.
+8. Implement review transitions and logical purge marker. Complete.
+9. Implement explicit evidence proposal, decision and idempotent M1 evidence promotion. Complete.
+10. Add public-safe export, private backup/restore, health and exact queries. Complete.
+11. Add minimal `observations` CLI and adversarial/integration coverage. Complete.
 
 ## M8 Capability Sensing
 
