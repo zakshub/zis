@@ -4,7 +4,7 @@ Date: 2026 10 04
 
 ## Overall state
 
-Milestone 4 — Cognitive Engine v0.1 — is implemented and verified. M0-M3 remain closed. The broader ZIS product remains pre-AI-adapter, pre-learning-application, pre-specialist-execution, pre-observation and pre-frontend.
+Milestone 5 — Modern AI Adapter — is implemented and verified. M0-M4 remain closed. The deterministic core remains authoritative; the broader product remains pre-learning-application, pre-specialist-federation, pre-observation and pre-frontend.
 
 ## Completed foundation documentation
 
@@ -112,6 +112,24 @@ ZIST is a local first Urdu content intelligence and archive system.
 14. Minimal `cognition` CLI supports run, inspection and bounded lifecycle transitions.
 15. All cognition remains local, deterministic, inspectable and functional without AI or specialist invocation.
 
+## Milestone 5 implemented
+
+1. Small provider-neutral adapter protocol, registry and replaceable fake/no-provider implementations.
+2. Exactly one real provider implementation: an isolated OpenAI Responses adapter using standard-library HTTPS and injectable transport.
+3. AIRequest, AIResponse and AICandidate strict portable contracts plus migration 005.
+4. AI disabled by default; missing configuration or credential returns an explicit state without disabling ZIS.
+5. Only explicit, externally approved `public` or `internal` structured context may be transmitted.
+6. Existing structural and direct-text identity/credential guards run before transport and again on provider output.
+7. Credentials are read from `OPENAI_API_KEY` at call time and never stored, audited, exported or included in backup metadata.
+8. Provider response parsing and requested-schema validation reject malformed or extra output without semantic repair.
+9. Successful output becomes only an `ai_candidate_not_truth` pending-review record; no evidence, memory, approval, contradiction or execution state changes.
+10. Timeout, authentication, rate limit, server, network, invalid-provider and invalid-structured-output failures are normalized without fabricated success.
+11. Usage preserves provider values or explicit nulls. Cost remains unknown without versioned local pricing and is labeled estimated when calculated.
+12. AI interactions persist request/response/candidate plus metadata-only audit atomically.
+13. Export format 4, backup/restore, schema-5 health and AI status include safe M5 state.
+14. Minimal `ai` CLI supports status, provider inventory, explicit request and record inspection.
+15. No automatic AI call was added to deterministic cognition and no live credential is needed by the test suite.
+
 ## Not yet implemented
 
 No general external-source ingestion pipeline or observation connector exists; M2 only reads explicitly selected local ZOS files.
@@ -119,8 +137,6 @@ No general external-source ingestion pipeline or observation connector exists; M
 No ZIS specialist federation exists yet.
 
 No ZIS Observation Ledger exists yet.
-
-No ZIS modern AI adapter exists yet.
 
 No ZIS operations frontend exists yet.
 
@@ -132,8 +148,8 @@ No full Memory Engine, Learning Engine, learning/consolidation or model-update a
 
 ## Verification
 
-With `PYTHONPATH=src`, `python -m unittest discover -s tests -v` passes 79 tests locally on Python 3.13.15: the accepted 59 M1-M3 tests plus 20 M4 tests. `python -m compileall -q src tests` also passes. The implementation targets Python 3.11+ and requires no network, AI service or specialist runtime.
+With `PYTHONPATH=src`, `python -m unittest discover -s tests -v` passes 95 tests locally on Python 3.13.15: the accepted 79 M1-M4 tests plus 16 M5 tests. `python -m compileall -q src tests` also passes. The implementation targets Python 3.11+; classical operation and the tests require no network, live AI credential or specialist runtime.
 
 ## Next milestone
 
-Recommended next after owner review: M5 — Modern AI Adapter. Do not begin automatically. The deterministic M1-M4 path must remain complete when an adapter is disabled.
+Recommended next after owner review: M6 — Specialist Federation. Do not begin automatically.

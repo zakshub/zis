@@ -12,7 +12,7 @@ The durable object is the cognitive specification, evidence model, memory, rules
 
 ## Current status
 
-Milestones 1 through 4 are implemented locally. In addition to the evidence, governed ZOS migration and Classical Runtime foundations, ZIS now has a deterministic Cognitive Engine v0.1. Explicitly supplied evidence and memory references can produce explainable attention, novelty/repetition, associations, pattern candidates, explicit hypotheses, idea lineage, criteria evaluations, structured reflection and governed model-update proposals. These artifacts are candidates, not automatic truth or memory. Contradictions are not resolved and model updates are not applied by M4. No real ZOS personal evidence or specialist knowledge has been imported. The dependency-free validator implements only the ZIS-required subset of JSON Schema Draft 2020-12; it is not standards-complete. Audit and approval records are application-level governance, not cryptographic identity or tamper evidence. No AI provider, specialist invocation, frontend or network is required.
+Milestones 1 through 5 are implemented locally. The deterministic M1-M4 core remains authoritative and fully functional without AI. M5 adds an optional provider-neutral AI boundary with disabled/no-provider mode, exactly one isolated OpenAI Responses adapter, strict structured-output validation, explicit candidate records, normalized errors, usage metadata and bounded cost estimation. AI output is not evidence, memory, truth, approval, contradiction resolution or execution. No live credential is required for initialization or tests, and no specialist federation, observation, frontend or simulation has been built. The dependency-free validator implements only the ZIS-required subset of JSON Schema Draft 2020-12; it is not standards-complete. Audit and approval records remain application-level governance, not cryptographic identity or tamper evidence.
 
 ## Quick start
 
@@ -24,6 +24,7 @@ python -m zis.cli init
 python -m zis.cli status
 python -m zis.cli runtime status
 python -m zis.cli health
+python -m zis.cli ai status
 python -m unittest discover -s tests -v
 ```
 
@@ -43,7 +44,9 @@ python -m zis.cli cognition sessions
 python -m zis.cli cognition artifacts patterns
 ```
 
-The bounded M2 commands remain under `zis migrate zos`. M3 adds `source`, `memory`, `capability`, `specialist`, `approval`, `route`, `backup`, `restore`, `health` and `runtime`; M4 adds the minimal `cognition` command family. Use `--help` for exact structured inputs.
+M5 AI requests are explicit structured JSON files. AI is disabled by default; enabling the OpenAI adapter requires `ZIS_AI_ENABLED=true`, `ZIS_AI_PROVIDER=openai`, an explicit `ZIS_AI_MODEL`, and `OPENAI_API_KEY` in the runtime environment. Credentials are never stored in ZIS configuration or durable records.
+
+The bounded M2 commands remain under `zis migrate zos`. M3 adds classical runtime/governance commands, M4 adds `cognition`, and M5 adds the minimal `ai status`, `ai providers`, `ai request` and `ai records` surface. Use `--help` for exact structured inputs.
 
 Runtime data defaults to `.zis/zis.sqlite3` and is excluded from Git. Backups must use an explicit private destination and are never uploaded. Exports and backups may contain private state and must not be committed.
 
@@ -66,6 +69,6 @@ Read in this order:
 15. docs/14_STATUS.md
 16. docs/15_GOVERNANCE_AND_ACCEPTANCE.md
 
-Implementation details are in `docs/architecture/M1_IMPLEMENTATION.md`, `docs/migration/M2_IMPLEMENTATION.md`, `docs/architecture/M3_CLASSICAL_RUNTIME.md` and `docs/architecture/M4_COGNITIVE_ENGINE.md`; privacy boundaries and the ZOS migration inventory are under `docs/privacy/` and `docs/migration/`.
+Implementation details are in `docs/architecture/M1_IMPLEMENTATION.md`, `docs/migration/M2_IMPLEMENTATION.md`, `docs/architecture/M3_CLASSICAL_RUNTIME.md`, `docs/architecture/M4_COGNITIVE_ENGINE.md` and `docs/architecture/M5_AI_ADAPTER.md`; privacy boundaries and the ZOS migration inventory are under `docs/privacy/` and `docs/migration/`.
 
 No direct personal identity, face, employer or exact private identity data belongs in the public ZIS core.

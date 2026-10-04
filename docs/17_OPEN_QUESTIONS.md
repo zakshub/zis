@@ -21,6 +21,14 @@ These questions are intentionally deferred until the relevant milestone. They ar
 3. Which future Learning Engine policy may apply an approved ModelUpdateProposal, and how will it preserve prior memory plus rollback/reconstruction evidence?
 4. What reviewed rule-change process should version a future `m4.v2` ruleset without making old session reconstruction ambiguous?
 
+## AI adapter
+
+1. M5 resolves the provider-neutral boundary, disabled behavior, first real adapter, structured validation and candidate isolation.
+2. Which exact OpenAI models should an owner configure for particular purposes remains a runtime choice, not durable architecture.
+3. When should pricing metadata be refreshed, reviewed and retired without implying exact billed cost?
+4. Should a later milestone support provider-reported billed cost separately from M5 estimates?
+5. Multi-provider selection, retries, streaming, tool calling and provider failover remain intentionally unresolved future proposals.
+
 ## Observation
 
 1. Which source is the first real connector?

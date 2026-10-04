@@ -1,6 +1,6 @@
 # Testing Strategy
 
-Milestones 1-4 use the standard-library `unittest` runner and temporary directories. Tests require no AI provider, network, external database, specialist runtime or private data.
+Milestones 1-5 use the standard-library `unittest` runner and temporary directories. Tests require no live AI credential, network, external database, specialist runtime or private data.
 
 Run:
 
@@ -61,7 +61,25 @@ M4 adds:
 42. Cognitive orphan health detection, M4 export and full M4 backup/restore state equivalence.
 43. End-to-end cognition CLI run/session/artifact/health/export smoke coverage.
 
-Current verified result on Python 3.13.15: 79 passed (59 accepted M1-M3 tests and 20 M4 tests).
+M5 adds:
+
+44. Core initialization and deterministic M4 cognition while AI is disabled.
+45. Explicit disabled, unsupported-provider and missing-credential states without core failure.
+46. Provider-neutral fake adapter success and registry-based provider switching.
+47. Deterministic OpenAI request construction with only explicit context transmitted.
+48. Identity/credential rejection before transport.
+49. Credential and Authorization-header absence from SQLite, audit, export and backup.
+50. Timeout, authentication, rate-limit, server and transport error normalization.
+51. Invalid provider envelope, malformed JSON and schema-invalid output rejection.
+52. Hidden-reasoning field rejection and no raw provider-envelope persistence.
+53. Proof that provider output does not create evidence, memory, approval or contradiction changes.
+54. Provider usage preservation, explicit unknown usage and bounded estimated-cost calculation.
+55. Metadata-only AI audit and full durable rollback when audit fails.
+56. Explicit cognitive augmentation that does not overwrite deterministic session state.
+57. Migration 004-to-005 upgrade, fresh schema-5 initialization, AI health/export and full AI backup/restore equivalence.
+58. End-to-end disabled-mode AI CLI smoke.
+
+Current verified result on Python 3.13.15: 95 passed (79 accepted M1-M4 tests and 16 M5 tests).
 
 ## Future durability and adversarial backlog
 

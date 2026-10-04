@@ -132,3 +132,29 @@ Architecture impact: no second approval system and no autonomous self-modificati
 Decision: migration 004 stores strict JSON contract projections with indexed lifecycle fields and one normalized reference table.
 Reason: portable reconstruction and queryable lineage are both required; a single opaque blob is insufficient and dozens of relation-specific tables are unnecessary.
 Architecture impact: export, backup and health include all M4 tables and orphan-reference checks.
+
+## D029 M5 AI remains an explicit optional outer adapter
+Decision: AI assistance is invoked only through `AIService`; deterministic cognition never calls it automatically and provider failure does not make ZIS fail.
+Reason: D005 requires replaceability and the accepted M3/M4 path must remain authoritative without network or credentials.
+Architecture impact: adapters can augment explicit requests but cannot replace cognition, governance or execution.
+
+## D030 M5 implements one dependency-free OpenAI adapter
+Decision: implement exactly one real OpenAI Responses adapter with Python standard-library HTTPS and injected transport; add no provider SDK or retry framework.
+Reason: the current runtime already has the required JSON, TLS/HTTP and timeout primitives, while injection provides deterministic tests and provider isolation.
+Alternatives: a provider SDK and multiple real adapters were rejected as unnecessary M5 dependencies and federation scope.
+Migration impact: endpoint/model are runtime configuration and provider-specific parsing stays in `ai.py`.
+
+## D031 AI transmission is explicit-safe and credentials are runtime-only
+Decision: permit only explicitly approved `public` or `internal` structured context after identity/credential checks; read the credential from its environment variable only at invocation.
+Reason: the provider boundary is an external disclosure boundary and secrets must never enter SQLite, audit, export or backup.
+Architecture impact: request records may retain the exact approved safe structured payload for reproducibility, but audit stores fingerprints and metadata only.
+
+## D032 Provider output persists only as a validated candidate
+Decision: validate response envelopes and requested output schema before creating an `ai_candidate_not_truth` pending-review record; never auto-convert it to any M1-M4 artifact.
+Reason: provider output is untrusted interpretation, not evidence, memory, approval, decision or execution.
+Architecture impact: migration 005 stores request, response and candidate projections in one audited transaction.
+
+## D033 Usage and cost are separate and bounded
+Decision: preserve provider token counts when supplied, retain null when unknown, and calculate cost only from explicit versioned local pricing metadata as an estimate.
+Reason: tokens are not money and model prices are time-dependent external facts.
+Architecture impact: no timeless price is hard-coded and unknown pricing produces unknown cost.

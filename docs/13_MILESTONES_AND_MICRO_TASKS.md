@@ -70,7 +70,7 @@ Pre-runtime audit fixes completed 2026-10-03: validator scope and audit-history 
 
 ## M4 Cognitive Engine v0.1
 
-Status: complete and verified locally (2026-10-04). M3 was accepted before implementation; M5 has not started.
+Status: complete and verified locally (2026-10-04). M3 was accepted before implementation; the later M5 adapter does not alter or replace this deterministic milestone.
 
 1. Deterministic, explainable ordinal attention rules. Complete.
 2. Exact-structured novelty, repetition, duplicate, variation and insufficient-basis signals. Complete.
@@ -87,16 +87,20 @@ Status: complete and verified locally (2026-10-04). M3 was accepted before imple
 
 ## M5 Modern AI Adapter
 
-1. Define provider neutral model interface.
-2. Define prompt input contract.
-3. Define structured output contract.
-4. Implement one provider adapter.
-5. Implement no provider fallback.
-6. Add timeout behavior.
-7. Add error transparency.
-8. Add cost and token accounting.
-9. Add provider switch test.
-10. Prove core runtime works with adapter disabled.
+Status: complete and verified locally (2026-10-04). M4 was accepted before implementation; M6 has not started.
+
+1. Provider-neutral adapter protocol and registry. Complete.
+2. Portable AIRequest contract with deterministic prompt fingerprint. Complete.
+3. Portable normalized AIResponse contract. Complete.
+4. Exactly one real OpenAI Responses adapter isolated behind standard-library transport. Complete.
+5. Disabled/no-provider fallback. Complete.
+6. Explicit bounded timeout and no automatic retry. Complete.
+7. Authentication, rate-limit, server, transport, timeout and invalid-output normalization. Complete.
+8. Provider-reported token usage plus optional versioned estimated-cost calculation. Complete.
+9. Fake/no-provider/real-adapter replacement through the registry. Complete.
+10. Core runtime and M4 cognition with AI disabled. Complete.
+11. AICandidate non-truth boundary, migration 005, audit, export, backup/restore, health and CLI. Complete.
+12. Secret non-persistence and adversarial/integration coverage. Complete.
 
 ## M6 Specialist Federation
 

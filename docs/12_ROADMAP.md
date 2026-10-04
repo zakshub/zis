@@ -38,7 +38,9 @@ Outputs: model adapter contract, retrieval, synthesis, tool calling, structured 
 
 Exit condition: disabling AI leaves Phase 2 functional.
 
-Exact next milestone: M5 Modern AI Adapter. It may add optional provider-neutral acceleration but must not weaken or replace the complete deterministic M1-M4 path.
+Status (2026-10-04): M5 complete for the bounded adapter layer. Provider-neutral contracts, disabled mode, one OpenAI adapter, strict validation, normalized failure/usage/cost metadata, private-boundary enforcement, candidate isolation, migration 005, CLI, export, health and backup/restore are implemented. The complete deterministic M1-M4 path still runs with AI disabled.
+
+No retrieval platform, tool calling, autonomous model selection, multi-provider orchestration or specialist invocation was added.
 
 ## Phase 4 Specialist Intelligence Federation
 
@@ -47,6 +49,8 @@ Goal: connect Designer, Studio, SEO, TaxBot and other approved specialists.
 Outputs: specialist manifest schema, health checks, capability discovery, task contracts, fallback behavior and provenance.
 
 Exit condition: ZIS can route tasks and combine specialist outputs without copying their knowledge.
+
+Exact next milestone after owner review: M6 Specialist Federation.
 
 ## Phase 5 Observation and Learning
 
