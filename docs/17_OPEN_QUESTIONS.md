@@ -37,9 +37,11 @@ These questions are intentionally deferred until the relevant milestone. They ar
 
 ## Specialist federation
 
-1. Should specialists be invoked through local CLI, HTTP, repository contracts or multiple adapters?
-2. How should version compatibility be negotiated?
-3. What is the fallback when a specialist is unavailable?
+1. M6 resolves the common boundary: multiple future transport-specific adapters may implement one explicit request/response/provenance protocol.
+2. M6 requires exact request/response contract versions and declared runtime-major/minor compatibility; future range negotiation needs a separate proposal.
+3. M6 returns a visible unavailable/incompatible state and does not fallback automatically.
+4. Which specialist will first publish an approved stable, privacy-scoped task endpoint?
+5. Should ZIST become a writing specialist, an M7 corpus source, or remain outside ZIS after its interface and privacy boundary are reviewed?
 
 ## Simulation world
 

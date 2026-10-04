@@ -4,7 +4,7 @@ Date: 2026 10 04
 
 ## Overall state
 
-Milestone 5 — Modern AI Adapter — is implemented and verified. M0-M4 remain closed. The deterministic core remains authoritative; the broader product remains pre-learning-application, pre-specialist-federation, pre-observation and pre-frontend.
+Milestone 6 — Specialist Federation — is implemented and verified. M0-M5 remain closed. The deterministic core remains authoritative; the broader product remains pre-learning-application, pre-observation and pre-frontend.
 
 ## Completed foundation documentation
 
@@ -130,11 +130,27 @@ ZIST is a local first Urdu content intelligence and archive system.
 14. Minimal `ai` CLI supports status, provider inventory, explicit request and record inspection.
 15. No automatic AI call was added to deterministic cognition and no live credential is needed by the test suite.
 
+## Milestone 6 implemented
+
+1. SpecialistManifest v3 can describe contract versions, adapter type, health state, privacy classification and invocation policy while preserving older manifests.
+2. Strict portable SpecialistRequest, SpecialistResponse and SpecialistProvenanceReceipt contracts plus migration 006.
+3. Small SpecialistAdapter protocol and registry separate from the M5 AI provider adapter.
+4. Designer, Studio, SEO and TaxBot are registered with bounded domain/capability metadata and no copied expertise.
+5. Repository inspection found no approved stable generic task interface; all four use honest metadata-only/not-configured adapters.
+6. ZIST was evaluated and deferred because no local/verifiable stable privacy-scoped interface was available and its corpus boundary needs later review.
+7. Requests carry only explicit structured context/references and reject direct identity, credential signals, private/restricted data and undeclared fields before transport.
+8. Exact request/response/runtime compatibility is required; no silent coercion, fallback or specialist substitution exists.
+9. Success requires complete registered output-schema validation and creates an execution provenance receipt, not evidence, memory or truth.
+10. Unavailable, disabled, incompatible, timeout, invalid-output, internal and transport failures are explicit and never fake success.
+11. Tax filing/submission is unimplemented; declared high-impact preparation actions require exact existing approval.
+12. M3 routing still returns a candidate only; M4 cognition and M5 AI do not select or invoke specialists.
+13. Each durable request/response/receipt/audit interaction commits atomically on one connection, with metadata-only audit and rollback coverage.
+14. Export format 5, schema-6 health and backup/restore include safe federation state; specialist availability remains separate from core health.
+15. Minimal `specialists` CLI supports list, show, status, explicit invoke, record inspection and ZIST evaluation.
+
 ## Not yet implemented
 
 No general external-source ingestion pipeline or observation connector exists; M2 only reads explicitly selected local ZOS files.
-
-No ZIS specialist federation exists yet.
 
 No ZIS Observation Ledger exists yet.
 
@@ -144,12 +160,12 @@ No ZIS simulation world exists yet.
 
 No real ZOS evidence, personal content or specialist knowledge has been imported; human selection and review are still required for any future candidate.
 
-No full Memory Engine, Learning Engine, learning/consolidation or model-update application, specialist federation/execution, capability sensing, semantic routing, background job system or cryptographic approval identity exists yet. M4 provides bounded deterministic cognition, not semantic understanding or autonomous agency.
+No full Memory Engine, Learning Engine, learning/consolidation or model-update application, live callable specialist integration, capability sensing, semantic routing, background job system or cryptographic approval identity exists yet. M4 provides bounded deterministic cognition, not semantic understanding or autonomous agency.
 
 ## Verification
 
-With `PYTHONPATH=src`, `python -m unittest discover -s tests -v` passes 100 tests locally on Python 3.13.15: the accepted 79 M1-M4 tests plus 21 M5 tests. `python -m compileall -q src tests` also passes. The implementation targets Python 3.11+; classical operation and the tests require no network, live AI credential or specialist runtime.
+With `PYTHONPATH=src`, `python -m unittest discover -s tests -v` passes 115 tests locally on Python 3.13.15: the accepted 100 M1-M5 tests plus 15 M6 test methods covering the required federation cases. `python -m compileall -q src tests` also passes. The implementation targets Python 3.11+; classical operation and the tests require no network, live AI credential or specialist runtime.
 
 ## Next milestone
 
-Recommended next after owner review: M6 — Specialist Federation. Do not begin automatically.
+Recommended next after owner review: M7 — Observation Ledger. Do not begin automatically.

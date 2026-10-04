@@ -158,3 +158,23 @@ Architecture impact: migration 005 stores request, response and candidate projec
 Decision: preserve provider token counts when supplied, retain null when unknown, and calculate cost only from explicit versioned local pricing metadata as an estimate.
 Reason: tokens are not money and model prices are time-dependent external facts.
 Architecture impact: no timeless price is hard-coded and unknown pricing produces unknown cost.
+
+## D034 M6 federation is explicit and separate from AI
+Decision: add a SpecialistAdapter protocol and explicit SpecialistFederation invocation method without changing M3 routing, M4 cognition or M5 provider selection.
+Reason: a specialist owns domain intelligence while an AI provider is optional infrastructure; conflating them would hide authority and execution boundaries.
+Architecture impact: the router still returns `specialist_candidate`; only an explicit federation call can invoke one named specialist.
+
+## D035 Initial specialists remain metadata-only
+Decision: register Designer, Studio, SEO and TaxBot, but mark their adapters not configured until each repository exposes an approved stable general task contract. Defer ZIST.
+Reason: inspected repositories expose knowledge governance, incomplete retrieval, infrastructure-specific workflows or storage operations—not a safe common task endpoint. ZIST's interface and privacy boundary could not be verified.
+Alternatives: invented CLI commands, internal-module calls and starting specialist infrastructure were rejected.
+
+## D036 Specialist results remain isolated execution records
+Decision: a validated response receives an execution provenance receipt but is never auto-promoted into evidence, memory, approval, contradiction resolution or execution authority.
+Reason: specialist expertise does not remove ZIS truth and governance requirements.
+Migration impact: migration 006 stores requests, responses and receipts atomically with metadata-only audit.
+
+## D037 M6 uses fail-visible compatibility and no fallback graph
+Decision: require exact request/response contract versions and declared runtime compatibility, return normalized failures, and never substitute another specialist automatically.
+Reason: silent coercion or fallback could change domain authority, privacy exposure and consequences.
+Architecture impact: health is read-only and specialist availability remains independent of core integrity.

@@ -1,6 +1,6 @@
 # Testing Strategy
 
-Milestones 1-5 use the standard-library `unittest` runner and temporary directories. Tests require no live AI credential, network, external database, specialist runtime or private data.
+Milestones 1-6 use the standard-library `unittest` runner and temporary directories. Tests require no live AI credential, network, external database, specialist runtime or private data.
 
 Run:
 
@@ -79,7 +79,26 @@ M5 adds:
 57. Migration 004-to-005 upgrade, fresh schema-5 initialization, AI health/export and full AI backup/restore equivalence.
 58. End-to-end disabled-mode AI CLI smoke.
 
-Current verified result on Python 3.13.15: 100 passed (79 accepted M1-M4 tests and 21 M5 tests).
+M6 adds:
+
+59. Designer, Studio, SEO and TaxBot registration plus explicit ZIST deferral.
+60. SpecialistManifest federation metadata and strict request/response/receipt validation.
+61. Honest metadata-only unavailable state for every initial specialist and disabled-state handling.
+62. Exact request, response and runtime compatibility with no invocation on mismatch.
+63. Explicit bounded context, undeclared-field rejection and deterministic request fingerprints.
+64. Identity, direct-identifier, credential and private-context rejection before adapter invocation.
+65. Provider-neutral fake-specialist success, normalized response, latency and complete provenance receipt.
+66. Whole-output schema rejection without partial acceptance.
+67. Timeout, specialist-internal and transport/process failure normalization.
+68. Proof that output creates no evidence, memory, approval or contradiction-resolution mutation.
+69. Proof that cognition, AI and router candidate paths do not auto-invoke federation.
+70. Exact approval for high-impact TaxBot preparation and hard rejection of tax submission.
+71. Metadata-only audit, secret non-persistence and complete rollback after final audit failure.
+72. Migration 005-to-006 and fresh schema-6 initialization.
+73. M6 export, health separation and full backup/restore state equivalence.
+74. End-to-end metadata-only specialist CLI smoke.
+
+Current verified result on Python 3.13.15: 115 passed (100 accepted M1-M5 tests and 15 M6 test methods covering the required federation cases).
 
 ## Future durability and adversarial backlog
 

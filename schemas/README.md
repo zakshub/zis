@@ -43,8 +43,16 @@ M5 optional AI adapter contracts:
 2. AIResponse
 3. AICandidate
 
-SpecialistManifest was extended for registry use with explicit domain, interface version, compatible runtime versions and availability. It remains metadata only and does not authorize invocation. IdeaLineage v2 is the M4 durable idea contract and intentionally stops at the pre-execution `ready` state.
+M6 specialist federation contracts:
+
+1. SpecialistRequest
+2. SpecialistResponse
+3. SpecialistProvenanceReceipt
+
+SpecialistManifest v3 adds optional federation metadata for request/response versions, adapter type, health state, privacy classification and invocation policy while preserving older manifests. A registry entry does not authorize invocation. IdeaLineage v2 is the M4 durable idea contract and intentionally stops at the pre-execution `ready` state.
 
 AIRequest stores only explicitly approved safe structured context and a deterministic prompt fingerprint. AIResponse normalizes provider outcome, usage and cost state without raw provider payload or hidden reasoning. AICandidate is explicitly `ai_candidate_not_truth` and pending review; it is not an EvidenceRecord, MemoryRecord or approval.
 
-Validation is available through `zis validate`. Core synthetic examples are covered by `tests/test_contracts.py`; migration contracts by `tests/test_migration.py`; M4 contracts and behavior by `tests/test_cognition.py`; M5 by `tests/test_ai.py`. Contracts are strict (`additionalProperties: false`) and use explicit unknown/null states rather than invented precision. The dependency-free validator implements only the schema keywords required by these ZIS contracts, not all of Draft 2020-12.
+SpecialistRequest stores only explicitly selected structured context and a deterministic fingerprint. SpecialistResponse normalizes outcomes, and every success references a SpecialistProvenanceReceipt. These records are specialist results, not evidence, memory, truth, approval or execution authority.
+
+Validation is available through `zis validate`. Core synthetic examples are covered by `tests/test_contracts.py`; migration contracts by `tests/test_migration.py`; M4 contracts and behavior by `tests/test_cognition.py`; M5 by `tests/test_ai.py`; M6 by `tests/test_federation.py`. Contracts are strict (`additionalProperties: false`) and use explicit unknown/null states rather than invented precision. The dependency-free validator implements only the schema keywords required by these ZIS contracts, not all of Draft 2020-12.

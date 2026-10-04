@@ -106,4 +106,4 @@ The verified suite contains the accepted 79 M1-M4 tests plus 21 M5 tests: 100 to
 
 The dependency-free validator is not a standards-complete Draft 2020-12 implementation. External provider compatibility was not proven against a live account. Timeout relies on the underlying blocking HTTPS timeout and there is no streaming or active cancellation handle. Application audit remains non-cryptographic. External transmission still requires human judgment because deterministic identity screening cannot prove free-text anonymity.
 
-M6 Specialist Federation is the exact next recommended milestone after owner review. M5 does not implement or authorize it.
+M5 did not implement or authorize specialist federation. The later approved M6 implementation remains a separate adapter layer and does not change this M5 boundary.

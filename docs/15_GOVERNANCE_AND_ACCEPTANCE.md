@@ -124,6 +124,22 @@ M4 acceptance remains human-controlled. An ordinal attention level is not import
 
 M5 acceptance does not authorize AI output as truth, approval, decision or execution and does not authorize specialist federation.
 
+## Milestone 6 acceptance evidence
+
+1. Portable specialist request, normalized response and execution-provenance contracts exist independently of any specialist repository.
+2. Designer, Studio, SEO and TaxBot are registered as governed metadata only; repository expertise is not copied into ZIS.
+3. Current adapters report not configured because no approved stable general specialist-task interface was verified; no callable capability is fabricated.
+4. ZIST is explicitly evaluated and deferred rather than forced into the registry.
+5. Identity, credential, privacy, explicit-context, manifest capability, registry state, compatibility and approval checks precede adapter invocation.
+6. A successful result validates completely and creates a provenance receipt; malformed output is rejected whole.
+7. Specialist output cannot create evidence, memory, approval, contradiction resolution or external execution authority.
+8. Tax submission is absent, and bounded high-impact TaxBot preparation requires exact pre-existing approval.
+9. Request, response, receipt and metadata-only audit commit atomically; audit failure rolls all M6 interaction state back.
+10. Migration 006, health, export and backup/restore cover M6 records while specialist availability remains separate from core health.
+11. The 115-test suite passes without credentials, network, external services, private fixtures or a live specialist runtime.
+
+M6 acceptance authorizes only explicit federation through an approved adapter. It does not authorize autonomous selection, fallback, specialist chains, capability sensing, observation or any M7+ behavior.
+
 ## Change governance
 
 Every architecture change should record reason, evidence, alternatives, decision, consequences and migration impact.

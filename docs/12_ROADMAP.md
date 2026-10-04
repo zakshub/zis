@@ -50,7 +50,9 @@ Outputs: specialist manifest schema, health checks, capability discovery, task c
 
 Exit condition: ZIS can route tasks and combine specialist outputs without copying their knowledge.
 
-Exact next milestone after owner review: M6 Specialist Federation.
+Status (2026-10-04): M6 complete for the bounded federation foundation. Designer, Studio, SEO and TaxBot are registered without copied expertise; all remain metadata-only/unavailable until approved stable task interfaces exist. Explicit requests, compatibility/privacy/approval checks, normalized responses, provenance receipts, health separation, audit, recovery, export and CLI are implemented. ZIST is deferred. No automatic selection, fallback graph or specialist chain exists.
+
+Exact next milestone after owner review: M7 Observation Ledger.
 
 ## Phase 5 Observation and Learning
 

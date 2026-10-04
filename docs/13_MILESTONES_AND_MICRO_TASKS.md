@@ -87,7 +87,7 @@ Status: complete and verified locally (2026-10-04). M3 was accepted before imple
 
 ## M5 Modern AI Adapter
 
-Status: complete and verified locally (2026-10-04). M4 was accepted before implementation; M6 has not started.
+Status: complete and verified locally (2026-10-04). M4 was accepted before implementation; later M6 remains a separate layer and does not alter M5.
 
 1. Provider-neutral adapter protocol and registry. Complete.
 2. Portable AIRequest contract with deterministic prompt fingerprint. Complete.
@@ -104,19 +104,21 @@ Status: complete and verified locally (2026-10-04). M4 was accepted before imple
 
 ## M6 Specialist Federation
 
-1. Define SpecialistManifest schema.
-2. Register Designer.
-3. Register Studio.
-4. Register SEO.
-5. Register TaxBot.
-6. Evaluate ZIST.
-7. Define request contract.
-8. Define response contract.
-9. Define health check.
-10. Define unavailable state.
-11. Define version compatibility.
-12. Define provenance receipt.
-13. Add specialist fallback rules.
+Status: complete and verified locally (2026-10-04). No specialist expertise was copied and no M7 behavior was added.
+
+1. Extend SpecialistManifest federation metadata. Complete.
+2. Register Designer metadata-only/unavailable. Complete.
+3. Register Studio metadata-only/unavailable. Complete.
+4. Register SEO metadata-only/unavailable. Complete.
+5. Register TaxBot metadata-only/unavailable with submission prohibited. Complete.
+6. Evaluate ZIST; deferred and not registered. Complete.
+7. Define explicit request contract and privacy gate. Complete.
+8. Define normalized response contract. Complete.
+9. Define read-only health check separate from core health. Complete.
+10. Define explicit unavailable/disabled/degraded states. Complete.
+11. Define exact request/response/runtime compatibility. Complete.
+12. Define execution provenance receipt. Complete.
+13. Fail visibly without automatic specialist substitution. Complete.
 
 ## M7 Observation Ledger
 
