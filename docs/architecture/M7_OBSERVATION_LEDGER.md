@@ -1,6 +1,6 @@
 # M7 Observation Ledger
 
-Status: implemented and verified locally on 2026-10-04. The design below was recorded before code changes and now describes the verified behavior.
+Status: implemented and verified locally on 2026-10-05. The design below was recorded before code changes and now describes the verified behavior, including the independent-audit public-projection fix.
 
 ## Decision
 
@@ -77,7 +77,14 @@ No observation API creates or updates memory, resolves contradictions, modifies 
 
 ## Export, backup, health and query
 
-Default export remains public-safe. Public/internal reviewed-safe observations may include their validated content. Private/restricted and quarantined observations export metadata and fingerprints only. Evidence proposals export without raw observation content; proposal content is already required to pass the public-safe boundary.
+Default export uses four explicit least-disclosure projections rather than serializing private-vault rows directly:
+
+1. Sources retain stable ID, safe type/lifecycle/adapter fields, timestamps, approval ID and version. Name, approval-scope text, allow/deny policy, retention policy, last-collection detail, privacy notes and provenance are omitted.
+2. Sessions retain stable/source IDs, safe operation/adapter fields, timestamps, status, counts, observation IDs and version. Approval scope, privacy findings, errors and provenance are omitted.
+3. Only explicitly `public`, non-quarantined observations may retain their validated payload. Internal, private, restricted and quarantined observations retain bounded structural/temporal metadata and content fingerprints but omit content, structured payload, source reference, explicit event ID, scope, subject/context labels and provenance/transformation details recursively.
+4. Evidence proposals are metadata-only by default. They retain stable ID, type, ordinal confidence, safe timestamps, lifecycle/approval/evidence IDs, observation count and version, while omitting observation lineage, proposed content, scope, rationale, uncertainty, counter-context and provenance.
+
+Identity-safe or structurally valid metadata is not assumed to be public-safe. The proposal's free-text rationale is kept only in the private proposal row; its M3 approval uses a fixed metadata-only review reason so public runtime export does not duplicate that rationale.
 
 Local SQLite backup/restore includes all M7 tables and preserves provenance and retention state. A backup can contain private local observations and must never be committed or treated as a public export.
 
@@ -100,4 +107,4 @@ Migration 007 extends schema 6 without rewriting M1-M6 rows. Runtime version bec
 
 ## Verification
 
-The complete standard-library suite passes 134 tests: 115 accepted M1-M6 tests plus 19 M7 test methods. Coverage includes schema 6-to-7 upgrade and fresh initialization, lifecycle/approval gates, manual and file adapters, temporal/provenance fields, exact duplicates, quarantine and secret non-persistence, public-safe export, evidence promotion, memory/contradiction isolation, transactional rollback, logical purge, backup/restore, health/orphans and CLI smoke. `python -m compileall -q src tests` and `git diff --check` also pass.
+The complete standard-library suite passes 136 tests: 115 accepted M1-M6 tests plus 21 M7 test methods. Coverage includes schema 6-to-7 upgrade and fresh initialization, lifecycle/approval gates, manual and file adapters, temporal/provenance fields, exact duplicates, quarantine and secret non-persistence, least-disclosure projection for all M7 families, evidence promotion, memory/contradiction isolation, transactional rollback, logical purge, full private backup/restore, health/orphans and CLI smoke. `python -m compileall -q src tests` and `git diff --check` also pass.

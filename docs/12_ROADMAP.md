@@ -52,7 +52,7 @@ Exit condition: ZIS can route tasks and combine specialist outputs without copyi
 
 Status (2026-10-04): M6 complete for the bounded federation foundation. Designer, Studio, SEO and TaxBot are registered without copied expertise; all remain metadata-only/unavailable until approved stable task interfaces exist. Explicit requests, compatibility/privacy/approval checks, normalized responses, provenance receipts, health separation, audit, recovery, export and CLI are implemented. ZIST is deferred. No automatic selection, fallback graph or specialist chain exists.
 
-M7 Observation Ledger status (2026-10-04): complete for the bounded local foundation. Source consent, explicit sessions, manual/file adapters, local private storage, quarantine, exact duplicate handling, logical purge, evidence proposals, public-safe export, backup/restore, health and CLI are implemented. No real external connector or autonomous learning exists.
+M7 Observation Ledger status (2026-10-05): complete for the bounded local foundation. Source consent, explicit sessions, manual/file adapters, local private storage, quarantine, exact duplicate handling, logical purge, evidence proposals, least-disclosure public projections for every M7 family, private backup/restore, health and CLI are implemented. No real external connector or autonomous learning exists.
 
 ## Phase 5 Observation and Learning
 

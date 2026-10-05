@@ -168,6 +168,79 @@ class ObservationLedgerTests(unittest.TestCase):
         exported_public = next(item for item in payload["observations"]["observations"] if item["id"] == public["id"])
         self.assertEqual(exported_public["content"], public["content"])
 
+    def test_public_snapshot_projects_all_m7_families_by_least_disclosure(self):
+        source_note = "Synthetic private source note only for the local vault."
+        source_name = "Synthetic private source name"
+        source = self._approve(self._register(name=source_name, privacy_notes=source_note))
+        private_content = "Synthetic private observation payload only for the local vault."
+        private_reference = "fixture:private-source-reference"
+        private_subject = "private-subject-label"
+        private_context = "private-context-label"
+        private_transform = "private-transformation-detail"
+        collected = self._capture(
+            source,
+            self._item(
+                content=private_content,
+                structured_payload={"private_payload": "private-structured-value"},
+                source_reference=private_reference,
+                privacy_class="private",
+                subject_labels=[private_subject],
+                context_labels=[private_context],
+                transformation_notes=[private_transform],
+            ),
+            "2026-10-04T00:00:06Z",
+        )
+        observation = collected["observations"][0]
+        self.ledger.set_review_state(observation["id"], "review_pending")
+        self.ledger.set_review_state(observation["id"], "accepted_for_evidence_review")
+        proposal_content = "Synthetic proposed content retained only in the private proposal record."
+        proposal_rationale = "Synthetic private proposal rationale."
+        proposal_uncertainty = "Synthetic private proposal uncertainty."
+        proposal_counter = "Synthetic private proposal counter-context."
+        proposal = self.ledger.propose_evidence({
+            "observation_ids": [observation["id"]],
+            "proposed_content": proposal_content,
+            "proposed_evidence_type": "observation",
+            "scope": "observations.synthetic",
+            "confidence": "probable",
+            "rationale": proposal_rationale,
+            "uncertainty": proposal_uncertainty,
+            "counter_context": [proposal_counter],
+        })["proposal"]
+
+        exported = export_store(self.store, self.root / "least-disclosure-export")
+        public_export_text = exported["json"].read_text(encoding="utf-8")
+        snapshot = json.loads(public_export_text)["observations"]
+        public_source = next(item for item in snapshot["sources"] if item["id"] == source["id"])
+        public_session = next(item for item in snapshot["sessions"] if item["id"] == collected["session"]["id"])
+        public_observation = next(item for item in snapshot["observations"] if item["id"] == observation["id"])
+        public_proposal = next(item for item in snapshot["evidence_proposals"] if item["id"] == proposal["id"])
+
+        self.assertTrue({"id", "source_type", "status", "adapter_id", "version"} <= set(public_source))
+        self.assertTrue({"id", "source_id", "status", "items_considered", "items_accepted", "items_quarantined", "duplicates", "observation_ids", "version"} <= set(public_session))
+        self.assertTrue({"id", "source_id", "collection_session_id", "review_state", "privacy_class", "content_fingerprint", "version"} <= set(public_observation))
+        self.assertTrue({"id", "status", "proposed_evidence_type", "observation_count", "version"} <= set(public_proposal))
+        self.assertEqual(public_session["items_considered"], 1)
+        self.assertEqual(public_session["observation_ids"], [observation["id"]])
+        self.assertEqual(public_proposal["observation_count"], 1)
+
+        self.assertFalse({"name", "approval_scope", "allowed_scopes", "allowed_data_classes", "denied_data_classes", "retention_policy", "last_collection", "privacy_notes", "provenance"} & set(public_source))
+        self.assertFalse({"approval_scope", "privacy_findings", "errors", "provenance"} & set(public_session))
+        self.assertFalse({"content", "structured_payload", "source_reference", "explicit_event_id", "scope", "subject_labels", "context_labels", "provenance"} & set(public_observation))
+        self.assertFalse({"observation_ids", "proposed_content", "scope", "rationale", "uncertainty", "counter_context", "provenance"} & set(public_proposal))
+
+        for private_value in (source_note, source_name, private_content, private_reference, private_subject, private_context, private_transform, "private-structured-value", proposal_content, proposal_rationale, proposal_uncertainty, proposal_counter):
+            self.assertNotIn(private_value, public_export_text)
+
+    def test_internal_observation_uses_metadata_only_public_projection(self):
+        internal_content = "Synthetic internal-only observation content."
+        observation = self._capture(item=self._item(content=internal_content, privacy_class="internal"))["observations"][0]
+        public = next(item for item in self.ledger.public_snapshot()["observations"] if item["id"] == observation["id"])
+        self.assertNotIn("content", public)
+        self.assertNotIn("structured_payload", public)
+        self.assertNotIn("source_reference", public)
+        self.assertEqual(public["content_fingerprint"], observation["content_fingerprint"])
+
     def test_file_import_is_explicit_bounded_utf8_and_non_symlink(self):
         file_source = self._approve(self._register(name="Synthetic file source", source_type="file_import", adapter_id="file_import", allowed_data_classes=["text_document"]))
         document = self.root / "synthetic-note.txt"
@@ -300,14 +373,25 @@ class ObservationLedgerTests(unittest.TestCase):
         self.assertEqual(self.ledger.list_observations(), [])
 
     def test_backup_restore_preserves_private_m7_state_and_provenance(self):
-        private = self._capture(item=self._item(content="Synthetic private vault record.", privacy_class="private"))["observations"][0]
+        source = self._approve(self._register(privacy_notes="Synthetic private backup source note."))
+        collected = self._capture(source, self._item(content="Synthetic private vault record.", privacy_class="private", structured_payload={"private_backup": True}, subject_labels=["private-backup-subject"], context_labels=["private-backup-context"], transformation_notes=["private_backup_transform"]))
+        private = collected["observations"][0]
+        self.ledger.set_review_state(private["id"], "review_pending")
+        self.ledger.set_review_state(private["id"], "accepted_for_evidence_review")
+        proposal = self.ledger.propose_evidence({"observation_ids": [private["id"]], "proposed_content": "Synthetic backup proposal content.", "proposed_evidence_type": "observation", "scope": "observations.synthetic", "confidence": "probable", "rationale": "Synthetic backup proposal rationale.", "uncertainty": "Synthetic backup proposal uncertainty.", "counter_context": ["Synthetic backup proposal counter-context."]})["proposal"]
         backup = create_backup(self.store, self.root / "backup")
         restored_path = self.root / "restored.sqlite3"
         restore_backup(backup["manifest"], restored_path)
         restored = ObservationLedger(EvidenceStore(restored_path))
         restored_record = restored.get_observation(private["id"])
-        self.assertEqual(restored_record, private)
-        self.assertEqual(restored_record["provenance"], private["provenance"])
+        current_private = self.ledger.get_observation(private["id"])
+        self.assertEqual(restored_record, current_private)
+        self.assertEqual(restored_record["provenance"], current_private["provenance"])
+        self.assertEqual(restored.get_source(source["id"]), self.ledger.get_source(source["id"]))
+        self.assertEqual(restored.list_sessions(), self.ledger.list_sessions())
+        self.assertEqual(restored.list_evidence_proposals(), [proposal])
+        self.assertEqual(restored_record["content"], "Synthetic private vault record.")
+        self.assertEqual(restored_record["structured_payload"], {"private_backup": True})
         self.assertTrue(restored.health()["healthy"])
 
     def test_health_reports_quarantine_failures_retention_and_orphans_but_paused_is_optional(self):

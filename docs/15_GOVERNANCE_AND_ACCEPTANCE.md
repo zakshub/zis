@@ -146,7 +146,7 @@ M6 acceptance authorizes only explicit federation through an approved adapter. I
 2. Manual and bounded file-import adapters are separate from AI and specialist adapters; no background or external connector exists.
 3. ObservationRecord preserves capture provenance, time, privacy, capture integrity, retention and review state without becoming evidence, memory or truth.
 4. Restricted, denied and suspected-secret input is quarantined without durable raw payload or private-content audit.
-5. Private local observations remain in the gitignored vault and default public-safe export emits metadata/fingerprints only.
+5. Private local M7 state remains in the gitignored vault. Default public-safe export uses explicit source/session/observation/proposal projections: operational free text, private lineage and proposal payload are omitted; only explicitly public ObservationRecord payload may be included.
 6. Exact duplicates link to prior observations; conflict is not resolved and no semantic deduplication is claimed.
 7. Evidence promotion requires accepted observations, a separately authored public-safe proposal, exact M3 approval and one atomic M1 EvidenceRecord insertion.
 8. Observation APIs cannot mutate memory, resolve contradictions, auto-run cognition, call AI/specialists or sense capabilities.

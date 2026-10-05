@@ -185,9 +185,9 @@ Reason: observation must be transparent and attributable rather than becoming su
 Architecture impact: migration 007 adds source/session projections while adapters remain separate from AI and specialist protocols.
 
 ## D039 M7 uses a local private vault with public-safe projection
-Decision: owner-approved private observation content may exist only in the gitignored SQLite vault; default export emits metadata/fingerprints for private, restricted and quarantined observations.
-Reason: local identity-bearing capture and public/external safety are different boundaries and must not be conflated.
-Architecture impact: backups contain private vault state and remain private; audit stores metadata, not raw observation payload.
+Decision: owner-approved private observation content may exist only in the gitignored SQLite vault. Default export uses explicit least-disclosure projections for ObservationSource, ObservationCollectionSession, ObservationRecord and ObservationEvidenceProposal. Source/session operational free text and proposal payload/lineage are omitted; only explicitly public ObservationRecord payload may be included.
+Reason: identity-safe metadata is not automatically public-safe, and local identity-bearing capture and public/external safety are different boundaries.
+Architecture impact: backups contain complete private vault state and remain private; default export preserves structural IDs, lifecycle/status, safe classifications, counts, timestamps and fingerprints without publishing private M7 context.
 
 ## D040 M7 exact duplicates link and logical purge marks
 Decision: exact source/reference/event/fingerprint duplicates create a session link to the existing record, not another observation. Purge removes current content and leaves a metadata marker.

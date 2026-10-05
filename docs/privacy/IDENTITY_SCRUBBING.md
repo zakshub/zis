@@ -51,9 +51,8 @@ Automatic anonymization is not perfect. Any uncertain match, unstructured narrat
 
 An explicitly approved local source may retain identity-bearing observation content only as `private` vault state under its declared scope and retention policy. This does not make the content public-safe. Restricted input and detected credentials are quarantined; suspected-secret payload is omitted from the durable observation marker.
 
-Before an ObservationEvidenceProposal is stored, its authored evidence content, rationale, uncertainty and counter-context must pass the structural and direct-text boundary. Promotion preserves private lineage by observation ID/fingerprint and never copies the raw private observation into the public-safe export. External AI and specialist boundaries remain stricter and do not receive private/restricted observation content.
+Before an ObservationEvidenceProposal is stored, its authored evidence content, rationale, uncertainty and counter-context must pass the structural and direct-text boundary. Passing those checks does not make the proposal public: the default projection remains metadata-only and omits proposed content, rationale, uncertainty, counter-context and observation lineage. Promotion preserves private lineage by observation ID/fingerprint and never copies the raw private observation into the public-safe export. External AI and specialist boundaries remain stricter and do not receive private/restricted observation content.
 
 ## Audit requirements
 
 The future scrubber must record tool/version, source reference, rule matches, excluded categories, approved aliases, reviewer decision and timestamp. It must not place the sensitive matched value in a public log.
-

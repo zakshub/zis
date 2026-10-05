@@ -122,7 +122,7 @@ Status: complete and verified locally (2026-10-04). No specialist expertise was 
 
 ## M7 Observation Ledger
 
-Status: complete and verified locally (2026-10-04) for the approved backend-only foundation. UI, real connectors and autonomous learning remain unimplemented.
+Status: complete and verified locally (2026-10-05) for the approved backend-only foundation, including the independent-audit public-projection fix. UI, real connectors and autonomous learning remain unimplemented.
 
 1. Define governed source permission and lifecycle model. Complete.
 2. Define ObservationRecord v2, collection-session and evidence-proposal contracts. Complete.
@@ -133,7 +133,7 @@ Status: complete and verified locally (2026-10-04) for the approved backend-only
 7. Implement exact duplicate linking without semantic deduplication. Complete.
 8. Implement review transitions and logical purge marker. Complete.
 9. Implement explicit evidence proposal, decision and idempotent M1 evidence promotion. Complete.
-10. Add public-safe export, private backup/restore, health and exact queries. Complete.
+10. Add least-disclosure public projections for sources, sessions, observations and evidence proposals; retain full private state only in the local vault/backup; add health and exact queries. Complete.
 11. Add minimal `observations` CLI and adversarial/integration coverage. Complete.
 
 ## M8 Capability Sensing

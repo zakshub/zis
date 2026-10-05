@@ -106,7 +106,7 @@ M7 adds:
 78. Observed/recorded/imported time distinction and explicit unknown observed time.
 79. Bounded UTF-8 single-file import, extension/size/directory/symlink rejection and path non-persistence.
 80. Exact duplicate linking without observation multiplication or semantic inference.
-81. Private-vault local retention and public-safe export redaction.
+81. Private-vault local retention and least-disclosure public projection for all M7 families.
 82. Restricted, denied and suspected-secret content-free quarantine with secret non-persistence.
 83. Review-transition validation and logical purge marker without private audit payload.
 84. Evidence proposal eligibility, lineage, explicit decision and unapproved-promotion rejection.
@@ -118,8 +118,10 @@ M7 adds:
 90. Migration 006-to-007 and fresh schema-7 initialization.
 91. M7 public export, private backup/restore, provenance preservation, health/orphan checks and CLI smoke.
 92. Adapter separation, no connector inventory and no background collection state.
+93. Adversarial source/session/proposal projection checks proving private operational free text, proposal payload and private observation context are absent while IDs, status, counts and fingerprints remain.
+94. Internal/private/restricted/quarantined observation payload exclusion plus complete local SQLite and private-backup retention of intended M7 state.
 
-Current verified result on Python 3.13.15: 134 passed (115 accepted M1-M6 tests and 19 M7 test methods covering the required observation-ledger cases).
+Current verified result on Python 3.13.15: 136 passed (115 accepted M1-M6 tests and 21 M7 test methods covering the required observation-ledger and public-projection cases).
 
 ## Future durability and adversarial backlog
 
@@ -140,4 +142,3 @@ M3 completed the relevant checksum, tamper, restore, orphan and transactional ca
 13. Remaining rollback fault injection for every individual lifecycle transition and contradiction resolution.
 14. Cross-runtime-version and cross-schema-version backup migration/restore.
 15. Cryptographically signed backup manifests, authenticated approvals and tamper-evident audit history.
-

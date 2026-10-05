@@ -553,7 +553,7 @@ class ObservationLedger:
             existing = self._json_row(connection, "observation_evidence_proposals", proposal_id)
             if existing:
                 return {"proposal": existing, "approval": self.runtime._json_row(connection, "approval_records", existing["approval_id"])}
-            approval = build_approval_record("observation_evidence.promote", proposal_id, specification["rationale"], specification["scope"], "medium", "May create one governed M1 EvidenceRecord; never memory.", provenance_method="m7_observation_evidence_proposal", requested_at=now)
+            approval = build_approval_record("observation_evidence.promote", proposal_id, "Review one bounded observation evidence proposal.", specification["scope"], "medium", "May create one governed M1 EvidenceRecord; never memory.", provenance_method="m7_observation_evidence_proposal", requested_at=now)
             proposal = {"id": proposal_id, "observation_ids": observation_ids, "proposed_content": specification["proposed_content"], "proposed_evidence_type": specification["proposed_evidence_type"], "scope": specification["scope"], "confidence": specification["confidence"], "observed_at": observed_at, "valid_from": valid_from, "valid_until": valid_until, "rationale": specification["rationale"], "uncertainty": specification["uncertainty"], "counter_context": list(specification.get("counter_context", [])), "status": "pending_review", "approval_id": approval["id"], "evidence_id": None, "provenance": {"method": "explicit_observation_evidence_proposal", "actor": "owner", "chain": observation_ids}, "created_at": now, "updated_at": now, "version": 1}
             validate("observation-evidence-proposal", proposal)
             self.runtime._insert_approval(connection, approval)
@@ -628,14 +628,32 @@ class ObservationLedger:
             return [json.loads(row[0]) for row in connection.execute(query, (status,) if status else ())]
 
     @staticmethod
+    def _public_source(record: dict[str, Any]) -> dict[str, Any]:
+        return {key: record[key] for key in ("id", "source_type", "approval_id", "status", "collection_mode", "external", "adapter_id", "adapter_version", "created_at", "updated_at", "version")}
+
+    @staticmethod
+    def _public_session(record: dict[str, Any]) -> dict[str, Any]:
+        return {key: record[key] for key in ("id", "source_id", "requested_operation", "adapter_id", "adapter_version", "started_at", "completed_at", "status", "items_considered", "items_accepted", "items_quarantined", "items_rejected", "duplicates", "observation_ids", "duplicate_observation_ids", "version")}
+
+    @staticmethod
     def _public_observation(record: dict[str, Any]) -> dict[str, Any]:
-        if record["privacy_class"] in {"private", "restricted"} or record["review_state"] == "quarantined":
-            return {key: record[key] for key in ("id", "source_id", "collection_session_id", "adapter_id", "adapter_version", "observed_at", "observed_time_status", "recorded_at", "imported_at", "scope", "observation_type", "data_class", "privacy_class", "capture_confidence", "review_state", "retention_state", "retention_expires_at", "content_fingerprint", "identity_status", "secret_status", "linked_evidence_ids", "version")}
+        if record["privacy_class"] != "public" or record["review_state"] == "quarantined":
+            return {key: record[key] for key in ("id", "source_id", "collection_session_id", "adapter_id", "adapter_version", "observed_at", "observed_time_status", "recorded_at", "imported_at", "valid_from", "valid_until", "observation_type", "data_class", "privacy_class", "capture_confidence", "review_state", "retention_state", "retention_expires_at", "content_fingerprint", "identity_status", "secret_status", "linked_evidence_ids", "version")}
         return deepcopy(record)
 
+    @staticmethod
+    def _public_evidence_proposal(record: dict[str, Any]) -> dict[str, Any]:
+        return {
+            **{key: record[key] for key in ("id", "proposed_evidence_type", "confidence", "observed_at", "valid_from", "valid_until", "status", "approval_id", "evidence_id", "created_at", "updated_at", "version")},
+            "observation_count": len(record["observation_ids"]),
+        }
+
     def public_snapshot(self) -> dict[str, Any]:
+        sources = [self._public_source(item) for item in self.list_sources()]
+        sessions = [self._public_session(item) for item in self.list_sessions()]
         observations = [self._public_observation(item) for item in self.list_observations()]
-        return {"sources": self.list_sources(), "sessions": self.list_sessions(), "observations": observations, "evidence_proposals": self.list_evidence_proposals()}
+        proposals = [self._public_evidence_proposal(item) for item in self.list_evidence_proposals()]
+        return {"sources": sources, "sessions": sessions, "observations": observations, "evidence_proposals": proposals}
 
     def health(self) -> dict[str, Any]:
         self.initialize()

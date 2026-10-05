@@ -180,7 +180,7 @@ No full Memory Engine, Learning Engine, learning/consolidation or model-update a
 
 ## Verification
 
-With `PYTHONPATH=src`, `python -m unittest discover -s tests -v` passes 134 tests locally on Python 3.13.15: the accepted 115 M1-M6 tests plus 19 M7 test methods covering the required observation, privacy, governance, recovery and integration cases. The implementation targets Python 3.11+; classical operation and the tests require no network, live AI credential, specialist runtime or external observation connector.
+With `PYTHONPATH=src`, `python -m unittest discover -s tests -v` passes 136 tests locally on Python 3.13.15: the accepted 115 M1-M6 tests plus 21 M7 test methods covering the required observation, privacy, governance, recovery and integration cases. Independent-audit coverage verifies explicit least-disclosure projections for sources, sessions, observations and evidence proposals while local SQLite/backup state remains complete and private. The implementation targets Python 3.11+; classical operation and the tests require no network, live AI credential, specialist runtime or external observation connector.
 
 ## Next milestone
 
